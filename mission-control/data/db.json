@@ -71,6 +71,28 @@
       "tokens_out": 750,
       "id": 1772072800010,
       "created_at": "2026-02-26T02:46:00.000Z"
+    },
+    {
+      "description": "Moonshot API usage (kimi-k2.5 sessions)",
+      "amount": 2.6674,
+      "category": "api_call",
+      "provider": "moonshot",
+      "model": "kimi-k2.5",
+      "tokens_in": 50000,
+      "tokens_out": 10000,
+      "id": 1772079877580,
+      "created_at": "2026-02-26T04:24:37.580Z"
+    },
+    {
+      "description": "Moonshot API correction (actual balance check)",
+      "amount": 0.82,
+      "category": "api_call",
+      "provider": "moonshot",
+      "model": "kimi-k2.5",
+      "tokens_in": 15000,
+      "tokens_out": 2000,
+      "id": 1772081652855,
+      "created_at": "2026-02-26T04:54:12.855Z"
     }
   ],
   "memories": [],
