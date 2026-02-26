@@ -42,6 +42,24 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 - API Key: `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`
 - Used for: AI-optimized web search
 
+### Google Gemini API
+
+- API Key: `[STORED_SECURELY]`
+- Free tier: 60 requests/minute
+- Use for: Simple chats, basic tasks (FREE)
+
+### DeepSeek API
+
+- API Key: `[STORED_SECURELY]`
+- Cost: $0.0003/1K tokens (5x cheaper than kimi)
+- Use for: Coding, analysis (CHEAP)
+
+### Moonshot API
+
+- API Key: `[STORED_SECURELY]`
+- Cost: $0.0015/1K tokens
+- Use for: Complex tasks, high quality
+
 ---
 
 Add whatever helps you do your job. This is your cheat sheet.
