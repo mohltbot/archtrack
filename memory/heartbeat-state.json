@@ -1,0 +1,18 @@
+{
+  "lastChecks": {
+    "nightlyWorkSession": 1740593760,
+    "email": null,
+    "calendar": null
+  },
+  "lastSession": {
+    "date": "2026-02-26",
+    "completed": true,
+    "tasksCompleted": ["Fix npm permission issues in Mission Control"],
+    "budgetStatus": {
+      "spent": 11.0,
+      "budget": 200,
+      "percentUsed": 5.5,
+      "status": "ok"
+    }
+  }
+}
