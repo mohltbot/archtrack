@@ -26,7 +26,8 @@
     {"id": 4, "description": "Moonshot API correction (actual balance check)", "amount": 0.82, "category": "api_call", "provider": "moonshot", "model": "kimi-k2.5", "tokens_in": 15000, "tokens_out": 2000, "created_at": "2026-02-26T05:00:00Z"},
     {"id": 5, "description": "Moonshot API balance correction", "amount": 2.51, "category": "api_call", "provider": "moonshot", "model": "kimi-k2.5", "tokens_in": 75000, "tokens_out": 8000, "created_at": "2026-02-26T07:00:00Z"},
     {"id": 6, "description": "Moonshot API balance correction - unlogged sub-agent calls", "amount": 4.99, "category": "api_call", "provider": "moonshot", "model": "kimi-k2.5", "tokens_in": 200000, "tokens_out": 50000, "created_at": "2026-02-26T12:00:00Z"},
-    {"id": 7, "description": "Nightly work session - Feb 26", "amount": 0.0045, "category": "api_call", "provider": "moonshot", "model": "kimi-k2.5", "tokens_in": 28000, "tokens_out": 3200, "created_at": "2026-02-26T10:30:00Z"}
+    {"id": 7, "description": "Nightly work session - Feb 26", "amount": 0.0045, "category": "api_call", "provider": "moonshot", "model": "kimi-k2.5", "tokens_in": 28000, "tokens_out": 3200, "created_at": "2026-02-26T10:30:00Z"},
+    {"id": 8, "description": "Afternoon session - comprehensive MC update, 8 commits, server restarts, 75K tokens", "amount": 2.0, "category": "api_call", "provider": "moonshot", "model": "kimi-k2.5", "tokens_in": 40000, "tokens_out": 35000, "created_at": "2026-02-26T13:30:00Z"}
   ],
   "memories": [
     {"id": 1, "content": "Budget is $200/month for all API calls and infrastructure", "category": "fact", "importance": 5, "source": "initial_setup", "tags": ["budget", "constraints", "critical"], "created_at": "2026-02-26T14:00:00Z"},
