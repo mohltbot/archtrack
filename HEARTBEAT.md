@@ -35,3 +35,19 @@ Quick 10-min check:
 - At $150/mo (75%): Warning notification
 - At $180/mo (90%): Critical alert, pause non-essential work
 - At $195/mo (97.5%): Stop all API calls, manual approval required
+
+## Ben's Bites Scan (Wed & Fri 6 AM PST)
+
+**Wednesday 6 AM:** Process Tuesday's newsletter
+**Friday 6 AM:** Process Thursday's newsletter
+
+For each issue:
+1. **Scan** — Extract all AI tools/products mentioned
+2. **Categorize** — High/Medium/Low priority based on relevance
+3. **Filter** — Focus on:
+   - AI agent frameworks (improves OpenClaw)
+   - Cost optimization (stays under $200/mo)
+   - Solo founder tools (1-person unicorn mission)
+   - Mission Control enhancements
+4. **Implement** — Auto-implement HIGH priority items
+5. **Report** — Create PR for review, post summary to Discord
