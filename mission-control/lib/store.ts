@@ -1,7 +1,8 @@
 export { 
   getTasks, 
   createTask, 
-  updateTaskStatus, 
+  updateTaskStatus,
+  deleteTask,
   getExpenses, 
   addExpense, 
   getMonthlySpend,

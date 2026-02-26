@@ -98,6 +98,12 @@ export function updateTaskStatus(id: number, status: Task['status']): void {
   }
 }
 
+export function deleteTask(id: number): void {
+  const db = readDb();
+  db.tasks = db.tasks.filter(t => t.id !== id);
+  writeDb(db);
+}
+
 export function getExpenses(): Expense[] {
   return readDb().expenses;
 }

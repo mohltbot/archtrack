@@ -1,5 +1,5 @@
 import { getDashboardStats, getTasks, getExpenses, getAgents } from '@/lib/store';
-import { TaskBoard } from '@/components/TaskBoard';
+import { TaskBoard } from '@/components/TaskBoardWrapper';
 import { ExpenseTracker } from '@/components/ExpenseTracker';
 import { AgentStatus } from '@/components/AgentStatus';
 import { MemoryBrowser } from '@/components/MemoryBrowser';
@@ -70,7 +70,7 @@ export default function Dashboard() {
 
       <div className="grid lg:grid-cols-2 gap-6 mb-6">
         <div className="slide-in" style={{ animationDelay: '0.1s' }}>
-          <TaskBoard tasks={tasks} />
+          <TaskBoard initialTasks={tasks} />
         </div>
         <div className="space-y-6">
           <div className="slide-in" style={{ animationDelay: '0.2s' }}>
