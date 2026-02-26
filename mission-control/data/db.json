@@ -42,14 +42,47 @@
     {
       "title": "Add memory browser to Mission Control",
       "description": "Create UI for browsing and searching stored memories",
-      "status": "pending",
+      "status": "completed",
       "priority": "medium",
       "category": "feature",
       "id": 1772072800002,
-      "created_at": "2026-02-26T02:47:00.000Z"
+      "created_at": "2026-02-26T02:47:00.000Z",
+      "completed_at": "2026-02-26T10:25:00.000Z",
+      "notes": "Enhanced MemoryBrowser with: tabbed Files/DB view, search functionality, category color coding, importance stars, loading states. Includes all core memory files."
+    },
+    {
+      "title": "Run PR #5 - Setup persistent Cloudflare tunnel",
+      "description": "Run ./scripts/setup-persistent-tunnel.sh to create permanent Mission Control URL that survives restarts. Also test ./scripts/auto-pr.sh for automated PR creation.",
+      "status": "pending",
+      "priority": "high",
+      "category": "infrastructure",
+      "id": 1772090501755,
+      "created_at": "2026-02-26T07:21:41.755Z"
+    },
+    {
+      "title": "Review SaaS Agentification Framework (PR #7)",
+      "description": "Framework for quickly agentifying Monta VC portfolio companies. Includes Narada Executive Assistant Agent implementation. Review and provide feedback on approach.",
+      "status": "completed",
+      "priority": "high",
+      "category": "review",
+      "id": 1772091170716,
+      "created_at": "2026-02-26T07:32:50.716Z",
+      "completed_at": "2026-02-26T10:15:00.000Z",
+      "notes": "Reviewed PR. Framework has solid 5-step architecture (Ingest→Process→Decide→Human Review→Execute). Narada agent implementation is well-structured with TypeScript. Ready for merge after Mohammed's final approval."
     }
   ],
   "expenses": [
+    {
+      "description": "Nightly work session - Feb 26",
+      "amount": 0.0045,
+      "category": "api_call",
+      "provider": "moonshot",
+      "model": "kimi-k2.5",
+      "tokens_in": 28000,
+      "tokens_out": 3200,
+      "id": 1772100900000,
+      "created_at": "2026-02-26T10:30:00.000Z"
+    },
     {
       "description": "kimi-k2.5 session (Mission Control build)",
       "amount": 0.0021,
@@ -93,6 +126,17 @@
       "tokens_out": 2000,
       "id": 1772081652855,
       "created_at": "2026-02-26T04:54:12.855Z"
+    },
+    {
+      "description": "Moonshot API balance correction",
+      "amount": 2.51,
+      "category": "api_call",
+      "provider": "moonshot",
+      "model": "kimi-k2.5",
+      "tokens_in": 75000,
+      "tokens_out": 8000,
+      "id": 1772089633744,
+      "created_at": "2026-02-26T07:07:13.744Z"
     }
   ],
   "memories": [],
@@ -105,6 +149,15 @@
       "started_at": "2026-02-26T02:46:00.000Z",
       "completed_at": "2026-02-26T02:50:00.000Z",
       "result": "Reviewed Mission Control dashboard, checked pending tasks, completed Daily AI work session task, added 2 new tasks, recorded session expense"
+    },
+    {
+      "id": "nightly-2026-02-26",
+      "name": "Nightly Work Session",
+      "status": "completed",
+      "task": "Review Mission Control, fix nightly script, enhance MemoryBrowser",
+      "started_at": "2026-02-26T10:10:00.000Z",
+      "completed_at": "2026-02-26T10:30:00.000Z",
+      "result": "Fixed nightly-work.sh to use full path to openclaw. Reviewed PR #7 (SaaS Agentification Framework). Enhanced MemoryBrowser with search, tabs, DB integration."
     }
   ]
 }
