@@ -87,9 +87,23 @@ const MODEL_CAPABILITIES: Record<string, {
 
 // Cost per 1K tokens for comparison
 function getModelCost(model: string): number {
-  const pricing = API_PRICING[model.toLowerCase()];
-  if (!pricing) return 0.005; // Default to conservative estimate
-  return (pricing.input + pricing.output) / 2; // Average of input/output
+  // Search through all providers for the model
+  for (const providerModels of Object.values(API_PRICING)) {
+    const pricing = providerModels[model.toLowerCase()];
+    if (pricing) {
+      return (pricing.input + pricing.output) / 2; // Average of input/output
+    }
+    // Try partial match
+    const modelKey = Object.keys(providerModels).find(key => 
+      model.toLowerCase().includes(key.toLowerCase()) ||
+      key.toLowerCase().includes(model.toLowerCase())
+    );
+    if (modelKey) {
+      const p = providerModels[modelKey];
+      return (p.input + p.output) / 2;
+    }
+  }
+  return 0.005; // Default to conservative estimate
 }
 
 // Recommend best model for task
@@ -127,9 +141,22 @@ export function recommendModel(
     ).length / Math.max(requiredCapabilities.length, 1)) * 0.1;
     
     // Find provider
-    const provider = Object.entries(API_PRICING).find(([_, models]) => 
-      models[model.toLowerCase()]
-    )?.[0] || 'unknown';
+    let provider = 'unknown';
+    for (const [provName, models] of Object.entries(API_PRICING)) {
+      if (models[model.toLowerCase()]) {
+        provider = provName;
+        break;
+      }
+      // Try partial match
+      const modelKey = Object.keys(models).find(key => 
+        model.toLowerCase().includes(key.toLowerCase()) ||
+        key.toLowerCase().includes(model.toLowerCase())
+      );
+      if (modelKey) {
+        provider = provName;
+        break;
+      }
+    }
     
     candidates.push({
       provider,

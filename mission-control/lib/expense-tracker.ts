@@ -24,6 +24,9 @@ const PRICING: PricingData = pricingData;
 // In-memory cache with override capability
 let currentPricing: PricingData = { ...PRICING };
 
+// Export API_PRICING for model-router compatibility
+export const API_PRICING: { [provider: string]: { [model: string]: ModelPricing } } = currentPricing.pricing;
+
 export interface APICall {
   provider: string;
   model: string;

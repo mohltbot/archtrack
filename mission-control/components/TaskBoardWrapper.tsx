@@ -19,8 +19,8 @@ export function TaskBoardWrapper({ initialTasks }: TaskBoardWrapperProps) {
     setTasks(prev => prev.filter(t => t.id !== id));
   }, []);
 
-  const handleTaskCreate = useCallback((newTask: Task) => {
-    setTasks(prev => [newTask, ...prev]);
+  const handleTaskCreate = useCallback((newTask: Partial<Task>) => {
+    setTasks(prev => [newTask as Task, ...prev]);
   }, []);
 
   return (

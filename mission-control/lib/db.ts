@@ -170,7 +170,15 @@ export function deleteMemory(id: number): void {
   writeDb(db);
 }
 
-export function getDashboardStats() {
+export interface DashboardStats {
+  totalTasks: number;
+  completedTasks: number;
+  activeAgents: number;
+  monthlySpend: number;
+  memoryCount: number;
+}
+
+export function getDashboardStats(): DashboardStats {
   const db = readDb();
   const totalTasks = db.tasks.length;
   const completedTasks = db.tasks.filter(t => t.status === 'completed').length;

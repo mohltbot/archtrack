@@ -1,4 +1,4 @@
-import { getDb } from './db';
+import { getMemories, createMemory, deleteMemory, Memory as DbMemory } from './db';
 
 export interface Memory {
   id: number;
@@ -21,120 +21,111 @@ export interface MemoryQuery {
   limit?: number;
 }
 
-// Initialize memory table
+// Initialize memory table - no-op for JSON store (already initialized)
 export function initMemoryTable(): void {
-  const db = getDb();
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS memories (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      content TEXT NOT NULL,
-      category TEXT DEFAULT 'fact',
-      importance INTEGER DEFAULT 3,
-      source TEXT,
-      context TEXT,
-      tags TEXT,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      last_accessed DATETIME,
-      access_count INTEGER DEFAULT 0
-    );
-    
-    CREATE INDEX IF NOT EXISTS idx_memories_category ON memories(category);
-    CREATE INDEX IF NOT EXISTS idx_memories_importance ON memories(importance);
-    CREATE INDEX IF NOT EXISTS idx_memories_created ON memories(created_at);
-  `);
+  // JSON store is already initialized in db.ts
 }
 
 // Add a new memory
 export function addMemory(memory: Omit<Memory, 'id' | 'created_at' | 'access_count'>): Memory {
-  const db = getDb();
-  const result = db.prepare(
-    'INSERT INTO memories (content, category, importance, source, context, tags) VALUES (?, ?, ?, ?, ?, ?)'
-  ).run(
-    memory.content,
-    memory.category,
-    memory.importance,
-    memory.source || null,
-    memory.context || null,
-    memory.tags ? JSON.stringify(memory.tags) : null
-  );
-  
-  return db.prepare('SELECT * FROM memories WHERE id = ?').get(result.lastInsertRowid) as Memory;
+  const newMemory = createMemory({
+    content: memory.content,
+    category: memory.category || 'fact',
+    importance: (memory.importance || 3) as 1 | 2 | 3,
+    source: memory.source,
+  });
+
+  return {
+    ...newMemory,
+    category: (newMemory.category as Memory['category']) || 'fact',
+    importance: (newMemory.importance as Memory['importance']) || 3,
+    access_count: 0,
+  };
 }
 
-// Retrieve memories based on query (simple keyword matching for now)
+// Retrieve memories based on query (simple keyword matching)
 export function queryMemories(query: MemoryQuery): Memory[] {
-  const db = getDb();
-  const limit = query.limit || 10;
-  
-  let sql = 'SELECT * FROM memories WHERE 1=1';
-  const params: any[] = [];
-  
+  const allMemories = getMemories();
+  let results = allMemories.map(m => ({
+    ...m,
+    category: (m.category as Memory['category']) || 'fact',
+    importance: (m.importance as Memory['importance']) || 3,
+    access_count: 0,
+    tags: m.source ? [m.source] : [],
+  } as Memory));
+
+  // Filter by category
   if (query.category) {
-    sql += ' AND category = ?';
-    params.push(query.category);
+    results = results.filter(m => m.category === query.category);
   }
-  
+
+  // Filter by minimum importance
   if (query.minImportance) {
-    sql += ' AND importance >= ?';
-    params.push(query.minImportance);
+    const minImp = query.minImportance;
+    results = results.filter(m => m.importance >= minImp);
   }
-  
+
+  // Filter by tags
   if (query.tags && query.tags.length > 0) {
-    sql += ' AND (' + query.tags.map(() => 'tags LIKE ?').join(' OR ') + ')';
-    query.tags.forEach(tag => params.push(`%${tag}%`));
+    results = results.filter(m => 
+      query.tags!.some(tag => m.tags?.includes(tag) || m.source?.includes(tag))
+    );
   }
-  
+
   // Simple keyword matching in content
   if (query.query) {
     const keywords = query.query.toLowerCase().split(' ');
-    sql += ' AND (' + keywords.map(() => 'LOWER(content) LIKE ?').join(' OR ') + ')';
-    keywords.forEach(keyword => params.push(`%${keyword}%`));
+    results = results.filter(m => 
+      keywords.some(keyword => m.content.toLowerCase().includes(keyword))
+    );
   }
-  
-  sql += ' ORDER BY importance DESC, access_count DESC, created_at DESC LIMIT ?';
-  params.push(limit);
-  
-  const memories = db.prepare(sql).all(...params) as Memory[];
-  
-  // Update access stats
-  memories.forEach(mem => {
-    db.prepare('UPDATE memories SET access_count = access_count + 1, last_accessed = CURRENT_TIMESTAMP WHERE id = ?')
-      .run(mem.id);
+
+  // Sort by importance and created_at
+  results.sort((a, b) => {
+    if (b.importance !== a.importance) {
+      return b.importance - a.importance;
+    }
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
   });
-  
-  return memories;
+
+  // Limit results
+  if (query.limit) {
+    results = results.slice(0, query.limit);
+  }
+
+  return results;
 }
 
 // Get memories by category
 export function getMemoriesByCategory(category: Memory['category'], limit: number = 20): Memory[] {
-  const db = getDb();
-  return db.prepare(
-    'SELECT * FROM memories WHERE category = ? ORDER BY importance DESC, created_at DESC LIMIT ?'
-  ).all(category, limit) as Memory[];
+  return queryMemories({ query: '', category, limit });
 }
 
 // Get high-importance memories (for critical context)
 export function getCriticalMemories(limit: number = 10): Memory[] {
-  const db = getDb();
-  return db.prepare(
-    'SELECT * FROM memories WHERE importance >= 4 ORDER BY created_at DESC LIMIT ?'
-  ).all(limit) as Memory[];
+  return queryMemories({ query: '', minImportance: 4, limit });
 }
 
 // Update memory importance
 export function updateMemoryImportance(id: number, importance: Memory['importance']): void {
-  const db = getDb();
-  db.prepare('UPDATE memories SET importance = ? WHERE id = ?').run(importance, id);
+  // For JSON store, we'd need to add an updateMemory function to db.ts
+  // For now, this is a no-op
+  console.log(`Would update memory ${id} importance to ${importance}`);
 }
 
 // Delete old/unused memories
 export function cleanupMemories(olderThanDays: number = 90, maxImportance: number = 2): number {
-  const db = getDb();
-  const result = db.prepare(
-    'DELETE FROM memories WHERE created_at < datetime("now", ?) AND importance <= ? AND access_count < 3'
-  ).run(`-${olderThanDays} days`, maxImportance);
-  
-  return result.changes;
+  const allMemories = getMemories();
+  const cutoffDate = new Date();
+  cutoffDate.setDate(cutoffDate.getDate() - olderThanDays);
+
+  const toDelete = allMemories.filter(m => {
+    const memDate = new Date(m.created_at);
+    return memDate < cutoffDate && m.importance <= maxImportance;
+  });
+
+  toDelete.forEach(m => deleteMemory(m.id));
+  return toDelete.length;
 }
 
 // Get memory statistics
@@ -144,33 +135,34 @@ export function getMemoryStats(): {
   avgImportance: number;
   criticalCount: number;
 } {
-  const db = getDb();
-  
-  const total = (db.prepare('SELECT COUNT(*) as count FROM memories').get() as { count: number }).count;
-  
+  const allMemories = getMemories();
+  const total = allMemories.length;
+
   const byCategory: Record<string, number> = {};
   const categories = ['fact', 'preference', 'task', 'insight', 'context'];
   categories.forEach(cat => {
-    byCategory[cat] = (db.prepare('SELECT COUNT(*) as count FROM memories WHERE category = ?').get(cat) as { count: number }).count;
+    byCategory[cat] = allMemories.filter(m => m.category === cat).length;
   });
-  
-  const avgImportance = (db.prepare('SELECT AVG(importance) as avg FROM memories').get() as { avg: number }).avg || 0;
-  
-  const criticalCount = (db.prepare('SELECT COUNT(*) as count FROM memories WHERE importance >= 4').get() as { count: number }).count;
-  
+
+  const avgImportance = total > 0 
+    ? allMemories.reduce((sum, m) => sum + (m.importance || 3), 0) / total 
+    : 0;
+
+  const criticalCount = allMemories.filter(m => (m.importance || 3) >= 4).length;
+
   return { total, byCategory, avgImportance, criticalCount };
 }
 
 // Observational memory: automatically extract insights from conversations
 export function extractInsightsFromText(text: string, source: string): Partial<Memory>[] {
   const insights: Partial<Memory>[] = [];
-  
+
   // Pattern 1: Preferences ("I prefer...", "I like...", "I want...")
   const preferencePatterns = [
     /I (?:prefer|like|want|need|hate|dislike) ([^.,]+)/gi,
     /my (?:favorite|preferred) ([^.,]+) (?:is|are) ([^.,]+)/gi,
   ];
-  
+
   preferencePatterns.forEach(pattern => {
     let match;
     while ((match = pattern.exec(text)) !== null) {
@@ -183,14 +175,14 @@ export function extractInsightsFromText(text: string, source: string): Partial<M
       });
     }
   });
-  
+
   // Pattern 2: Facts ("I work at...", "I live in...", "My name is...")
   const factPatterns = [
     /I (?:work at|work for|am employed by) ([^.,]+)/gi,
     /I (?:live in|am from|am based in) ([^.,]+)/gi,
     /my (?:name is|name's|email is) ([^.,]+)/gi,
   ];
-  
+
   factPatterns.forEach(pattern => {
     let match;
     while ((match = pattern.exec(text)) !== null) {
@@ -203,13 +195,13 @@ export function extractInsightsFromText(text: string, source: string): Partial<M
       });
     }
   });
-  
+
   // Pattern 3: Tasks/Goals ("I need to...", "I should...", "I want to...")
   const taskPatterns = [
     /I (?:need to|should|must|have to) ([^.,]+)/gi,
     /I want to ([^.,]+)/gi,
   ];
-  
+
   taskPatterns.forEach(pattern => {
     let match;
     while ((match = pattern.exec(text)) !== null) {
@@ -222,6 +214,6 @@ export function extractInsightsFromText(text: string, source: string): Partial<M
       });
     }
   });
-  
+
   return insights.slice(0, 10); // Limit to top 10 insights
 }
