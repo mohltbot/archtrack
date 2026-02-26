@@ -2,6 +2,7 @@ import { getDashboardStats, getTasks, getExpenses, getAgents } from '@/lib/store
 import { TaskBoard } from '@/components/TaskBoard';
 import { ExpenseTracker } from '@/components/ExpenseTracker';
 import { AgentStatus } from '@/components/AgentStatus';
+import { MemoryBrowser } from '@/components/MemoryBrowser';
 import { StatsCard } from '@/components/StatsCard';
 import { Activity } from 'lucide-react';
 
@@ -66,7 +67,7 @@ export default function Dashboard() {
         />
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid lg:grid-cols-2 gap-6 mb-6">
         <div className="slide-in" style={{ animationDelay: '0.1s' }}>
           <TaskBoard tasks={tasks} />
         </div>
@@ -80,7 +81,11 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <footer className="mt-12 text-center text-slate-500 text-sm slide-in" style={{ animationDelay: '0.4s' }}>
+      <div className="slide-in" style={{ animationDelay: '0.4s' }}>
+        <MemoryBrowser />
+      </div>
+
+      <footer className="mt-12 text-center text-slate-500 text-sm slide-in" style={{ animationDelay: '0.5s' }}>
         <p>Mission Control v0.1 • Built with Next.js & OpenClaw</p>
       </footer>
     </div>
