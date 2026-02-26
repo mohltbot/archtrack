@@ -3,6 +3,7 @@ import { TaskBoard } from '@/components/TaskBoard';
 import { ExpenseTracker } from '@/components/ExpenseTracker';
 import { AgentStatus } from '@/components/AgentStatus';
 import { MemoryBrowser } from '@/components/MemoryBrowser';
+import { ModelOptimizer } from '@/components/ModelOptimizer';
 import { StatsCard } from '@/components/StatsCard';
 import { Activity } from 'lucide-react';
 
@@ -81,8 +82,13 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="slide-in" style={{ animationDelay: '0.4s' }}>
-        <MemoryBrowser />
+      <div className="grid lg:grid-cols-2 gap-6 mb-6">
+        <div className="slide-in" style={{ animationDelay: '0.4s' }}>
+          <MemoryBrowser />
+        </div>
+        <div className="slide-in" style={{ animationDelay: '0.5s' }}>
+          <ModelOptimizer />
+        </div>
       </div>
 
       <footer className="mt-12 text-center text-slate-500 text-sm slide-in" style={{ animationDelay: '0.5s' }}>
