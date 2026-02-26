@@ -8,7 +8,7 @@ interface TaskBoardWrapperProps {
   initialTasks: Task[];
 }
 
-export function TaskBoard({ initialTasks }: TaskBoardWrapperProps) {
+export function TaskBoardWrapper({ initialTasks }: TaskBoardWrapperProps) {
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
 
   const handleTaskUpdate = useCallback((updatedTask: Task) => {

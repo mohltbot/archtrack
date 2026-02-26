@@ -1,9 +1,9 @@
 import { getDashboardStats, getTasks, getExpenses, getAgents } from '@/lib/store';
-import { TaskBoard } from '@/components/TaskBoardWrapper';
+import { TaskBoardWrapper } from '@/components/TaskBoardWrapper';
 import { ExpenseTracker } from '@/components/ExpenseTracker';
 import { AgentStatus } from '@/components/AgentStatus';
 import { MemoryBrowser } from '@/components/MemoryBrowser';
-import { ModelOptimizer } from '@/components/ModelOptimizer';
+import { SavingsStats } from '@/components/SavingsStats';
 import { StatsCard } from '@/components/StatsCard';
 import { Activity } from 'lucide-react';
 
@@ -29,7 +29,7 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
         <StatsCard 
           iconName="check"
           title="Total Tasks" 
@@ -57,6 +57,7 @@ export default function Dashboard() {
           color="from-amber-400 to-orange-600"
           delay={200}
         />
+        <SavingsStats delay={250} />
         <StatsCard 
           iconName="brain"
           title="Memories" 
@@ -70,7 +71,7 @@ export default function Dashboard() {
 
       <div className="grid lg:grid-cols-2 gap-6 mb-6">
         <div className="slide-in" style={{ animationDelay: '0.1s' }}>
-          <TaskBoard initialTasks={tasks} />
+          <TaskBoardWrapper initialTasks={tasks} />
         </div>
         <div className="space-y-6">
           <div className="slide-in" style={{ animationDelay: '0.2s' }}>
@@ -82,13 +83,8 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-6 mb-6">
-        <div className="slide-in" style={{ animationDelay: '0.4s' }}>
-          <MemoryBrowser />
-        </div>
-        <div className="slide-in" style={{ animationDelay: '0.5s' }}>
-          <ModelOptimizer />
-        </div>
+      <div className="slide-in" style={{ animationDelay: '0.4s' }}>
+        <MemoryBrowser />
       </div>
 
       <footer className="mt-12 text-center text-slate-500 text-sm slide-in" style={{ animationDelay: '0.5s' }}>
