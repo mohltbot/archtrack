@@ -8,12 +8,20 @@ import {
   Memory 
 } from '@/lib/supermemory';
 
-// Initialize table on first request
-initMemoryTable();
+// Lazy initialization - only init when first request comes in
+let initialized = false;
+function ensureInitialized() {
+  if (!initialized) {
+    initMemoryTable();
+    initialized = true;
+  }
+}
 
 // GET /api/memories - Query memories
 export async function GET(request: Request) {
   try {
+    ensureInitialized();
+    
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('q') || '';
     const category = searchParams.get('category') as Memory['category'] | undefined;
@@ -34,7 +42,7 @@ export async function GET(request: Request) {
   } catch (error) {
     console.error('Error querying memories:', error);
     return NextResponse.json(
-      { error: 'Failed to query memories' },
+      { error: 'Failed to query memories', details: String(error) },
       { status: 500 }
     );
   }
@@ -43,6 +51,8 @@ export async function GET(request: Request) {
 // POST /api/memories - Add new memory or extract from text
 export async function POST(request: Request) {
   try {
+    ensureInitialized();
+    
     const body = await request.json();
     
     // Auto-extract mode
@@ -80,7 +90,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Error adding memory:', error);
     return NextResponse.json(
-      { error: 'Failed to add memory' },
+      { error: 'Failed to add memory', details: String(error) },
       { status: 500 }
     );
   }

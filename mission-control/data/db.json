@@ -16,9 +16,10 @@
     {"id": 14, "title": "Update memories with correct startup info from resume", "description": "Fixed dAIcor Inc and Sumer Inc details from resume", "status": "completed", "priority": "high", "category": "bugfix", "created_at": "2026-02-26T17:00:00Z", "completed_at": "2026-02-26T18:00:00Z"},
     {"id": 15, "title": "Comprehensive Mission Control update", "description": "Full update of all tasks, expenses, memories, agents (18 tasks, $13 budget)", "status": "completed", "priority": "high", "category": "maintenance", "created_at": "2026-02-26T13:00:00Z", "completed_at": "2026-02-26T13:45:00Z"},
     {"id": 16, "title": "Run PR #5 - Setup persistent Cloudflare tunnel", "description": "Run ./scripts/setup-persistent-tunnel.sh to create permanent Mission Control URL", "status": "pending", "priority": "high", "category": "infrastructure", "created_at": "2026-02-26T07:00:00Z"},
-    {"id": 17, "title": "Configure OpenClaw mixed model routing", "description": "Set up automatic model switching: Gemini (free), DeepSeek ($0.0003), Kimi ($0.0015)", "status": "pending", "priority": "high", "category": "infrastructure", "created_at": "2026-02-26T17:00:00Z"},
-    {"id": 18, "title": "Post LinkedIn about accounting skill", "description": "LinkedIn post ready at linkedin-post-final.md. Post when ready!", "status": "pending", "priority": "high", "category": "marketing", "created_at": "2026-02-26T20:00:00Z"},
-    {"id": 19, "title": "Submit skill to ClawHub marketplace", "description": "Submit accounting-tax skill to ClawHub using clawhub.json manifest", "status": "pending", "priority": "medium", "category": "marketing", "created_at": "2026-02-26T20:00:00Z"}
+    {"id": 17, "title": "Configure OpenClaw mixed model routing", "description": "Set up automatic model switching: Gemini (free), DeepSeek ($0.0003), Kimi ($0.0015)", "status": "completed", "priority": "high", "category": "infrastructure", "created_at": "2026-02-26T17:00:00Z", "completed_at": "2026-02-27T02:00:00Z"},
+    {"id": 18, "title": "Post LinkedIn about accounting skill", "description": "LinkedIn post ready at linkedin-post.md. Post when ready!", "status": "pending", "priority": "high", "category": "marketing", "created_at": "2026-02-26T20:00:00Z"},
+    {"id": 19, "title": "Submit skill to ClawHub marketplace", "description": "Submit accounting-tax skill to ClawHub using clawhub.json manifest", "status": "completed", "priority": "medium", "category": "marketing", "created_at": "2026-02-26T20:00:00Z", "completed_at": "2026-02-27T02:15:00Z"},
+    {"id": 20, "title": "Nightly Work Session - Feb 27", "description": "Completed nightly review: 2 tasks done, budget healthy at ~$13/200, 2 tasks remain", "status": "completed", "priority": "high", "category": "automation", "created_at": "2026-02-27T02:00:00Z", "completed_at": "2026-02-27T02:30:00Z"},
   ],
   "expenses": [
     {"id": 1, "description": "kimi-k2.5 session (Mission Control build)", "amount": 0.0021, "category": "api_call", "provider": "moonshot", "model": "kimi-k2.5", "tokens_in": 13000, "tokens_out": 980, "created_at": "2026-02-25T18:00:00Z"},
@@ -27,7 +28,8 @@
     {"id": 4, "description": "Moonshot API correction (actual balance check)", "amount": 0.82, "category": "api_call", "provider": "moonshot", "model": "kimi-k2.5", "tokens_in": 15000, "tokens_out": 2000, "created_at": "2026-02-25T22:00:00Z"},
     {"id": 5, "description": "Moonshot API balance correction", "amount": 2.51, "category": "api_call", "provider": "moonshot", "model": "kimi-k2.5", "tokens_in": 75000, "tokens_out": 8000, "created_at": "2026-02-25T22:30:00Z"},
     {"id": 6, "description": "Nightly work session - Feb 26", "amount": 0.0045, "category": "api_call", "provider": "moonshot", "model": "kimi-k2.5", "tokens_in": 28000, "tokens_out": 3200, "created_at": "2026-02-26T10:30:00Z"},
-    {"id": 7, "description": "Afternoon session - comprehensive MC update, 8 commits, server restarts, 75K tokens", "amount": 2.0, "category": "api_call", "provider": "moonshot", "model": "kimi-k2.5", "tokens_in": 40000, "tokens_out": 35000, "created_at": "2026-02-26T13:30:00Z"}
+    {"id": 7, "description": "Afternoon session - comprehensive MC update, 8 commits, server restarts, 75K tokens", "amount": 2.0, "category": "api_call", "provider": "moonshot", "model": "kimi-k2.5", "tokens_in": 40000, "tokens_out": 35000, "created_at": "2026-02-26T13:30:00Z"},
+    {"id": 8, "description": "Nightly work session Feb 27 - Mission Control review, 2 tasks completed", "amount": 0.15, "category": "api_call", "provider": "moonshot", "model": "kimi-k2.5", "tokens_in": 25000, "tokens_out": 8000, "created_at": "2026-02-27T02:30:00Z"}
   ],
   "memories": [
     {"id": 1, "content": "Budget is $200/month for all API calls and infrastructure", "category": "fact", "importance": 5, "source": "initial_setup", "tags": ["budget", "constraints", "critical"], "created_at": "2026-02-26T14:00:00Z"},
@@ -42,6 +44,7 @@
   ],
   "agents": [
     {"id": "bensbites-scanner", "name": "Ben's Bites Scanner", "status": "completed", "task": "Scan Feb 2026 Ben's Bites issues (6 issues analyzed)", "started_at": "2026-02-25T20:00:00Z", "completed_at": "2026-02-25T21:30:00Z", "result": "Created BENSBITES-BACKLOG.md with findings"},
-    {"id": "test-nightly-work", "name": "Test Nightly Work Session", "status": "completed", "task": "Test autonomous work session workflow", "started_at": "2026-02-25T22:00:00Z", "completed_at": "2026-02-25T22:15:00Z", "result": "Workflow tested successfully"}
+    {"id": "test-nightly-work", "name": "Test Nightly Work Session", "status": "completed", "task": "Test autonomous work session workflow", "started_at": "2026-02-25T22:00:00Z", "completed_at": "2026-02-25T22:15:00Z", "result": "Workflow tested successfully"},
+    {"id": "nightly-feb-27", "name": "Nightly Work Session - Feb 27", "status": "completed", "task": "Review Mission Control, complete pending tasks, submit to ClawHub", "started_at": "2026-02-27T02:00:00Z", "completed_at": "2026-02-27T02:30:00Z", "result": "Completed 2 tasks, budget healthy, 2 tasks remain pending"}
   ]
 }

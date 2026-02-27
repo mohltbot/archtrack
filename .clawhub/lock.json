@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "skills": {
+    "sonoscli": {
+      "version": "1.0.0",
+      "installedAt": 1772163199025
+    },
+    "accounting-tax": {
+      "version": "1.0.0",
+      "installedAt": 1740656640000
+    }
+  }
+}

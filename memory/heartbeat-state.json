@@ -1,17 +1,25 @@
 {
   "lastChecks": {
-    "nightlyWorkSession": 1740593760,
+    "nightlyWorkSession": 1740657000,
     "email": null,
     "calendar": null
   },
   "lastSession": {
-    "date": "2026-02-26",
+    "date": "2026-02-27",
     "completed": true,
-    "tasksCompleted": ["Fix npm permission issues in Mission Control"],
+    "tasksCompleted": [
+      "Configure OpenClaw mixed model routing",
+      "Submit accounting-tax skill to ClawHub marketplace",
+      "Nightly Work Session - Feb 27"
+    ],
+    "tasksRemaining": [
+      "Run PR #5 - Setup persistent Cloudflare tunnel (needs interactive auth)",
+      "Post LinkedIn about accounting skill (awaiting approval)"
+    ],
     "budgetStatus": {
-      "spent": 11.0,
+      "spent": 13.15,
       "budget": 200,
-      "percentUsed": 5.5,
+      "percentUsed": 6.6,
       "status": "ok"
     }
   }

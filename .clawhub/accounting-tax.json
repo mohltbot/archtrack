@@ -1,0 +1,84 @@
+{
+  "name": "accounting-tax",
+  "version": "1.0.0",
+  "description": "Professional-grade accounting and tax automation for CPAs, bookkeepers, and finance professionals. Automates reconciliations, tax calculations, financial analysis, and compliance checks.",
+  "author": {
+    "name": "Mohammed Wasif, CPA",
+    "email": "mohltbot10@gmail.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mohltbot/mission-control"
+  },
+  "keywords": [
+    "accounting",
+    "tax",
+    "cpa",
+    "bookkeeping",
+    "finance",
+    "reconciliation",
+    "compliance",
+    "automation",
+    "financial-analysis",
+    "depreciation"
+  ],
+  "category": "finance",
+  "entryPoints": [
+    {
+      "command": "reconcile",
+      "description": "Reconcile bank statements with general ledger - auto-matches transactions, finds missing items, flags duplicates"
+    },
+    {
+      "command": "tax-calc",
+      "description": "Calculate tax liabilities and estimates - federal tax, self-employment, quarterly estimates with 2024 brackets"
+    },
+    {
+      "command": "financial-analysis",
+      "description": "Analyze financial statements and ratios - profitability, liquidity, leverage analysis with variance detection"
+    },
+    {
+      "command": "compliance-check",
+      "description": "Check accounting compliance and standards - validates against GAAP and common audit triggers"
+    },
+    {
+      "command": "depreciation",
+      "description": "Calculate depreciation schedules - straight-line, MACRS, declining balance for all property classes"
+    },
+    {
+      "command": "variance",
+      "description": "Analyze budget vs actual variances - auto-flags significant variances (>10%), categorizes favorable/unfavorable"
+    }
+  ],
+  "permissions": [
+    "fileSystem:read",
+    "fileSystem:write",
+    "network:fetch"
+  ],
+  "skills": [
+    {
+      "name": "Bank Reconciliation",
+      "description": "Automated GL to bank statement matching with tolerance settings",
+      "example": "claw.accounting.reconcile({ glAccount: data, bankStatement: stmt, tolerance: 0.01 })"
+    },
+    {
+      "name": "Tax Calculator",
+      "description": "Federal income tax with current year brackets and self-employment calculations",
+      "example": "claw.accounting.taxCalc({ filingStatus: 'single', income: 85000, deductions: 15000 })"
+    },
+    {
+      "name": "Financial Analysis",
+      "description": "Complete ratio analysis with industry comparisons and trend detection",
+      "example": "claw.accounting.financialAnalysis({ current: curr, previous: prior })"
+    },
+    {
+      "name": "Depreciation Engine",
+      "description": "Multi-method depreciation with tax-compliant schedules",
+      "example": "claw.accounting.depreciation({ purchasePrice: 50000, propertyClass: 5, method: 'MACRS' })"
+    }
+  ],
+  "install": {
+    "type": "local",
+    "path": "skills/accounting-tax"
+  }
+}
