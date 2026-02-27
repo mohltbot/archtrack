@@ -84,8 +84,11 @@
 1. **dAIcor Inc** — E-commerce platform with Stability AI and Printify APIs, 482 customers, 40% EBITDA, 90.12% monthly growth
 2. **Sumer Inc** — Website/app platform, raised $250K, $1M valuation, 2,200 customers, 72.81% quarterly growth
 
-### Automation Rules
-- Mission Control should be updated every 4 hours via cron job
+### Automation Schedule (Cron Jobs)
+| Job | Schedule | Description |
+|-----|----------|-------------|
+| **Ghost-Shifts** | 12pm & 12am PST (every 12 hours) | Autonomous work sessions — read Mission Control, execute AI-Ready tasks, report to Discord |
+| **Ben's Bites Scanner** | Wed & Fri 6am PST (weekly) | Scan newsletter, implement HIGH priority tools, open DRAFT PRs, report to Discord |
 
 ---
 
