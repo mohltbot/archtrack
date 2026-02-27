@@ -1,0 +1,133 @@
+{
+  "name": "Avaamo: IT Helpdesk Agent",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\n  json: {\n    requestType: 'password_reset',\n    userEmail: 'employee@company.com',\n    userName: 'Jane Employee',\n    details: 'Forgot my password and cant login to Salesforce',\n    urgency: 'high',\n    system: 'Salesforce',\n    timestamp: new Date().toISOString()\n  }\n}];"
+      },
+      "name": "IT Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const request = $input.first().json;\n\n// Classify request type\nconst classifiers = {\n  password_reset: {\n    autoResolvable: true,\n    riskLevel: 'low',\n    action: 'generate_temp_password'\n  },\n  access_request: {\n    autoResolvable: false,\n    riskLevel: 'medium',\n    action: 'request_manager_approval'\n  },\n  server_issue: {\n    autoResolvable: false,\n    riskLevel: 'high',\n    action: 'escalate_immediately'\n  },\n  software_install: {\n    autoResolvable: true,\n    riskLevel: 'low',\n    action: 'approve_standard_software'\n  }\n};\n\nconst classification = classifiers[request.requestType] || classifiers.access_request;\n\nreturn [{\n  json: {\n    ...request,\n    classification,\n    canAutoResolve: classification.autoResolvable && request.urgency !== 'critical'\n  }\n}];"
+      },
+      "name": "Classify Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "conditions": [
+            {
+              "leftValue": "={{ $json.canAutoResolve }}",
+              "operator": "boolean"
+            }
+          ]
+        }
+      },
+      "name": "Auto-Resolvable?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const req = $input.first().json;\n\n// Simulate password reset\nconst tempPassword = 'TempPass' + Math.floor(Math.random() * 10000);\n\nreturn [{\n  json: {\n    ...req,\n    resolution: {\n      action: 'password_reset',\n      tempPassword: tempPassword,\n      expiry: '24 hours',\n      requiresChange: true\n    }\n  }\n}];"
+      },
+      "name": "Execute Fix",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1050, 200]
+    },
+    {
+      "parameters": {
+        "fromEmail": "it-support@company.com",
+        "toEmail": "={{ $json.userEmail }}",
+        "subject": "=🔐 Password Reset - {{ $json.system }}",
+        "text": "=Hi {{ $json.userName }},\n\nYour password has been reset for {{ $json.system }}.\n\n🔑 Temporary Password: {{ $json.resolution.tempPassword }}\n⏰ Expires in: {{ $json.resolution.expiry }}\n\nPlease login and change your password immediately.\n\nIf you didn't request this, contact IT Security.\n\nBest,\nIT Helpdesk Agent",
+        "options": {}
+      },
+      "name": "Notify User - Fixed",
+      "type": "n8n-nodes-base.sendEmail",
+      "typeVersion": 2.1,
+      "position": [1250, 200]
+    },
+    {
+      "parameters": {
+        "channel": "it-helpdesk",
+        "text": "=✅ Auto-Resolved: Password Reset\n\nUser: {{ $json.userName }} ({{ $json.userEmail }})\nSystem: {{ $json.system }}\nAction: Temporary password generated\nStatus: RESOLVED automatically",
+        "options": {}
+      },
+      "name": "Log Auto-Resolution",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.1,
+      "position": [1450, 200]
+    },
+    {
+      "parameters": {
+        "channel": "it-approvals",
+        "text": "=🔒 IT Helpdesk Request - Approval Needed\n\nUser: {{ $json.userName }}\nEmail: {{ $json.userEmail }}\nType: {{ $json.requestType }}\nSystem: {{ $json.system }}\nUrgency: {{ $json.urgency }}\nRisk Level: {{ $json.classification.riskLevel }}\n\nDetails: {{ $json.details }}\n\n⚡ Reply \"APPROVE\" to execute automatically",
+        "options": {}
+      },
+      "name": "Request Manager Approval",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.1,
+      "position": [1050, 400]
+    },
+    {
+      "parameters": {
+        "fromEmail": "it-support@company.com",
+        "toEmail": "={{ $json.userEmail }}",
+        "subject": "=🎫 IT Request Received - {{ $json.system }}",
+        "text": "=Hi {{ $json.userName }},\n\nWe've received your IT request:\n{{ $json.details }}\n\nStatus: Awaiting manager approval\nTicket: #IT-{{ Math.floor(Math.random() * 10000) }}\n\nYour manager has been notified. You'll receive an update within 1 hour.\n\nBest,\nIT Helpdesk Agent",
+        "options": {}
+      },
+      "name": "Acknowledge to User",
+      "type": "n8n-nodes-base.sendEmail",
+      "typeVersion": 2.1,
+      "position": [1250, 400]
+    }
+  ],
+  "connections": {
+    "Trigger": {
+      "main": [[{"node": "IT Request", "type": "main", "index": 0}]]
+    },
+    "IT Request": {
+      "main": [[{"node": "Classify Request", "type": "main", "index": 0}]]
+    },
+    "Classify Request": {
+      "main": [[{"node": "Auto-Resolvable?", "type": "main", "index": 0}]]
+    },
+    "Auto-Resolvable?": {
+      "main": [
+        [{"node": "Execute Fix", "type": "main", "index": 0}],
+        [{"node": "Request Manager Approval", "type": "main", "index": 0}]
+      ]
+    },
+    "Execute Fix": {
+      "main": [[{"node": "Notify User - Fixed", "type": "main", "index": 0}]]
+    },
+    "Notify User - Fixed": {
+      "main": [[{"node": "Log Auto-Resolution", "type": "main", "index": 0}]]
+    },
+    "Request Manager Approval": {
+      "main": [[{"node": "Acknowledge to User", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "description": "Avaamo: IT Helpdesk Agent - Auto-resolves common issues, requests approval for sensitive actions"
+}
