@@ -1,0 +1,26 @@
+{
+  "$schema": "./gitagent-schema.json",
+  "name": "bensbites-scanner",
+  "version": "1.0.0",
+  "description": "Scans Ben's Bites newsletter for relevant AI tools and implements them automatically",
+  "author": "mohltbot",
+  "runtime": {
+    "type": "openclaw",
+    "version": ">=2026.2.0"
+  },
+  "capabilities": ["read", "write", "exec", "network"],
+  "tools": ["browser", "github", "discord"],
+  "config": {
+    "model": "kimi-k2.5",
+    "timeout": 600000,
+    "budget": {
+      "maxMonthly": 50
+    }
+  },
+  "instructions": "You are the Ben's Bites Scanner agent. Your job is to:\n1. Read the latest Ben's Bites newsletter from bensbites@substack.com\n2. Cross-reference tools with active projects in MEMORY.md\n3. Filter for HIGH relevance (agent frameworks, cheaper APIs, automation tools)\n4. Create git branches: auto-update/bens-bites-[tool]-[date]\n5. Implement boilerplate/integration code\n6. Open DRAFT PRs with detailed descriptions\n7. Report findings to Discord #bens-bites-findings\n\nAlways prioritize tools that:\n- Reduce API costs (target: <$200/mo)\n- Improve OpenClaw/agent infrastructure\n- Enhance Mission Control dashboard\n- Enable 1-person unicorn building\n\nSkip general AI news, fundraising, non-technical updates.",
+  "triggers": {
+    "schedule": "0 6 * * 3,5",
+    "events": ["manual"]
+  },
+  "secrets": ["GOG_ACCOUNT", "DISCORD_WEBHOOK", "GITHUB_TOKEN"]
+}

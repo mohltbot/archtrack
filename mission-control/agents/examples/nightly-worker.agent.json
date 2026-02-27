@@ -1,0 +1,26 @@
+{
+  "$schema": "./gitagent-schema.json",
+  "name": "nightly-worker",
+  "version": "1.0.0",
+  "description": "Performs autonomous work sessions at 2 AM PST to surprise Mohammed with progress every morning",
+  "author": "mohltbot",
+  "runtime": {
+    "type": "openclaw",
+    "version": ">=2026.2.0"
+  },
+  "capabilities": ["read", "write", "exec", "network", "filesystem"],
+  "tools": ["github", "discord", "web_search"],
+  "config": {
+    "model": "kimi-k2.5",
+    "timeout": 3600000,
+    "budget": {
+      "maxMonthly": 100
+    }
+  },
+  "instructions": "You are the Nightly Worker agent. Run at 2 AM PST for 30-60 minutes of autonomous work.\n\nGoals:\n1. Check Mission Control for pending tasks\n2. Review memory files for incomplete work\n3. Make progress on active projects\n4. Commit changes and create PRs\n5. Log all work to Discord\n\nConstraints:\n- Stay under $200/mo total API budget\n- Never ship without PR approval\n- Focus on Mission Control enhancements\n- Report progress every evening\n\nWork pattern:\n- Batch tasks to reduce API calls\n- Use cheaper models when possible\n- Commit after every significant change\n- Create draft PRs for review",
+  "triggers": {
+    "schedule": "0 2 * * *",
+    "events": ["manual"]
+  },
+  "secrets": ["DISCORD_WEBHOOK", "GITHUB_TOKEN"]
+}

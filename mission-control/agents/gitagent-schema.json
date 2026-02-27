@@ -1,0 +1,116 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "gitagent-schema",
+  "title": "GitAgent Agent Definition",
+  "description": "Schema for defining AI agents in a git-native, framework-agnostic format",
+  "type": "object",
+  "required": ["name", "version", "description", "runtime", "instructions"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Reference to this schema"
+    },
+    "name": {
+      "type": "string",
+      "description": "Unique agent identifier (kebab-case)",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of the agent"
+    },
+    "author": {
+      "type": "string",
+      "description": "Agent creator"
+    },
+    "runtime": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["openclaw", "claude-code", "codex", "custom"],
+          "description": "Agent runtime environment"
+        },
+        "version": {
+          "type": "string",
+          "description": "Minimum runtime version required"
+        }
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["read", "write", "exec", "network", "browser", "filesystem"]
+      },
+      "description": "Required capabilities"
+    },
+    "tools": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Tool dependencies (browser, filesystem, github, etc.)"
+    },
+    "config": {
+      "type": "object",
+      "description": "Runtime configuration",
+      "properties": {
+        "model": {
+          "type": "string",
+          "description": "Default LLM model"
+        },
+        "timeout": {
+          "type": "number",
+          "description": "Execution timeout in milliseconds"
+        },
+        "maxTokens": {
+          "type": "number",
+          "description": "Maximum tokens per request"
+        },
+        "budget": {
+          "type": "object",
+          "properties": {
+            "maxMonthly": {
+              "type": "number",
+              "description": "Monthly budget limit in USD"
+            }
+          }
+        }
+      }
+    },
+    "instructions": {
+      "type": "string",
+      "description": "System prompt or behavior definition"
+    },
+    "triggers": {
+      "type": "object",
+      "properties": {
+        "schedule": {
+          "type": "string",
+          "description": "Cron expression for scheduled runs"
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["git.push", "git.pr", "webhook", "manual"]
+          }
+        }
+      }
+    },
+    "secrets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Required environment variable names (not values)"
+    }
+  }
+}
