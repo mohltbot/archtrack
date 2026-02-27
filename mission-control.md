@@ -1,7 +1,7 @@
 # Mission Control Board
 
-**Last Reconstructed:** February 27, 2026 at 8:35 AM PST  
-**Source:** Memory extraction from daily logs, nightly reports, and active projects
+**Last Updated:** February 27, 2026 at 12:09 PM PST (Ghost Shift)  
+**Source:** Automated work session + proactive task generation
 
 ---
 
@@ -10,9 +10,10 @@
 | Metric | Value |
 |--------|-------|
 | **Budget** | $13.15 / $200 (6.6%) ✅ |
-| **Tasks** | 20 total — 17 done, 3 pending |
-| **Open PRs** | 3 (pending review) |
+| **Tasks** | 23 total — 19 done, 4 pending |
+| **Open PRs** | 4 (pending review) |
 | **API Spend Status** | Healthy (well under $150 alert threshold) |
+| **Last Ghost Shift** | Feb 27, 2026 12:09 PM PST |
 
 ---
 
@@ -23,14 +24,17 @@ Tasks I can execute autonomously without manual input:
 - [ ] **Review & Merge PR #10** — GitAgent Integration (Git-native agent definitions)
 - [ ] **Review & Merge PR #11** — Agent Self-Diagnostics Module (proactive health monitoring)
 - [ ] **Review & Merge PR #12** — Browser Use Agent API Integration (cloud browser automation)
+- [x] **Review & Merge PR #13** — Apple On-Device LLM (FREE local inference) — *Reviewed, HIGH PRIORITY for budget*
 - [ ] **Fix Model Optimizer API endpoint** — Currently returning 404 error
 - [ ] **Wire diagnostics to actual agent execution** — Connect self-diagnostics module
 - [ ] **Set BROWSER_USE_API_KEY in .env** — If using fallback scraper for Ben's Bites
 - [ ] **Add memory browser to Mission Control** — Dashboard feature for viewing logs
 - [ ] **Create expense tracking automation** — Auto-log API costs to spreadsheet
-- [ ] **Batch memory maintenance** — Review daily logs, distill to MEMORY.md
+- [x] **Batch memory maintenance** — Review daily logs, distill to MEMORY.md — *Completed Feb 27*
 - [ ] **Test nightly work session** — Verify 2 AM automation runs correctly
 - [ ] **Fix npm permission issues** — Ongoing setup cleanup
+- [x] **[Proactive] Create accounting-tax skill documentation** — Usage guide for submitted ClawHub skill — *Created docs/accounting-tax-skill.md*
+- [ ] **[Proactive] Test Apple On-Device LLM on Mac Mini** — Install apple-fm-sdk, download model, verify local inference — *BLOCKED: needs your approval to merge PR #13 first*
 
 ---
 
@@ -49,6 +53,7 @@ Tasks requiring manual input, approval, or interactive authentication:
 
 Completed tasks from recent work sessions:
 
+- [x] **Ghost Shift — Feb 27, 12:09 PM** — Reviewed PR #13 (Apple On-Device LLM), created accounting-tax docs, memory maintenance
 - [x] **Initial Setup** — GitHub account (mohltbot), mission-control repo created
 - [x] **Mission Control Dashboard v0.1** — Next.js 15 glassmorphism UI, running at localhost:3000
 - [x] **Automated Work Sessions** — 2 AM nightly + 12 PM mid-day check-ins configured
@@ -118,9 +123,10 @@ Completed tasks from recent work sessions:
 ## 🔗 Quick Links
 
 - **GitHub Repo:** https://github.com/mohltbot/mission-control
-- **Open PRs:** #10, #11, #12 (all draft, awaiting review)
+- **Open PRs:** #10 (GitAgent), #11 (Self-Diagnostics), #12 (Browser Use API), #13 🆕 (Apple On-Device LLM - FREE)
 - **Local Dashboard:** http://localhost:3000
 - **ClawHub:** accounting-tax skill submitted
+- **Accounting-Tax Docs:** `docs/accounting-tax-skill.md` (created this shift)
 
 ---
 
