@@ -1,0 +1,105 @@
+{
+  "name": "Narada: Executive Assistant Agent - Travel Booking",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\n  json: {\n    employeeEmail: 'exec@company.com',\n    employeeName: 'John Executive',\n    request: 'Book travel to SF for conference next week',\n    dates: {\n      departure: '2026-03-05',\n      return: '2026-03-08'\n    },\n    preferences: {\n      airline: 'United',\n      hotel: 'Marriott',\n      class: 'business'\n    }\n  }\n}];"
+      },
+      "name": "Travel Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const policy = {\n  maxFlightCost: 1500,\n  maxHotelCost: 400,\n  requiresApproval: (cost) => cost > 1000,\n  preferredAirlines: ['United', 'Delta', 'American'],\n  hotelTier: 'business'\n};\n\nconst request = $input.first().json;\n\n// Check policy compliance\nconst issues = [];\nif (!policy.preferredAirlines.includes(request.preferences?.airline)) {\n  issues.push('Non-preferred airline selected');\n}\n\nreturn [{\n  json: {\n    ...request,\n    policy,\n    policyIssues: issues,\n    estimatedCost: {\n      flight: 1200,\n      hotel: 350,\n      total: 1550\n    },\n    requiresApproval: true\n  }\n}];"
+      },
+      "name": "Check Policy",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "channel": "executive-requests",
+        "text": "=✈️ Travel Booking Request\n\nEmployee: {{ $json.employeeName }}\nTrip: {{ $json.request }}\nDates: {{ $json.dates.departure }} - {{ $json.dates.return }}\n\n💰 Estimated Cost: ${{ $json.estimatedCost.total }}\nPolicy Issues: {{ $json.policyIssues.length > 0 ? $json.policyIssues.join(', ') : 'None' }}\n\n⚡ One-Click Approval: Reply with \"APPROVE\" to book",
+        "options": {}
+      },
+      "name": "Notify Manager",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.1,
+      "position": [850, 200]
+    },
+    {
+      "parameters": {
+        "fromEmail": "assistant@company.com",
+        "toEmail": "={{ $json.employeeEmail }}",
+        "subject": "=Travel Request Submitted - Awaiting Approval",
+        "text": "=Hi {{ $json.employeeName }},\n\nI've received your travel request:\n{{ $json.request }}\n\n✅ Policy Check: Passed (with notes)\n💰 Estimated Total: ${{ $json.estimatedCost.total }}\n\nYour manager has been notified for approval. You'll receive confirmation within 1 hour.\n\nBest,\nYour AI Assistant",
+        "options": {}
+      },
+      "name": "Confirm to Employee",
+      "type": "n8n-nodes-base.sendEmail",
+      "typeVersion": 2.1,
+      "position": [850, 400]
+    },
+    {
+      "parameters": {
+        "resource": "task",
+        "operation": "create",
+        "projectId": "=TRAVEL_REQUESTS",
+        "name": "=Travel: {{ $json.employeeName }} - {{ $json.dates.departure }}",
+        "notes": "=Cost: ${{ $json.estimatedCost.total }}\nStatus: Awaiting approval\nPolicy check: {{ $json.policyIssues.length > 0 ? 'Issues found' : 'Clean' }}"
+      },
+      "name": "Create Task",
+      "type": "n8n-nodes-base.asana",
+      "typeVersion": 1,
+      "position": [1050, 300],
+      "notes": "Replace with your task manager"
+    },
+    {
+      "parameters": {
+        "jsCode": "// This would trigger the actual booking once approved\n// For demo purposes, showing the approval workflow\nreturn [{\n  json: {\n    status: 'pending_approval',\n    bookingId: 'BK' + Date.now(),\n    nextStep: 'Wait for manager approval via Slack'
+  }\n}];"
+      },
+      "name": "Await Approval",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1250, 300]
+    }
+  ],
+  "connections": {
+    "Trigger": {
+      "main": [[{"node": "Travel Request", "type": "main", "index": 0}]]
+    },
+    "Travel Request": {
+      "main": [[{"node": "Check Policy", "type": "main", "index": 0}]]
+    },
+    "Check Policy": {
+      "main": [
+        [{"node": "Notify Manager", "type": "main", "index": 0}],
+        [{"node": "Confirm to Employee", "type": "main", "index": 0}]
+      ]
+    },
+    "Notify Manager": {
+      "main": [[{"node": "Create Task", "type": "main", "index": 0}]]
+    },
+    "Confirm to Employee": {
+      "main": [[{"node": "Create Task", "type": "main", "index": 0}]]
+    },
+    "Create Task": {
+      "main": [[{"node": "Await Approval", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "description": "Narada: Executive Assistant Agent - Handles complex travel booking with policy checks and manager approval"
+}
