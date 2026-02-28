@@ -256,7 +256,7 @@
     {
       "id": 26,
       "title": "Relationship Ninja CRM (Bi-weekly)",
-      "description": "Analyzes Google Sheet contacts, drafts outreach messages for Siegfried 12 and Sunday calls, reports to #ninja-crm.",
+      "description": "Analyzes Google Sheet contacts, identifies The Siegfried 12 (Big 4, 3+ yrs, CPA track, D Beaker Opt-ins), drafts outreach for cultivation, reports to #ninja-crm. Goal: Cultivate 12 \u2192 Recruit 3.",
       "status": "active",
       "priority": "high",
       "category": "cron",
@@ -264,7 +264,15 @@
       "channel": "discord",
       "discord_channel": "#ninja-crm",
       "spreadsheet": "https://docs.google.com/spreadsheets/d/1BgOdW3dBF1e7yYRz0wGC9TN75QcHRgsl/edit",
-      "created_at": "2026-02-27T23:01:00Z"
+      "created_at": "2026-02-27T23:01:00Z",
+      "target_profile": {
+        "big4_experience": "3+ years",
+        "industry_experience": "0+ years",
+        "cpa_status": "Working toward CPA",
+        "priority": "D Beaker Opt-ins (expressed interest)",
+        "exclude": "Current Siegfried employees",
+        "goal": "Identify 12 prospects \u2192 Cultivate \u2192 Recruit 3"
+      }
     },
     {
       "id": 27,
