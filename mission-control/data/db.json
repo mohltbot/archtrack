@@ -197,6 +197,24 @@
       "category": "automation",
       "created_at": "2026-02-27T02:00:00Z",
       "completed_at": "2026-02-27T02:30:00Z"
+    },
+    {
+      "id": 21,
+      "title": "Test 4 v2 VC Portfolio Workflows",
+      "description": "Test all 4 research-based v2 workflows in n8n (KlearNow.AI, Narada, Newtrul, Avaamo). Run each workflow, verify execution, check notifications. Provide feedback on which to demo to VC.",
+      "status": "pending",
+      "priority": "high",
+      "category": "vc_portfolio",
+      "created_at": "2026-02-28T03:38:00Z"
+    },
+    {
+      "id": 22,
+      "title": "Decide on building remaining 12 VC workflows",
+      "description": "After testing the 4 v2 workflows, tell mohltbot whether to build workflows for the remaining 12 companies (Shael: 4, Sarah: 4, Imran: 4). Options: YES (build all 12), SAMPLE (build 2-3 best examples), or NO (stop here).",
+      "status": "pending",
+      "priority": "high",
+      "category": "vc_portfolio",
+      "created_at": "2026-02-28T03:38:00Z"
     }
   ],
   "expenses": [
