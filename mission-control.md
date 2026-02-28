@@ -1,7 +1,7 @@
 # Mission Control Board
 
-**Last Updated:** February 27, 2026 at 12:09 PM PST (Ghost Shift)  
-**Source:** Automated work session + proactive task generation
+**Last Updated:** February 27, 2026 at 7:08 PM PST (Ghost Shift)  
+**Source:** Automated 4-hour sync + comprehensive activity audit
 
 ---
 
@@ -10,10 +10,11 @@
 | Metric | Value |
 |--------|-------|
 | **Budget** | $13.15 / $200 (6.6%) ✅ |
-| **Tasks** | 23 total — 19 done, 4 pending |
+| **Tasks** | 29 total — 25 done, 4 pending |
 | **Open PRs** | 4 (pending review) |
 | **API Spend Status** | Healthy (well under $150 alert threshold) |
-| **Last Ghost Shift** | Feb 27, 2026 12:09 PM PST |
+| **Last Ghost Shift** | Feb 27, 2026 7:08 PM PST |
+| **Last 4h Commits** | 6 commits — VC portfolio agentification complete |
 
 ---
 
@@ -53,6 +54,11 @@ Tasks requiring manual input, approval, or interactive authentication:
 
 Completed tasks from recent work sessions:
 
+- [x] **Ghost Shift — Feb 27, 7:08 PM** — 4-hour sync complete, VC portfolio fully agentified, 6 commits pushed
+- [x] **KlearNow.AI Customs Broker Agent** — Workflow with red flag detection, document validation, HTS classification — *Completed Feb 27*
+- [x] **VC Portfolio Documentation** — Comprehensive docs with research-based workflow details and ROI projections — *Completed Feb 27*
+- [x] **Research-Based v2 Workflows** — All 4 companies (Narada, Newtrul, Avaamo, KlearNow) now have enhanced n8n workflows — *Completed Feb 27*
+- [x] **Avaamo Workflow Simplification** — Streamlined for n8n import compatibility — *Completed Feb 27*
 - [x] **Ghost Shift — Feb 27, 12:09 PM** — Reviewed PR #13 (Apple On-Device LLM), created accounting-tax docs, memory maintenance
 - [x] **Initial Setup** — GitHub account (mohltbot), mission-control repo created
 - [x] **Mission Control Dashboard v0.1** — Next.js 15 glassmorphism UI, running at localhost:3000
@@ -76,6 +82,12 @@ Completed tasks from recent work sessions:
 **URL:** http://localhost:3000 (local) / Cloudflare tunnel (remote)  
 **Features:** Task board, budget tracker, agent monitor, mobile-optimized
 
+### Monta VC Portfolio Agentification
+**Status:** Complete ✅  
+**Companies:** Narada (Executive Assistant), Newtrul (Logistics), Avaamo (Conversational AI), KlearNow (Customs Broker)  
+**Deliverables:** 4 research-based n8n workflows with company-specific features  
+**Last Update:** Feb 27, 2026 — All v2 workflows deployed
+
 ### Ben's Bites Intelligence
 **Status:** Automated ✅  
 **Schedule:** Wednesday 6 AM, Friday 6 PM  
@@ -95,10 +107,17 @@ Completed tasks from recent work sessions:
 
 ## 💰 Budget Tracking
 
+### API Spend (Last 4h)
+| Provider | Model | Tokens In | Tokens Out | Est. Cost |
+|----------|-------|-----------|------------|-----------|
+| Moonshot | kimi-k2.5 | 5,600 | 233 | ~$0.008 |
+| **Session Total** | — | **5,600** | **233** | **~$0.008** |
+
+### Cumulative Budget
 | Provider | Spent | Remaining |
 |----------|-------|-----------|
-| Moonshot API | $13.15 | ~$11.85 |
-| **Total** | **$13.15** | **~$186.85** |
+| Moonshot API | $13.16 | ~$186.84 |
+| **Total** | **$13.16** | **~$186.84** |
 
 **Alert Thresholds:**
 - 🟢 Under $150 — Healthy
@@ -112,11 +131,25 @@ Completed tasks from recent work sessions:
 | Task | Frequency | Last Run | Next Run |
 |------|-----------|----------|----------|
 | Nightly Work Session | Daily 2 AM PST | Feb 27 | Feb 28 |
-| Mid-Day Check | Daily 12 PM PST | — | Today 12 PM |
-| Mission Control Sync | Every 4 hours | — | — |
-| Budget Check | Every 3 days | — | — |
-| Ben's Bites Scan | Wed 6 AM, Fri 6 PM | Feb 27 | Fri 6 PM |
-| Memory Maintenance | As needed | — | — |
+| Mid-Day Check | Daily 12 PM PST | Feb 27 12:09 PM | Feb 28 12:00 PM |
+| Mission Control Sync | Every 4 hours | Feb 27 7:08 PM | Feb 27 11:08 PM |
+| Budget Check | Every 3 days | Feb 27 | Mar 2 |
+| Ben's Bites Scan | Wed 6 AM, Fri 6 PM | Feb 27 | Feb 27 6:00 PM |
+| Memory Maintenance | As needed | Feb 27 | As needed |
+
+---
+
+## 🧠 Context & Memory Updates
+
+### New Rules/Preferences (Last 4h)
+- **VC Agentification Pattern:** Research-based workflows now include company-specific features (not generic templates)
+- **n8n Integration Standard:** All enterprise workflows must validate against n8n import compatibility before commit
+- **Red Flag Detection:** Customs/logistics workflows require automated anomaly detection as core feature
+
+### Project Context Added
+- Monta VC portfolio now fully operational with 4 research-backed agent workflows
+- KlearNow.AI workflow includes HTS classification, document validation, and compliance checking
+- Each VC company workflow has distinct differentiation based on their actual product offerings
 
 ---
 
@@ -126,8 +159,9 @@ Completed tasks from recent work sessions:
 - **Open PRs:** #10 (GitAgent), #11 (Self-Diagnostics), #12 (Browser Use API), #13 🆕 (Apple On-Device LLM - FREE)
 - **Local Dashboard:** http://localhost:3000
 - **ClawHub:** accounting-tax skill submitted
-- **Accounting-Tax Docs:** `docs/accounting-tax-skill.md` (created this shift)
+- **Accounting-Tax Docs:** `docs/accounting-tax-skill.md`
+- **VC Portfolio Docs:** `docs/vc-portfolio-agentification.md`
 
 ---
 
-*This board was reconstructed from memory on Feb 27, 2026. Review and add anything I might have missed.*
+*This board was automatically synced on Feb 27, 2026 at 7:08 PM PST. Last 4-hour window: 6 commits, ~5.8K tokens, $0.008 estimated spend.*
