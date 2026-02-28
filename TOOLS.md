@@ -63,3 +63,9 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 ---
 
 Add whatever helps you do your job. This is your cheat sheet.
+
+### Google API Access (Updated Feb 28)
+**Scopes now include:**
+- ✅ Google Calendar (read/write/events) - Event Scout auto-booking
+- ✅ Google Sheets (read-only) - Ninja CRM contact analysis
+- **Token expires:** 1 hour (auto-refresh enabled)
