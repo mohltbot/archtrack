@@ -215,6 +215,94 @@
       "priority": "high",
       "category": "vc_portfolio",
       "created_at": "2026-02-28T03:38:00Z"
+    },
+    {
+      "id": 23,
+      "title": "Ghost-Shifts (Every 12hrs)",
+      "description": "Autonomous work session - reads Mission Control, executes AI-Ready tasks, reports to Discord #work-session-briefs. Runs at 12pm & 12am PST.",
+      "status": "active",
+      "priority": "high",
+      "category": "cron",
+      "schedule": "Every 12 hours (12pm/12am PST)",
+      "channel": "discord",
+      "discord_channel": "#work-session-briefs",
+      "created_at": "2026-02-27T23:01:00Z"
+    },
+    {
+      "id": 24,
+      "title": "Mission Control Update (Every 4hrs)",
+      "description": "4-hour audit - reviews activity, calculates API costs, updates mission-control.md, reports to Discord.",
+      "status": "active",
+      "priority": "high",
+      "category": "cron",
+      "schedule": "Every 4 hours",
+      "channel": "discord",
+      "discord_channel": "#mission-control-updates",
+      "created_at": "2026-02-27T23:01:00Z"
+    },
+    {
+      "id": 25,
+      "title": "Ben's Bites Scanner (Weekly)",
+      "description": "Scans newsletter, implements HIGH priority tools, opens DRAFT PRs, reports to Discord. Runs Wed & Fri 6am PST.",
+      "status": "error",
+      "priority": "high",
+      "category": "cron",
+      "schedule": "Wed & Fri 6am PST (weekly)",
+      "channel": "discord",
+      "discord_channel": "#bens-bites-findings",
+      "last_error": "Discord message failed",
+      "created_at": "2026-02-27T23:01:00Z"
+    },
+    {
+      "id": 26,
+      "title": "Relationship Ninja CRM (Bi-weekly)",
+      "description": "Analyzes Google Sheet contacts, drafts outreach messages for Siegfried 12 and Sunday calls, reports to #ninja-crm.",
+      "status": "active",
+      "priority": "high",
+      "category": "cron",
+      "schedule": "Every 2 weeks",
+      "channel": "discord",
+      "discord_channel": "#ninja-crm",
+      "spreadsheet": "https://docs.google.com/spreadsheets/d/1BgOdW3dBF1e7yYRz0wGC9TN75QcHRgsl/edit",
+      "created_at": "2026-02-27T23:01:00Z"
+    },
+    {
+      "id": 27,
+      "title": "Event Scout (Weekly)",
+      "description": "Scrapes Lu.ma/Eventbrite for AI/SaaS events 5-9pm PST, reports findings to #luma-scout. Manual calendar entry required.",
+      "status": "active",
+      "priority": "medium",
+      "category": "cron",
+      "schedule": "Weekly",
+      "channel": "discord",
+      "discord_channel": "#luma-scout",
+      "note": "Google Calendar integration disabled - auth required",
+      "created_at": "2026-02-27T23:01:00Z"
+    },
+    {
+      "id": 28,
+      "title": "Test 4 v2 VC Portfolio Workflows",
+      "description": "Test all 4 research-based v2 workflows in n8n (KlearNow.AI, Narada, Newtrul, Avaamo). Run each workflow, verify execution, check notifications.",
+      "status": "pending",
+      "priority": "high",
+      "category": "vc_portfolio",
+      "workflow_ids": [
+        "H1afUHStT3WWiKIH",
+        "7KDcp7ADUUGwe67r",
+        "lJgnEacbjVXRKkYr",
+        "EfRetKCRnFl3FtAJ"
+      ],
+      "created_at": "2026-02-28T03:38:00Z"
+    },
+    {
+      "id": 29,
+      "title": "Decide on building remaining 12 VC workflows",
+      "description": "After testing the 4 v2 workflows, decide whether to build workflows for remaining 12 companies (Shael: 4, Sarah: 4, Imran: 4). Options: YES, SAMPLE, or NO.",
+      "status": "pending",
+      "priority": "high",
+      "category": "vc_portfolio",
+      "depends_on": 28,
+      "created_at": "2026-02-28T03:38:00Z"
     }
   ],
   "expenses": [
