@@ -199,3 +199,55 @@
 
 *Mission Control v0.2 — 2026-02-27*
 *Last Sync: 3:08 PM PT*
+
+---
+
+## 🤖 Active Cron Jobs (Automated)
+
+| Job | Schedule | Status | Discord Channel |
+|-----|----------|--------|-----------------|
+| **Ghost-Shifts** | Every 12 hours (12pm & 12am PST) | ✅ Active | #work-session-briefs |
+| **Mission Control Update** | Every 4 hours | ✅ Active | #mission-control-updates |
+| **Ben's Bites Scanner** | Wed & Fri 6am PST | ⚠️ Error | #bens-bites-findings |
+| **Relationship Ninja CRM** | Every 2 weeks | ✅ Active | #ninja-crm |
+| **Event Scout** | Weekly | ✅ Active | #luma-scout |
+
+### Cron Job Details
+
+#### Ghost-Shifts (Every 12hrs)
+- **Purpose:** Autonomous work sessions
+- **Actions:** Read Mission Control → Execute AI-Ready tasks → Report to Discord
+- **Last Run:** See #work-session-briefs
+
+#### Mission Control Update (Every 4hrs)
+- **Purpose:** Comprehensive audit and sync
+- **Actions:** Review activity → Calculate API costs → Update mission-control.md → Discord report
+- **Tracks:** Token usage, expenses, task progress
+
+#### Ben's Bites Scanner (Weekly)
+- **Purpose:** AI newsletter automation
+- **Actions:** Scan newsletter → Implement HIGH priority tools → Open DRAFT PRs → Report findings
+- **Issue:** Discord message delivery failing
+
+#### Relationship Ninja CRM (Bi-weekly)
+- **Purpose:** Siegfried Relationship Ninja program support
+- **Actions:** Read Google Sheet → Identify outreach targets → Draft messages → Report to #ninja-crm
+- **Sheet:** https://docs.google.com/spreadsheets/d/1BgOdW3dBF1e7yYRz0wGC9TN75QcHRgsl/edit
+
+#### Event Scout (Weekly)
+- **Purpose:** SF Bay Area tech event discovery
+- **Actions:** Scrape Lu.ma/Eventbrite → Filter AI/SaaS events (5-9pm PST) → Report to #luma-scout
+- **Note:** Google Calendar integration disabled (auth required)
+
+---
+
+## 📅 Next Scheduled Runs
+
+| Job | Next Run | Time Until |
+|-----|----------|------------|
+| Ghost-Shifts | 12:00 AM PST | ~1 hour |
+| Mission Control Update | Next 4hr window | See logs |
+| Ben's Bites | Wed 6am PST | Check schedule |
+| Ninja CRM | March 12, 2026 | ~2 weeks |
+| Event Scout | Weekly | Check schedule |
+
