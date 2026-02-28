@@ -1,6 +1,6 @@
 # Mission Control Board
 
-**Last Updated:** February 27, 2026 at 8:03 PM PST (Ghost Shift)  
+**Last Updated:** February 28, 2026 at 12:03 AM PST (Ghost Shift)  
 **Source:** Automated 4-hour sync + comprehensive activity audit
 
 ---
@@ -9,12 +9,12 @@
 
 | Metric | Value |
 |--------|-------|
-| **Budget** | $13.17 / $200 (6.6%) ✅ |
+| **Budget** | $13.21 / $200 (6.6%) ✅ |
 | **Tasks** | 31 total — 26 done, 5 pending |
 | **Open PRs** | 4 (pending review) |
 | **API Spend Status** | Healthy (well under $150 alert threshold) |
-| **Last Ghost Shift** | Feb 27, 2026 8:03 PM PST |
-| **Last 4h Commits** | 8 commits — cost-tracker skill + v2 workflow testing tasks |
+| **Last Ghost Shift** | Feb 28, 2026 12:03 AM PST |
+| **Last 4h Commits** | 5 commits — Google Calendar OAuth + cron jobs documentation |
 
 ---
 
@@ -37,6 +37,7 @@ Tasks I can execute autonomously without manual input:
 - [x] **[Proactive] Create accounting-tax skill documentation** — Usage guide for submitted ClawHub skill — *Created docs/accounting-tax-skill.md*
 - [x] **[Proactive] Build cost-tracker skill** — Accurate API cost monitoring across all providers — *Completed Feb 27, 7:57 PM*
 - [x] **[Proactive] Add v2 workflow testing tasks** — Created tasks for validating Narada, Newtrul, Avaamo, KlearNow workflows — *Completed Feb 27, 7:40 PM*
+- [x] **[Proactive] Enable Google Calendar OAuth** — Tokens stored locally, automation ready — *Completed Feb 27, 11:30 PM*
 - [ ] **[Proactive] Test Apple On-Device LLM on Mac Mini** — Install apple-fm-sdk, download model, verify local inference — *BLOCKED: needs your approval to merge PR #13 first*
 
 ---
@@ -57,6 +58,10 @@ Tasks requiring manual input, approval, or interactive authentication:
 
 Completed tasks from recent work sessions:
 
+- [x] **Ghost Shift — Feb 28, 12:03 AM** — 4-hour sync complete, Google Calendar OAuth enabled, cron jobs documented
+- [x] **Google Calendar OAuth** — Enabled for automation, tokens stored locally — *Completed Feb 27, 11:30 PM*
+- [x] **Cron Jobs Documentation** — All 6 cron jobs documented with schedules and Discord channels — *Completed Feb 27, 11:15 PM*
+- [x] **Ninja CRM Criteria Update** — Prospecting criteria refined: 12 prospects, D Beaker Opt-ins priority, Big 4/CPA target — *Completed Feb 27, 10:45 PM*
 - [x] **Ghost Shift — Feb 27, 8:03 PM** — 4-hour sync complete, cost-tracker skill added, v2 workflow testing tasks created
 - [x] **Cost-Tracker Skill** — New skill for accurate API cost monitoring across all LLM providers — *Completed Feb 27, 7:57 PM*
 - [x] **V2 Workflow Testing Tasks** — Added structured tasks for testing all 4 company workflows — *Completed Feb 27, 7:40 PM*
@@ -115,6 +120,11 @@ Completed tasks from recent work sessions:
 **Features:** Bank reconciliation, tax calc, financial analysis, depreciation  
 **Pending:** LinkedIn post for marketing
 
+### Google Calendar Integration
+**Status:** OAuth Enabled ✅  
+**Features:** Calendar read/write for automation, event scheduling  
+**Last Update:** Feb 27, 2026 11:30 PM
+
 ---
 
 ## 💰 Budget Tracking
@@ -122,14 +132,14 @@ Completed tasks from recent work sessions:
 ### API Spend (Last 4h)
 | Provider | Model | Tokens In | Tokens Out | Est. Cost |
 |----------|-------|-----------|------------|-----------|
-| Moonshot | kimi-k2.5 | 6,400 | 550 | ~$0.010 |
-| **Session Total** | — | **6,400** | **550** | **~$0.010** |
+| Moonshot | kimi-k2.5 | 21,400 | 5,400 | ~$0.040 |
+| **Session Total** | — | **26,800** | **—** | **~$0.040** |
 
 ### Cumulative Budget
 | Provider | Spent | Remaining |
 |----------|-------|-----------|
-| Moonshot API | $13.17 | ~$186.83 |
-| **Total** | **$13.17** | **~$186.83** |
+| Moonshot API | $13.21 | ~$186.79 |
+| **Total** | **$13.21** | **~$186.79** |
 
 **Alert Thresholds:**
 - 🟢 Under $150 — Healthy
@@ -144,7 +154,7 @@ Completed tasks from recent work sessions:
 |------|-----------|----------|----------|
 | Nightly Work Session | Daily 2 AM PST | Feb 27 | Feb 28 |
 | Mid-Day Check | Daily 12 PM PST | Feb 27 12:09 PM | Feb 28 12:00 PM |
-| Mission Control Sync | Every 4 hours | Feb 27 8:03 PM | Feb 28 12:03 AM |
+| Mission Control Sync | Every 4 hours | Feb 28 12:03 AM | Feb 28 4:03 AM |
 | Budget Check | Every 3 days | Feb 27 | Mar 2 |
 | Ben's Bites Scan | Wed 6 AM, Fri 6 PM | Feb 27 | Feb 27 6:00 PM |
 | Memory Maintenance | As needed | Feb 27 | As needed |
@@ -154,14 +164,15 @@ Completed tasks from recent work sessions:
 ## 🧠 Context & Memory Updates
 
 ### New Rules/Preferences (Last 4h)
-- **Cost Tracking Standard:** New cost-tracker skill deployed for accurate multi-provider API cost monitoring
-- **V2 Workflow Testing:** All enterprise workflows must be tested for n8n import compatibility before marking complete
-- **Task Granularity:** Breaking testing phases into discrete, trackable tasks for better visibility
+- **Google Calendar OAuth Standard:** All calendar automations must use OAuth tokens stored locally only
+- **Cron Job Documentation:** All scheduled tasks must be documented with frequency, last run, next run, and Discord channel
+- **Ninja CRM Criteria:** Prospecting refined to 12 prospects, D Beaker Opt-ins priority, Big 4/CPA profile targeting
 
 ### Project Context Added
-- Cost-tracker skill now operational for accurate budget tracking across Moonshot, DeepSeek, and Gemini
-- VC portfolio v2 workflows require validation testing before full completion
-- Mission Control sync interval standardized to every 4 hours with structured reporting format
+- Google Calendar OAuth now enabled for calendar-based automations
+- 6 cron jobs fully documented: Mission Control Sync, Nightly Work Session, Mid-Day Check, Budget Check, Ben's Bites Scan, Memory Maintenance
+- Ninja CRM prospecting criteria updated with clearer targeting parameters
+- Mission Control sync now runs every 4 hours with structured reporting
 
 ---
 
@@ -177,4 +188,4 @@ Completed tasks from recent work sessions:
 
 ---
 
-*This board was automatically synced on Feb 27, 2026 at 8:03 PM PST. Last 4-hour window: 8 commits, ~6.9K tokens, $0.010 estimated spend.*
+*This board was automatically synced on Feb 28, 2026 at 12:03 AM PST. Last 4-hour window: 5 commits, ~26.8K tokens, $0.040 estimated spend.*
