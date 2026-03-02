@@ -1,0 +1,121 @@
+{
+  "name": "Newtrul: TMS Integration Freight Agent v2",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\n  json: {\n    source: 'tms_webhook',\n    tmsSystem: 'Tai Software',\n    brokerId: 'BROKER_001',\n    load: {\n      id: 'LOAD-2026-8847',\n      origin: { city: 'Dallas', state: 'TX', zip: '75201' },\n      destination: { city: 'Atlanta', state: 'GA', zip: '30309' },\n      distance: 780,\n      equipment: 'Dry Van',\n      weight: 42000,\n      pickupDate: '2026-03-02',\n      deliveryDate: '2026-03-04',\n      commodity: 'Consumer Electronics',\n      offerRate: 2100,\n      maxRate: 2400\n    },\n    preferredCarriers: ['CAR_001', 'CAR_002', 'CAR_003']\n  }\n}];"
+      },
+      "name": "TMS Load Posted",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const load = $input.first().json.load;\n\n// Newtrul's Smart Matching algorithm\n// Analyzes carrier preferences, history, equipment, location\n\nconst carriers = [\n  {\n    id: 'CAR_001',\n    name: 'Swift Transportation',\n    rating: 4.8,\n    onTime: 0.96,\n    equipment: ['Dry Van', 'Reefer'],\n    preferredLanes: ['TX-GA', 'TX-FL', 'TX-NC'],\n    currentLocation: { city: 'Houston', state: 'TX' },\n    availableDate: '2026-03-01',\n    acceptanceRate: 0.85,\n    fraudScore: 0.02\n  },\n  {\n    id: 'CAR_002',\n    name: 'J.B. Hunt',\n    rating: 4.9,\n    onTime: 0.98,\n    equipment: ['Dry Van', 'Flatbed'],\n    preferredLanes: ['TX-GA', 'OK-TX'],\n    currentLocation: { city: 'Dallas', state: 'TX' },\n    availableDate: '2026-03-01',\n    acceptanceRate: 0.75,\n    fraudScore: 0.01\n  },\n  {\n    id: 'CAR_003',\n    name: 'Schneider',\n    rating: 4.7,\n    onTime: 0.94,\n    equipment: ['Dry Van'],\n    preferredLanes: ['TX-GA', 'TX-LA'],\n    currentLocation: { city: 'San Antonio', state: 'TX' },\n    availableDate: '2026-03-02',\n    acceptanceRate: 0.80,\n    fraudScore: 0.03\n  },\n  {\n    id: 'CAR_004',\n    name: 'Knight-Swift',\n    rating: 4.6,\n    onTime: 0.93,\n    equipment: ['Dry Van', 'Reefer'],\n    preferredLanes: ['TX-GA'],\n    currentLocation: { city: 'Austin', state: 'TX' },\n    availableDate: '2026-03-01',\n    acceptanceRate: 0.88,\n    fraudScore: 0.04\n  }\n];\n\n// Smart matching score calculation\nconst scoredCarriers = carriers.map(carrier => {\n  let score = 0;\n  let reasons = [];\n  \n  // Lane preference match\n  const laneKey = load.origin.state + '-' + load.destination.state;\n  if (carrier.preferredLanes.includes(laneKey)) {\n    score += 25;\n    reasons.push('Preferred lane match');\n  }\n  \n  // Equipment match\n  if (carrier.equipment.includes(load.equipment)) {\n    score += 20;\n    reasons.push('Equipment match');\n  }\n  \n  // Proximity to pickup\n  const distanceFromPickup = Math.abs(['Houston', 'Dallas', 'San Antonio', 'Austin'].indexOf(carrier.currentLocation.city) - 0);\n  score += (3 - distanceFromPickup) * 10;\n  if (carrier.currentLocation.city === load.origin.city) {\n    reasons.push('In pickup city');\n  }\n  \n  // Performance\n  score += carrier.rating * 5;\n  score += carrier.onTime * 10;\n  score += carrier.acceptanceRate * 15;\n  \n  // Fraud protection (Highway integration)\n  score -= carrier.fraudScore * 100;\n  if (carrier.fraudScore < 0.03) {\n    reasons.push('Low fraud risk');\n  }\n  \n  // Rate competitiveness\n  const suggestedRate = load.distance * 2.8; // $2.80/mile market rate\n  const rateAcceptance = load.offerRate >= suggestedRate ? 1.0 : load.offerRate / suggestedRate;\n  score += rateAcceptance * 15;\n  \n  return {\n    ...carrier,\n    matchScore: Math.round(score),\n    suggestedRate: Math.round(suggestedRate),\n    reasons,\n    bookable: score > 70 && carrier.fraudScore < 0.05\n  };\n}).sort((a, b) => b.matchScore - a.matchScore);\n\nreturn [{\n  json: {\n    ...$input.first().json,\n    scoredCarriers,\n    topMatch: scoredCarriers[0],\n    alternatives: scoredCarriers.slice(1, 3),\n    digitalBookingAvailable: scoredCarriers[0].bookable\n  }\n}];"
+      },
+      "name": "Smart Matching Algorithm",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 300],
+      "notes": "Newtrul's Smart Matching: Considers lane preference, equipment, location, performance, and fraud score (Highway integration)"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\n\n// Digital Booking - Auto-negotiate and book\nconst topCarrier = data.topMatch;\n\n// Try to negotiate 3% below offer rate\nconst negotiatedRate = Math.round(data.load.offerRate * 0.97);\nconst savings = data.load.offerRate - negotiatedRate;\n\n// Check if carrier accepts negotiated rate\nconst carrierAccepts = negotiatedRate >= topCarrier.suggestedRate * 0.95;\n\nreturn [{\n  json: {\n    ...data,\n    negotiation: {\n      originalOffer: data.load.offerRate,\n      negotiatedRate: carrierAccepts ? negotiatedRate : data.load.offerRate,\n      savings: carrierAccepts ? savings : 0,\n      carrierAccepts,\n      message: carrierAccepts \n        ? `${topCarrier.name} accepted negotiated rate of $${negotiatedRate}` \n        : `${topCarrier.name} requires original offer of $${data.load.offerRate}`\n    },\n    readyToBook: true\n  }\n}];"
+      },
+      "name": "Digital Booking & Negotiation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [850, 300],
+      "notes": "Newtrul's Digital Booking: Auto-negotiates rates and books digitally without phone calls"
+    },
+    {
+      "parameters": {
+        "channel": "freight-booking",
+        "text": "=🚛 Smart Match Found & Negotiated\n\nLoad: {{ $json.load.id }}\nRoute: {{ $json.load.origin.city }}, {{ $json.load.origin.state }} → {{ $json.load.destination.city }}, {{ $json.load.destination.state }}\nDistance: {{ $json.load.distance }} miles\n\n🎯 Top Match: {{ $json.topMatch.name }}\nMatch Score: {{ $json.topMatch.matchScore }}/100\nRating: {{ $json.topMatch.rating }} ⭐ | On-time: {{ ($json.topMatch.onTime * 100).toFixed(0) }}%\n\n💰 Rate Negotiated:\n• Original Offer: ${{ $json.load.offerRate }}\n• Negotiated: ${{ $json.negotiation.negotiatedRate }}\n• Savings: ${{ $json.negotiation.savings }}\n\n✅ Fraud Check: Passed (Score: {{ $json.topMatch.fraudScore }})\n\n⚡ Reply BOOK to confirm digital booking",
+        "options": {}
+      },
+      "name": "Notify Broker",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.1,
+      "position": [1050, 200]
+    },
+    {
+      "parameters": {
+        "resource": "task",
+        "operation": "create",
+        "projectId": "=FREIGHT_MATCHES",
+        "name": "=Match: {{ $json.load.id }} - {{ $json.topMatch.name }}",
+        "notes": "=Rate: ${{ $json.negotiation.negotiatedRate }}\nScore: {{ $json.topMatch.matchScore }}\nSavings: ${{ $json.negotiation.savings }}\nStatus: Awaiting broker approval"
+      },
+      "name": "Log Match",
+      "type": "n8n-nodes-base.asana",
+      "typeVersion": 1,
+      "position": [1250, 200]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.tai-software.com/v1/loads/{{ $json.load.id }}/assign",
+        "method": "POST",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={\n  \"carrierId\": \"{{ $json.topMatch.id }}\",\n  \"rate\": {{ $json.negotiation.negotiatedRate }},\n  \"assignmentType\": \"Digital\",\n  \"platform\": \"Newtrul\"\n}"
+      },
+      "name": "Update TMS (Tai)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1050, 400],
+      "notes": "Newtrul integrates directly with TMS systems like Tai, McLeod, etc."
+    },
+    {
+      "parameters": {
+        "fromEmail": "dispatch@newtrul.io",
+        "toEmail": "dispatch@{{ $json.topMatch.name.toLowerCase().replace(/\\s+/g, '') }}.com",
+        "subject": "=Digital Load Offer: {{ $json.load.id }}",
+        "text": "=Hello {{ $json.topMatch.name }},\n\nYou have a new load offer via Newtrul Digital Booking:\n\nLoad ID: {{ $json.load.id }}\nRoute: {{ $json.load.origin.city }}, {{ $json.load.origin.state }} → {{ $json.load.destination.city }}, {{ $json.load.destination.state }}\nDistance: {{ $json.load.distance }} miles\n\nPickup: {{ $json.load.pickupDate }}\nDelivery: {{ $json.load.deliveryDate }}\n\nRate: ${{ $json.negotiation.negotiatedRate }}\nEquipment: {{ $json.load.equipment }}\n\nClick to accept: https://newtrul.io/book/{{ $json.load.id }}\n\nThis load is offered based on your Smart Match score of {{ $json.topMatch.matchScore }}/100.",
+        "options": {}
+      },
+      "name": "Offer to Carrier",
+      "type": "n8n-nodes-base.sendEmail",
+      "typeVersion": 2.1,
+      "position": [1250, 400]
+    }
+  ],
+  "connections": {
+    "Trigger": {
+      "main": [[{"node": "TMS Load Posted", "type": "main", "index": 0}]]
+    },
+    "TMS Load Posted": {
+      "main": [[{"node": "Smart Matching Algorithm", "type": "main", "index": 0}]]
+    },
+    "Smart Matching Algorithm": {
+      "main": [[{"node": "Digital Booking & Negotiation", "type": "main", "index": 0}]]
+    },
+    "Digital Booking & Negotiation": {
+      "main": [
+        [{"node": "Notify Broker", "type": "main", "index": 0}],
+        [{"node": "Update TMS (Tai)", "type": "main", "index": 0}]
+      ]
+    },
+    "Notify Broker": {
+      "main": [[{"node": "Log Match", "type": "main", "index": 0}]]
+    },
+    "Update TMS (Tai)": {
+      "main": [[{"node": "Offer to Carrier", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "description": "Newtrul v2: TMS-integrated Smart Matching with Digital Booking, fraud protection (Highway), and auto-negotiation"
+}
