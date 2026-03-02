@@ -36,15 +36,7 @@
       "name": "GPT Summarize",
       "parameters": {
         "model": "gpt-4o",
-        "prompt": "Summarize this meeting transcript:\n\n{{ $json.text }}\n\nProvide:\n1. Key discussion points (bullet list)\n2. Decisions made\n3. Action items with owners\n4. Next steps\n\nKeep it concise but comprehensive."
-      }
-    },
-    {
-      "id": "extractActions",
-      "type": "n8n-nodes-base.function",
-      "name": "Parse Action Items",
-      "parameters": {
-        "functionCode": "const summary = $input.first().json.content;\n// Extract action items with regex\nconst actionRegex = /- \[ \] (.+?)(?:\n|$)/g;\nconst actions = [];\nlet match;\nwhile ((match = actionRegex.exec(summary)) !== null) {\n  actions.push(match[1]);\n}\nreturn { actions, summary };"
+        "prompt": "Summarize this meeting transcript: {{ $json.text }} Provide: 1. Key discussion points 2. Decisions made 3. Action items 4. Next steps"
       }
     },
     {
@@ -57,8 +49,6 @@
         "parentDatabaseId": "meetings-db",
         "properties": {
           "Name": "={{ $json.meetingTopic }}",
-          "Date": "={{ $json.startTime }}",
-          "Attendees": "={{ $json.participants }}",
           "Summary": "={{ $json.summary }}"
         }
       }
@@ -69,7 +59,7 @@
       "name": "Post to Channel",
       "parameters": {
         "channel": "#meeting-notes",
-        "text": "📝 Meeting Summary: {{ $json.meetingTopic }}\n\n{{ $json.summary }}\n\n📋 Action Items:\n{{ $json.actions.map(a => \"- \" + a).join(\"\\n\") }}\n\n🔗 Full notes in Notion"
+        "text": "Meeting Summary: {{ $json.meetingTopic }} {{ $json.summary }}"
       }
     },
     {
@@ -79,7 +69,7 @@
       "parameters": {
         "to": "={{ $json.participants.join(',') }}",
         "subject": "Meeting Notes: {{ $json.meetingTopic }}",
-        "body": "Hi team,\n\nHere are the notes from today's meeting:\n\n{{ $json.summary }}\n\nAction items:\n{{ $json.actions.map(a => \"- \" + a).join(\"\\n\") }}\n\nFull transcript and notes: {{ $json.notionUrl }}"
+        "body": "Here are the notes from today's meeting: {{ $json.summary }}"
       }
     }
   ],
@@ -87,8 +77,7 @@
     "zoomTrigger": {"main": [[{"node": "getRecording", "type": "main", "index": 0}]]},
     "getRecording": {"main": [[{"node": "transcribe", "type": "main", "index": 0}]]},
     "transcribe": {"main": [[{"node": "summarize", "type": "main", "index": 0}]]},
-    "summarize": {"main": [[{"node": "extractActions", "type": "main", "index": 0}]]},
-    "extractActions": {"main": [[{"node": "createNotion", "type": "main", "index": 0}]]},
+    "summarize": {"main": [[{"node": "createNotion", "type": "main", "index": 0}]]},
     "createNotion": {"main": [[{"node": "slackSummary", "type": "main", "index": 0}]]},
     "slackSummary": {"main": [[{"node": "emailAttendees", "type": "main", "index": 0}]]}
   },
@@ -96,9 +85,8 @@
     "company": "Narada",
     "useCase": "Meeting Intelligence",
     "version": "2.0",
-    "nodes": 8,
+    "nodes": 7,
     "author": "Mission Control",
-    "status": "production-ready",
-    "roi": "Eliminate manual note-taking"
+    "status": "production-ready"
   }
 }
