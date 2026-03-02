@@ -1,0 +1,104 @@
+{
+  "name": "Avaamo - Employee Onboarding",
+  "description": "Automated HR onboarding: accounts, access, training, equipment",
+  "version": "2.0",
+  "nodes": [
+    {
+      "id": "formTrigger",
+      "type": "n8n-nodes-base.googleFormsTrigger",
+      "name": "New Hire Form",
+      "parameters": {
+        "formId": "new-hire-form"
+      }
+    },
+    {
+      "id": "createAccounts",
+      "type": "n8n-nodes-base.googleWorkspaceAdmin",
+      "name": "Create Google Account",
+      "parameters": {
+        "operation": "create",
+        "resource": "user",
+        "email": "={{ $json.firstName }}.{{ $json.lastName }}@company.com",
+        "name": "{{ $json.firstName }} {{ $json.lastName }}"
+      }
+    },
+    {
+      "id": "slackInvite",
+      "type": "n8n-nodes-base.slack",
+      "name": "Add to Slack",
+      "parameters": {
+        "operation": "invite",
+        "email": "={{ $json.email }}",
+        "channels": "#general,#new-hires"
+      }
+    },
+    {
+      "id": "calendar",
+      "type": "n8n-nodes-base.googleCalendar",
+      "name": "Schedule Onboarding",
+      "parameters": {
+        "operation": "create",
+        "summary": "Onboarding: {{ $json.firstName }} {{ $json.lastName }}",
+        "start": "={{ DateTime.now().plus({ days: 1 }).toISO() }}",
+        "attendees": ["hr@company.com", "{{ $json.email }}"]
+      }
+    },
+    {
+      "id": "equipment",
+      "type": "n8n-nodes-base.jira",
+      "name": "Equipment Ticket",
+      "parameters": {
+        "operation": "create",
+        "resource": "issue",
+        "project": "IT",
+        "summary": "Setup equipment for {{ $json.firstName }} {{ $json.lastName }}",
+        "description": "Role: {{ $json.role }}\nDepartment: {{ $json.department }}\nEquipment needed: {{ $json.equipment }}"
+      }
+    },
+    {
+      "id": "accessList",
+      "type": "n8n-nodes-base.function",
+      "name": "Generate Access List",
+      "parameters": {
+        "functionCode": "const role = $input.first().json.role;\nconst access = {\n  'Engineer': ['GitHub', 'AWS', 'Jira', 'Datadog'],\n  'Sales': ['Salesforce', 'LinkedIn Sales', 'Zoom'],\n  'Marketing': ['HubSpot', 'Google Ads', 'Figma'],\n  'HR': ['BambooHR', 'Greenhouse', 'Slack Admin']\n};\nreturn { access: access[role] || ['Slack', 'Google Workspace'] };"
+      }
+    },
+    {
+      "id": "notifyManager",
+      "type": "n8n-nodes-base.gmail",
+      "name": "Notify Manager",
+      "parameters": {
+        "to": "={{ $json.managerEmail }}",
+        "subject": "New hire starting: {{ $json.firstName }} {{ $json.lastName }}",
+        "body": "Your new team member starts tomorrow.\n\nName: {{ $json.firstName }} {{ $json.lastName }}\nRole: {{ $json.role }}\nDepartment: {{ $json.department }}\n\nOnboarding scheduled. Equipment request submitted."
+      }
+    },
+    {
+      "id": "welcomeEmail",
+      "type": "n8n-nodes-base.gmail",
+      "name": "Send Welcome",
+      "parameters": {
+        "to": "={{ $json.email }}",
+        "subject": "Welcome to the team!",
+        "body": "Hi {{ $json.firstName }},\n\nWelcome! Your first day is tomorrow.\n\n✓ Google account created\n✓ Slack invite sent\n✓ Onboarding meeting scheduled\n✓ Equipment being prepared\n\nSee you tomorrow!"
+      }
+    }
+  ],
+  "connections": {
+    "formTrigger": {"main": [[{"node": "createAccounts", "type": "main", "index": 0}]]},
+    "createAccounts": {"main": [[{"node": "slackInvite", "type": "main", "index": 0}]]},
+    "slackInvite": {"main": [[{"node": "calendar", "type": "main", "index": 0}]]},
+    "calendar": {"main": [[{"node": "equipment", "type": "main", "index": 0}]]},
+    "equipment": {"main": [[{"node": "accessList", "type": "main", "index": 0}]]},
+    "accessList": {"main": [[{"node": "notifyManager", "type": "main", "index": 0}]]},
+    "notifyManager": {"main": [[{"node": "welcomeEmail", "type": "main", "index": 0}]]}
+  },
+  "meta": {
+    "company": "Avaamo",
+    "useCase": "Employee Onboarding",
+    "version": "2.0",
+    "nodes": 8,
+    "author": "Mission Control",
+    "status": "production-ready"
+  }
+}
