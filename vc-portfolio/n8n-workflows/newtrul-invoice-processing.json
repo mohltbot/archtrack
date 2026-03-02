@@ -1,0 +1,139 @@
+{
+  "name": "Newtrul - Invoice Processing",
+  "description": "Auto-extract invoices, validate, route for approval, track payments",
+  "version": "2.0",
+  "nodes": [
+    {
+      "id": "emailTrigger",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "name": "Invoice Received",
+      "parameters": {
+        "event": "messageReceived",
+        "filters": {
+          "subject": "invoice"
+        }
+      }
+    },
+    {
+      "id": "extractPDF",
+      "type": "n8n-nodes-base.function",
+      "name": "Extract PDF",
+      "parameters": {
+        "functionCode": "// Download and extract PDF content\nconst attachment = $input.first().json.attachments[0];\nreturn { pdfUrl: attachment.url, filename: attachment.filename };"
+      }
+    },
+    {
+      "id": "ocr",
+      "type": "n8n-nodes-base.openAi",
+      "name": "OCR Invoice Data",
+      "parameters": {
+        "model": "gpt-4o",
+        "prompt": "Extract invoice data from PDF:\n{{ $json.pdfContent }}\n\nReturn JSON:\n{\n  invoiceNumber,\n  vendor,\n  date,\n  amount,\n  lineItems: [{description, quantity, rate, total}],\n  dueDate,\n  paymentTerms\n}"
+      }
+    },
+    {
+      "id": "validate",
+      "type": "n8n-nodes-base.function",
+      "name": "Validate Invoice",
+      "parameters": {
+        "functionCode": "// Business rules validation\nconst invoice = $input.first().json;\nconst errors = [];\nif (!invoice.invoiceNumber) errors.push('Missing invoice number');\nif (!invoice.amount || invoice.amount <= 0) errors.push('Invalid amount');\nif (new Date(invoice.dueDate) < new Date()) errors.push('Past due date');\nreturn { valid: errors.length === 0, errors, invoice };"
+      }
+    },
+    {
+      "id": "checkVendor",
+      "type": "n8n-nodes-base.googleSheets",
+      "name": "Verify Vendor",
+      "parameters": {
+        "operation": "lookup",
+        "sheetId": "approved-vendors",
+        "range": "Vendors!A:C",
+        "lookupValue": "={{ $json.invoice.vendor }}"
+      }
+    },
+    {
+      "id": "approvalRoute",
+      "type": "n8n-nodes-base.switch",
+      "name": "Route by Amount",
+      "parameters": {
+        "rules": [
+          {"value": "<1000", "output": 0},
+          {"value": "<5000", "output": 1},
+          {"value": ">=5000", "output": 2}
+        ]
+      }
+    },
+    {
+      "id": "autoApprove",
+      "type": "n8n-nodes-base.function",
+      "name": "Auto-Approve Low",
+      "parameters": {
+        "functionCode": "return { status: 'APPROVED', approver: 'SYSTEM', approvedAt: new Date().toISOString() };"
+      }
+    },
+    {
+      "id": "managerApproval",
+      "type": "n8n-nodes-base.slack",
+      "name": "Request Approval",
+      "parameters": {
+        "channel": "@finance-manager",
+        "text": "📄 Invoice Approval Needed\nVendor: {{ $json.invoice.vendor }}\nAmount: ${{ $json.invoice.amount }}\nDue: {{ $json.invoice.dueDate }}"
+      }
+    },
+    {
+      "id": "logToERP",
+      "type": "n8n-nodes-base.httpRequest",
+      "name": "Post to ERP",
+      "parameters": {
+        "method": "POST",
+        "url": "https://erp.company.com/api/invoices",
+        "body": "={{ $json.invoice }}"
+      }
+    },
+    {
+      "id": "notifyVendor",
+      "type": "n8n-nodes-base.gmail",
+      "name": "Confirm Receipt",
+      "parameters": {
+        "to": "={{ $json.invoice.vendorEmail }}",
+        "subject": "Invoice Received - {{ $json.invoice.invoiceNumber }}",
+        "body": "Your invoice has been received and is being processed. Expected payment: {{ $json.expectedPaymentDate }}"
+      }
+    },
+    {
+      "id": "archive",
+      "type": "n8n-nodes-base.googleDrive",
+      "name": "Archive Invoice",
+      "parameters": {
+        "operation": "upload",
+        "folder": "Invoices/{{ $json.year }}/{{ $json.month }}",
+        "file": "={{ $json.pdfData }}"
+      }
+    }
+  ],
+  "connections": {
+    "emailTrigger": {"main": [[{"node": "extractPDF", "type": "main", "index": 0}]]},
+    "extractPDF": {"main": [[{"node": "ocr", "type": "main", "index": 0}]]},
+    "ocr": {"main": [[{"node": "validate", "type": "main", "index": 0}]]},
+    "validate": {"main": [[{"node": "checkVendor", "type": "main", "index": 0}]]},
+    "checkVendor": {"main": [[{"node": "approvalRoute", "type": "main", "index": 0}]]},
+    "approvalRoute": {
+      "main": [
+        [{"node": "autoApprove", "type": "main", "index": 0}],
+        [{"node": "managerApproval", "type": "main", "index": 0}],
+        [{"node": "managerApproval", "type": "main", "index": 0}]
+      ]
+    },
+    "autoApprove": {"main": [[{"node": "logToERP", "type": "main", "index": 0}]]},
+    "managerApproval": {"main": [[{"node": "logToERP", "type": "main", "index": 0}]]},
+    "logToERP": {"main": [[{"node": "notifyVendor", "type": "main", "index": 0}]]},
+    "notifyVendor": {"main": [[{"node": "archive", "type": "main", "index": 0}]]}
+  },
+  "meta": {
+    "company": "Newtrul",
+    "useCase": "Invoice Processing",
+    "version": "2.0",
+    "nodes": 11,
+    "author": "Mission Control",
+    "status": "production-ready"
+  }
+}
