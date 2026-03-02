@@ -1,0 +1,103 @@
+{
+  "name": "Tekion - Service Advisor Agent",
+  "description": "Scans car telemetry, predicts maintenance, drafts appointment for dealer approval",
+  "version": "2.0",
+  "nodes": [
+    {
+      "id": "trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "name": "Daily Check",
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "hour", "hours": 9}]
+        }
+      }
+    },
+    {
+      "id": "getTelemetry",
+      "type": "n8n-nodes-base.httpRequest",
+      "name": "Get Car Data",
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.tekion.com/v1/vehicles/telemetry?needsService=true"
+      }
+    },
+    {
+      "id": "analyzeHealth",
+      "type": "n8n-nodes-base.function",
+      "name": "Predict Maintenance",
+      "parameters": {
+        "functionCode": "const vehicles = $input.first().json;\n\nconst needsService = vehicles.filter(v => {\n  const issues = [];\n  \n  if (v.oilLife < 15) issues.push({ type: 'Oil Change', urgency: v.oilLife < 5 ? 'URGENT' : 'SOON' });\n  if (v.tirePressure < 30) issues.push({ type: 'Tire Service', urgency: 'SOON' });\n  if (v.brakePadLife < 20) issues.push({ type: 'Brake Inspection', urgency: v.brakePadLife < 10 ? 'URGENT' : 'SOON' });\n  if (v.batteryHealth < 50) issues.push({ type: 'Battery Check', urgency: v.batteryHealth < 30 ? 'URGENT' : 'SOON' });\n  if (v.mileage - v.lastServiceMiles > 5000) issues.push({ type: 'Scheduled Maintenance', urgency: v.mileage - v.lastServiceMiles > 7500 ? 'URGENT' : 'SOON' });\n  \n  v.predictedIssues = issues;\n  return issues.length > 0;\n});\n\nreturn { needsService, count: needsService.length };"
+      }
+    },
+    {
+      "id": "draftMessage",
+      "type": "n8n-nodes-base.openAi",
+      "name": "Draft Service Text",
+      "parameters": {
+        "model": "gpt-4o",
+        "prompt": "Draft a friendly SMS to car owner about upcoming maintenance:\n\nOwner: {{ $json.ownerName }}\nCar: {{ $json.year }} {{ $json.make }} {{ $json.model }}\nIssues: {{ $json.predictedIssues.map(i => i.type).join(', ') }}\nUrgency: {{ $json.predictedIssues[0].urgency }}\n\nKeep under 160 characters, friendly but professional."
+      }
+    },
+    {
+      "id": "checkAvailability",
+      "type": "n8n-nodes-base.httpRequest",
+      "name": "Check Dealer Slots",
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.tekion.com/v1/dealers/{{ $json.dealerId }}/availability"
+      }
+    },
+    {
+      "id": "proposeSlot",
+      "type": "n8n-nodes-base.function",
+      "name": "Propose Time",
+      "parameters": {
+        "functionCode": "const availability = $input.first().json.slots;\nconst preferredTime = availability.find(s => s.time.includes('09:00') || s.time.includes('10:00')) || availability[0];\n\nreturn { proposedSlot: preferredTime, alternativeSlots: availability.slice(1, 3) };"
+      }
+    },
+    {
+      "id": "dealerApproval",
+      "type": "n8n-nodes-base.slack",
+      "name": "Ask Dealer to Approve",
+      "parameters": {
+        "channel": "@service-advisor",
+        "text": "🔧 SERVICE OPPORTUNITY\n\n**Customer:** {{ $json.ownerName }}\n**Vehicle:** {{ $json.year }} {{ $json.make }} {{ $json.model }}\n**Issues:** {{ $json.predictedIssues.map(i => i.type).join(', ') }}\n\n**Drafted Message:**\n{{ $json.draftMessage }}\n\n**Proposed Slot:** {{ $json.proposedSlot.time }}\n\nReply ✅ to send or ✏️ to edit."
+      }
+    },
+    {
+      "id": "log",
+      "type": "n8n-nodes-base.googleSheets",
+      "name": "Log Opportunity",
+      "parameters": {
+        "operation": "append",
+        "sheetId": "service-opportunities",
+        "range": "Opportunities!A:E",
+        "values": [
+          "={{ $now }}",
+          "={{ $json.ownerName }}",
+          "={{ $json.predictedIssues.map(i => i.type).join(', ') }}",
+          "Pending Approval",
+          "={{ $json.predictedIssues[0].urgency }}"
+        ]
+      }
+    }
+  ],
+  "connections": {
+    "trigger": {"main": [[{"node": "getTelemetry", "type": "main", "index": 0}]]},
+    "getTelemetry": {"main": [[{"node": "analyzeHealth", "type": "main", "index": 0}]]},
+    "analyzeHealth": {"main": [[{"node": "draftMessage", "type": "main", "index": 0}]]},
+    "draftMessage": {"main": [[{"node": "checkAvailability", "type": "main", "index": 0}]]},
+    "checkAvailability": {"main": [[{"node": "proposeSlot", "type": "main", "index": 0}]]},
+    "proposeSlot": {"main": [[{"node": "dealerApproval", "type": "main", "index": 0}]]},
+    "dealerApproval": {"main": [[{"node": "log", "type": "main", "index": 0}]]}
+  },
+  "meta": {
+    "company": "Tekion",
+    "useCase": "Service Advisor Agent",
+    "version": "2.0",
+    "nodes": 8,
+    "author": "Mission Control",
+    "status": "production-ready"
+  }
+}

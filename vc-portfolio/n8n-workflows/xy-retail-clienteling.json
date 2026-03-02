@@ -1,0 +1,103 @@
+{
+  "name": "XY Retail - Clienteling Agent",
+  "description": "Reminds associates to contact VIPs about new arrivals, drafts messages",
+  "version": "2.0",
+  "nodes": [
+    {
+      "id": "trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "name": "Morning Check",
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "hour", "hours": 10}]
+        }
+      }
+    },
+    {
+      "id": "getNewArrivals",
+      "type": "n8n-nodes-base.httpRequest",
+      "name": "Get New Inventory",
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.xyretail.com/v1/inventory/new-arrivals"
+      }
+    },
+    {
+      "id": "getVIPClients",
+      "type": "n8n-nodes-base.httpRequest",
+      "name": "Get VIP List",
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.xyretail.com/v1/clients/vip"
+      }
+    },
+    {
+      "id": "matchPreferences",
+      "type": "n8n-nodes-base.function",
+      "name": "Match Items to Clients",
+      "parameters": {
+        "functionCode": "const items = $input.all()[0].json;\nconst clients = $input.all()[1].json;\n\nconst matches = clients.map(client => {\n  const matchedItems = items.filter(item => {\n    const sizeMatch = item.sizes.includes(client.preferences.size);\n    const styleMatch = client.preferences.styles.some(s => item.tags.includes(s));\n    const brandMatch = client.preferences.brands.includes(item.brand);\n    const priceMatch = item.price >= client.preferences.priceRange[0] && item.price <= client.preferences.priceRange[1];\n    return sizeMatch && styleMatch && brandMatch && priceMatch;\n  });\n  \n  return { client, matchedItems };\n}).filter(m => m.matchedItems.length > 0);\n\nreturn { matches, totalMatches: matches.length };"
+      }
+    },
+    {
+      "id": "assignAssociate",
+      "type": "n8n-nodes-base.function",
+      "name": "Assign to Associate",
+      "parameters": {
+        "functionCode": "const matches = $input.first().json.matches;\n\n// Round-robin assignment\nconst associates = ['Sarah', 'Michael', 'Emma', 'David'];\n\nconst assigned = matches.map((m, i) => ({\n  ...m,\n  assignedAssociate: associates[i % associates.length],\n  priority: m.client.tier === 'Platinum' ? 'HIGH' : m.client.tier === 'Gold' ? 'MEDIUM' : 'NORMAL'\n}));\n\nreturn { assigned };"
+      }
+    },
+    {
+      "id": "draftMessages",
+      "type": "n8n-nodes-base.openAi",
+      "name": "Draft Outreach",
+      "parameters": {
+        "model": "gpt-4o",
+        "prompt": "Draft a personalized message from luxury retail associate to VIP client:\n\nClient: {{ $json.client.name }} ({{ $json.client.tier }} tier)\nAssociate: {{ $json.assignedAssociate }}\nItems: {{ $json.matchedItems.map(i => i.name).join(', ') }}\nBrand: {{ $json.matchedItems[0].brand }}\n\nTone: Exclusive, personal, not pushy. Mention specific items that match their style."
+      }
+    },
+    {
+      "id": "notifyAssociate",
+      "type": "n8n-nodes-base.slack",
+      "name": "Alert Associate",
+      "parameters": {
+        "channel": "#clienteling",
+        "text": "👔 CLIENTELING OPPORTUNITY\n\n**Associate:** {{ $json.assignedAssociate }}\n**Client:** {{ $json.client.name }} ({{ $json.client.tier }})\n**Priority:** {{ $json.priority }}\n\n**Recommended Items:**\n{{ $json.matchedItems.map(i => `- ${i.name} (${i.brand}) - $${i.price}`).join('\\n') }}\n\n**Drafted Message:**\n{{ $json.draftMessage }}\n\nSend via preferred channel: {{ $json.client.preferredContact }}"
+      }
+    },
+    {
+      "id": "log",
+      "type": "n8n-nodes-base.googleSheets",
+      "name": "Log Opportunity",
+      "parameters": {
+        "operation": "append",
+        "sheetId": "clienteling-log",
+        "range": "Log!A:E",
+        "values": [
+          "={{ $now }}",
+          "={{ $json.client.name }}",
+          "={{ $json.assignedAssociate }}",
+          "={{ $json.matchedItems.length }}",
+          "Pending"
+        ]
+      }
+    }
+  ],
+  "connections": {
+    "trigger": {"main": [[{"node": "getNewArrivals", "type": "main", "index": 0}]]},
+    "getNewArrivals": {"main": [[{"node": "getVIPClients", "type": "main", "index": 0}]]},
+    "getVIPClients": {"main": [[{"node": "matchPreferences", "type": "main", "index": 0}]]},
+    "matchPreferences": {"main": [[{"node": "assignAssociate", "type": "main", "index": 0}]]},
+    "assignAssociate": {"main": [[{"node": "draftMessages", "type": "main", "index": 0}]]},
+    "draftMessages": {"main": [[{"node": "notifyAssociate", "type": "main", "index": 0}]]},
+    "notifyAssociate": {"main": [[{"node": "log", "type": "main", "index": 0}]]}
+  },
+  "meta": {
+    "company": "XY Retail",
+    "useCase": "Clienteling Agent",
+    "version": "2.0",
+    "nodes": 8,
+    "author": "Mission Control",
+    "status": "production-ready"
+  }
+}
