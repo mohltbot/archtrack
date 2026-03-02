@@ -1,0 +1,131 @@
+{
+  "name": "KlearNow.AI: IDP Customs Agent v2",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\n  json: {\n    uploadType: 'pdf_manifest',\n    documents: [\n      {\n        type: 'bill_of_lading',\n        filename: 'BOL_12345.pdf',\n        url: 'https://docs.example.com/bol.pdf'\n      },\n      {\n        type: 'commercial_invoice',\n        filename: 'INV_12345.pdf',\n        url: 'https://docs.example.com/inv.pdf'\n      },\n      {\n        type: 'packing_list',\n        filename: 'PL_12345.pdf',\n        url: 'https://docs.example.com/pl.pdf'\n      }\n    ],\n    shipmentId: 'KL-2026-8842',\n    receivedAt: new Date().toISOString()\n  }\n}];"
+      },
+      "name": "Documents Uploaded",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const docs = $input.first().json;\n\n// Simulate OCR extraction from multiple documents\nconst extractedData = {\n  bol: {\n    vessel: 'MAERSK EDINBURGH',\n    voyage: '267E',\n    containerNumber: 'MSKU1234567',\n    portOfLoading: 'Shanghai, China',\n    portOfDischarge: 'Los Angeles, CA',\n    eta: '2026-03-05'\n  },\n  invoice: {\n    shipper: {\n      name: 'Shanghai Electronics Co.',\n      address: '123 Industrial Rd, Shanghai, China'\n    },\n    consignee: {\n      name: 'TechCorp USA',\n      address: '456 Commerce St, Los Angeles, CA 90021',\n      taxId: '12-3456789'\n    },\n    lineItems: [\n      {\n        description: 'Electronic Components - Circuit Boards',\n        hsCode: '8534.00.00',\n        quantity: 5000,\n        unitValue: 25,\n        totalValue: 125000,\n        countryOfOrigin: 'CN'\n      },\n      {\n        description: 'Semiconductor Chips',\n        hsCode: '8542.31.00',\n        quantity: 10000,\n        unitValue: 25,\n        totalValue: 250000,\n        countryOfOrigin: 'CN'\n      }\n    ],\n    totalValue: 375000,\n    currency: 'USD'\n  },\n  packingList: {\n    totalPackages: 50,\n    totalWeight: 3000,\n    weightUnit: 'kg',\n    dimensions: '40ft container'\n  }\n};\n\nreturn [{\n  json: {\n    ...docs,\n    extractedData,\n    extractionConfidence: 0.94\n  }\n}];"
+      },
+      "name": "OCR + Data Extraction (IDP)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 300],
+      "notes": "KlearNow.AI's Intelligent Document Processing extracts data from all customs docs"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json.extractedData;\nconst discrepancies = [];\n\n// Cross-document validation (KlearNow's key feature)\n\n// 1. BOL vs Invoice - Container match\nif (data.bol.containerNumber) {\n  // In real scenario, verify against master data\n}\n\n// 2. Value consistency\nconst invoiceTotal = data.invoice.totalValue;\nconst calculatedTotal = data.invoice.lineItems.reduce((sum, item) => sum + item.totalValue, 0);\nif (Math.abs(invoiceTotal - calculatedTotal) > 1) {\n  discrepancies.push({\n    type: 'value_mismatch',\n    severity: 'high',\n    message: `Invoice total ($${invoiceTotal}) doesn't match line items ($${calculatedTotal})`,\n    documents: ['invoice']\n  });\n}\n\n// 3. Weight consistency\nconst invoiceWeight = data.packingList.totalWeight;\nconst weightPerItem = data.invoice.lineItems.reduce((sum, item) => sum + (item.quantity * 0.1), 0); // Rough estimate\nif (Math.abs(invoiceWeight - weightPerItem) > 500) {\n  discrepancies.push({\n    type: 'weight_variance',\n    severity: 'medium',\n    message: `Declared weight (${invoiceWeight}kg) significantly different from estimated`,\n    documents: ['packing_list', 'invoice']\n  });\n}\n\n// 4. HS Code validation\ndata.invoice.lineItems.forEach((item, idx) => {\n  if (item.hsCode.startsWith('8542')) { // Semiconductors\n    discrepancies.push({\n      type: 'controlled_item',\n      severity: 'high',\n      message: `Line ${idx + 1}: Semiconductor chips (${item.hsCode}) may require EAR license`,\n      documents: ['invoice']\n    });\n  }\n});\n\n// 5. High-value check\nif (data.invoice.totalValue > 250000) {\n  discrepancies.push({\n    type: 'high_value',\n    severity: 'medium',\n    message: `High-value shipment: $${data.invoice.totalValue}`,\n    documents: ['invoice']\n  });\n}\n\nreturn [{\n  json: {\n    ...$input.first().json,\n    discrepancies,\n    hasDiscrepancies: discrepancies.length > 0,\n    criticalIssues: discrepancies.filter(d => d.severity === 'high').length,\n    requiresHumanReview: discrepancies.filter(d => d.severity === 'high').length > 0\n  }\n}];"
+      },
+      "name": "Cross-Doc Validation (Discrepancy Detection)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [850, 300],
+      "notes": "KlearNow's Humans-in-the-Loop: Flags discrepancies for broker review"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "conditions": [
+            {
+              "leftValue": "={{ $json.requiresHumanReview }}",
+              "operator": "boolean"
+            }
+          ]
+        }
+      },
+      "name": "Issues Found?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1050, 300]
+    },
+    {
+      "parameters": {
+        "channel": "customs-review",
+        "text": "=📋 Documents Need Review - {{ $json.shipmentId }}\n\n🚨 Critical Issues: {{ $json.criticalIssues }}\n⚠️ Total Discrepancies: {{ $json.discrepancies.length }}\n\n{{ $json.discrepancies.filter(d => d.severity === 'high').map(d => '🔴 ' + d.message).join('\\n') }}\n\nDocuments:\n• B/L: {{ $json.extractedData.bol.vessel }}\n• Invoice: ${{ $json.extractedData.invoice.totalValue }}\n• Packing: {{ $json.extractedData.packingList.totalWeight }}kg\n\nReview: https://klearnow.ai/review/{{ $json.shipmentId }}",
+        "options": {}
+      },
+      "name": "Alert Broker (HITL)",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.1,
+      "position": [1250, 200]
+    },
+    {
+      "parameters": {
+        "fromEmail": "customs@klearnow.ai",
+        "toEmail": "broker@company.com",
+        "subject": "=🚨 Review Required: {{ $json.shipmentId }}",
+        "text": "=Customs entry {{ $json.shipmentId }} requires your review.\n\nCritical Issues:\n{{ $json.discrepancies.filter(d => d.severity === 'high').map(d => '- ' + d.message).join('\\n') }}\n\nAll Discrepancies:\n{{ $json.discrepancies.map(d => '[' + d.severity.toUpperCase() + '] ' + d.message).join('\\n') }}\n\nShipper: {{ $json.extractedData.invoice.shipper.name }}\nValue: ${{ $json.extractedData.invoice.totalValue }}\n\nPlease review and approve.",
+        "options": {}
+      },
+      "name": "Email Broker Details",
+      "type": "n8n-nodes-base.sendEmail",
+      "typeVersion": 2.1,
+      "position": [1450, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Auto-file clean entries (no discrepancies)\nconst data = $input.first().json;\n\n// Calculate duties\nconst duties = data.extractedData.invoice.lineItems.map(item => ({\n  hsCode: item.hsCode,\n  description: item.description,\n  value: item.totalValue,\n  dutyRate: item.hsCode.startsWith('8542') ? 0.035 : 0.025, // 3.5% for semiconductors, 2.5% otherwise\n  dutyAmount: item.totalValue * (item.hsCode.startsWith('8542') ? 0.035 : 0.025)\n}));\n\nconst totalDuty = duties.reduce((sum, d) => sum + d.dutyAmount, 0);\n\nreturn [{\n  json: {\n    ...data,\n    customsEntry: {\n      entryNumber: 'EE-' + Date.now().toString().slice(-8),\n      filedAt: new Date().toISOString(),\n      entryType: '01', // Consumption\n      portOfEntry: data.extractedData.bol.portOfDischarge,\n      importerNumber: data.extractedData.invoice.consignee.taxId,\n      suretyBond: 'SINGLE_TRANSACTION',\n      merchandise: duties,\n      totalDuty: Math.round(totalDuty * 100) / 100,\n      mpf: Math.min(614.35, data.extractedData.invoice.totalValue * 0.003464), // Merchandise Processing Fee\n      hmf: data.extractedData.invoice.totalValue * 0.00125, // Harbor Maintenance Fee\n      status: 'FILED',\n      filingMethod: 'ACE' // Automated Commercial Environment\n    }\n  }\n}];"
+      },
+      "name": "File Customs Entry (ACE)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1250, 400]
+    },
+    {
+      "parameters": {
+        "channel": "customs-completed",
+        "text": "=✅ Auto-Filed: {{ $json.shipmentId }}\n\nEntry: {{ $json.customsEntry.entryNumber }}\nValue: ${{ $json.extractedData.invoice.totalValue }}\nDuty: ${{ $json.customsEntry.totalDuty }}\n\nShipper: {{ $json.extractedData.invoice.shipper.name }}\nConsignee: {{ $json.extractedData.invoice.consignee.name }}\n\nConfidence: {{ $json.extractionConfidence }}\nDiscrepancies: 0 (clean filing)",
+        "options": {}
+      },
+      "name": "Log Clean Filing",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.1,
+      "position": [1450, 400]
+    }
+  ],
+  "connections": {
+    "Trigger": {
+      "main": [[{"node": "Documents Uploaded", "type": "main", "index": 0}]]
+    },
+    "Documents Uploaded": {
+      "main": [[{"node": "OCR + Data Extraction (IDP)", "type": "main", "index": 0}]]
+    },
+    "OCR + Data Extraction (IDP)": {
+      "main": [[{"node": "Cross-Doc Validation (Discrepancy Detection)", "type": "main", "index": 0}]]
+    },
+    "Cross-Doc Validation (Discrepancy Detection)": {
+      "main": [[{"node": "Issues Found?", "type": "main", "index": 0}]]
+    },
+    "Issues Found?": {
+      "main": [
+        [{"node": "Alert Broker (HITL)", "type": "main", "index": 0}],
+        [{"node": "File Customs Entry (ACE)", "type": "main", "index": 0}]
+      ]
+    },
+    "Alert Broker (HITL)": {
+      "main": [[{"node": "Email Broker Details", "type": "main", "index": 0}]]
+    },
+    "File Customs Entry (ACE)": {
+      "main": [[{"node": "Log Clean Filing", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "description": "KlearNow.AI v2: IDP-based customs processing with cross-document validation and Humans-in-the-Loop for discrepancies"
+}
