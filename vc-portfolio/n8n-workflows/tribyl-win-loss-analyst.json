@@ -1,0 +1,106 @@
+{
+  "name": "Tribyl - Win/Loss Analyst Agent",
+  "description": "Auto-interviews sales reps, updates CRM, flags coaching moments",
+  "version": "2.0",
+  "nodes": [
+    {
+      "id": "trigger",
+      "type": "n8n-nodes-base.salesforceTrigger",
+      "name": "Opportunity Closed",
+      "parameters": {
+        "event": "opportunityClosed"
+      }
+    },
+    {
+      "id": "checkStatus",
+      "type": "n8n-nodes-base.if",
+      "name": "Won or Lost?",
+      "parameters": {
+        "conditions": {
+          "options": {
+            "leftValue": "={{ $json.stage }}",
+            "operator": {"type": "string", "operation": "equals"},
+            "rightValue": "Closed Won"
+          }
+        }
+      }
+    },
+    {
+      "id": "interviewQuestions",
+      "type": "n8n-nodes-base.function",
+      "name": "Generate Interview",
+      "parameters": {
+        "functionCode": "const opp = $input.first().json;\nconst isWin = opp.stage === 'Closed Won';\n\nconst questions = isWin ? [\n  'What was the main factor that closed this deal?',\n  'What objections did you overcome?',\n  'What can we replicate for similar deals?',\n  'Any feedback on our product/demo?'\n] : [\n  'What was the main reason we lost?',\n  'Who did we lose to and why?',\n  'What could we have done differently?',\n  'Any feedback on our pricing/process?'\n];\n\nreturn { opp, questions, type: isWin ? 'win' : 'loss' };"
+      }
+    },
+    {
+      "id": "sendInterview",
+      "type": "n8n-nodes-base.gmail",
+      "name": "Send to Sales Rep",
+      "parameters": {
+        "to": "={{ $json.opp.ownerEmail }}",
+        "subject": "Quick Win/Loss Interview: {{ $json.opp.name }}",
+        "body": "Hi {{ $json.opp.ownerName }},\n\n{{ $json.opp.name }} just closed {{ $json.type }}.\n\nPlease reply with brief answers (2-3 sentences each):\n\n{{ $json.questions.map((q, i) => `${i+1}. ${q}`).join('\\n\\n') }}\n\nThis helps us improve!"
+      }
+    },
+    {
+      "id": "waitResponse",
+      "type": "n8n-nodes-base.wait",
+      "name": "Wait 24 Hours",
+      "parameters": {
+        "resume": "24h"
+      }
+    },
+    {
+      "id": "analyzeResponse",
+      "type": "n8n-nodes-base.openAi",
+      "name": "Extract Insights",
+      "parameters": {
+        "model": "gpt-4o",
+        "prompt": "Analyze this sales rep's win/loss interview and extract:\n1. Key factors (list)\n2. Process improvements suggested\n3. Coaching moments for VP of Sales\n4. Competitive intelligence\n5. Product feedback\n\nInterview:\n{{ $json.reply }}"
+      }
+    },
+    {
+      "id": "updateCRM",
+      "type": "n8n-nodes-base.salesforce",
+      "name": "Update Opportunity",
+      "parameters": {
+        "operation": "update",
+        "object": "Opportunity",
+        "id": "={{ $json.opp.id }}",
+        "winLossFactors": "={{ $json.insights.factors }}"
+      }
+    },
+    {
+      "id": "coachingAlert",
+      "type": "n8n-nodes-base.slack",
+      "name": "Alert VP of Sales",
+      "parameters": {
+        "channel": "#sales-coaching",
+        "text": "📊 WIN/LOSS INSIGHT: {{ $json.opp.name }}\n\n**Coaching Moment:**\n{{ $json.insights.coaching }}\n\n**Rep:** {{ $json.opp.ownerName }}\n**Deal Value:** ${{ $json.opp.amount }}"
+      }
+    }
+  ],
+  "connections": {
+    "trigger": {"main": [[{"node": "checkStatus", "type": "main", "index": 0}]]},
+    "checkStatus": {
+      "main": [
+        [{"node": "interviewQuestions", "type": "main", "index": 0}],
+        [{"node": "interviewQuestions", "type": "main", "index": 0}]
+      ]
+    },
+    "interviewQuestions": {"main": [[{"node": "sendInterview", "type": "main", "index": 0}]]},
+    "sendInterview": {"main": [[{"node": "waitResponse", "type": "main", "index": 0}]]},
+    "waitResponse": {"main": [[{"node": "analyzeResponse", "type": "main", "index": 0}]]},
+    "analyzeResponse": {"main": [[{"node": "updateCRM", "type": "main", "index": 0}]]},
+    "updateCRM": {"main": [[{"node": "coachingAlert", "type": "main", "index": 0}]]}
+  },
+  "meta": {
+    "company": "Tribyl",
+    "useCase": "Win/Loss Analyst Agent",
+    "version": "2.0",
+    "nodes": 8,
+    "author": "Mission Control",
+    "status": "production-ready"
+  }
+}

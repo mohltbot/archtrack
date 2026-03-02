@@ -1,0 +1,95 @@
+{
+  "name": "GoDomo - Campaign Analyst Agent",
+  "description": "Monitors ad performance and proactively suggests budget reallocations to CMO",
+  "version": "2.0",
+  "nodes": [
+    {
+      "id": "trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "name": "Daily at 9 AM",
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "hour", "hours": 9}]
+        }
+      }
+    },
+    {
+      "id": "fetchData",
+      "type": "n8n-nodes-base.httpRequest",
+      "name": "Get Campaign Data",
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.godomo.com/v1/campaigns/summary"
+      }
+    },
+    {
+      "id": "calculateKPIs",
+      "type": "n8n-nodes-base.function",
+      "name": "Calculate KPIs",
+      "parameters": {
+        "functionCode": "const campaigns = $input.first().json;\n\nconst kpis = {\n  totalSpend: campaigns.reduce((a, c) => a + c.spend, 0),\n  totalImpressions: campaigns.reduce((a, c) => a + c.impressions, 0),\n  totalClicks: campaigns.reduce((a, c) => a + c.clicks, 0),\n  totalConversions: campaigns.reduce((a, c) => a + c.conversions, 0),\n  avgCTR: campaigns.reduce((a, c) => a + c.ctr, 0) / campaigns.length,\n  avgCPA: campaigns.reduce((a, c) => a + c.cpa, 0) / campaigns.length,\n  avgROAS: campaigns.reduce((a, c) => a + c.roas, 0) / campaigns.length\n};\n\n// Identify anomalies\nconst outliers = campaigns.filter(c => c.roas > kpis.avgROAS * 1.5 || c.roas < kpis.avgROAS * 0.5);\n\nreturn { kpis, outliers, campaignCount: campaigns.length };"
+      }
+    },
+    {
+      "id": "generateInsights",
+      "type": "n8n-nodes-base.openAi",
+      "name": "Generate Recommendations",
+      "parameters": {
+        "model": "gpt-4o",
+        "prompt": "As a CMO's analyst, review these campaign metrics and provide 3 specific budget reallocation recommendations:\n\nKPIs: {{ $json.kpis }}\n\nOutliers (over/under performing): {{ $json.outliers }}\n\nFormat:\n1. [Channel/Campaign]: Shift $X from [underperformer] to [overperformer]\n2. Reasoning in 1 sentence\n3. Expected impact"
+      }
+    },
+    {
+      "id": "createReport",
+      "type": "n8n-nodes-base.googleDocs",
+      "name": "Create Daily Report",
+      "parameters": {
+        "operation": "create",
+        "title": "Campaign Analysis - {{ $now.format('YYYY-MM-DD') }}",
+        "content": "DAILY CAMPAIGN PERFORMANCE\n\nKPIs:\n- Total Spend: ${{ $json.kpis.totalSpend }}\n- ROAS: {{ $json.kpis.avgROAS }}x\n- CPA: ${{ $json.kpis.avgCPA }}\n\nRECOMMENDATIONS:\n{{ $json.insights }}"
+      }
+    },
+    {
+      "id": "notifyCMO",
+      "type": "n8n-nodes-base.slack",
+      "name": "Alert CMO",
+      "parameters": {
+        "channel": "@cmo",
+        "text": "📊 Daily Campaign Analysis Ready\n\n**Key Metrics:**\n• ROAS: {{ $json.kpis.avgROAS }}x avg\n• Outliers: {{ $json.outliers.length }} campaigns\n\n**Top Recommendation:**\n{{ $json.insights.split('\\n')[0] }}\n\n📄 Full report: {{ $json.docUrl }}"
+      }
+    },
+    {
+      "id": "archive",
+      "type": "n8n-nodes-base.googleSheets",
+      "name": "Archive Metrics",
+      "parameters": {
+        "operation": "append",
+        "sheetId": "campaign-history",
+        "range": "History!A:E",
+        "values": [
+          "={{ $now }}",
+          "={{ $json.kpis.avgROAS }}",
+          "={{ $json.kpis.avgCPA }}",
+          "={{ $json.kpis.totalSpend }}",
+          "={{ $json.outliers.length }}"
+        ]
+      }
+    }
+  ],
+  "connections": {
+    "trigger": {"main": [[{"node": "fetchData", "type": "main", "index": 0}]]},
+    "fetchData": {"main": [[{"node": "calculateKPIs", "type": "main", "index": 0}]]},
+    "calculateKPIs": {"main": [[{"node": "generateInsights", "type": "main", "index": 0}]]},
+    "generateInsights": {"main": [[{"node": "createReport", "type": "main", "index": 0}]]},
+    "createReport": {"main": [[{"node": "notifyCMO", "type": "main", "index": 0}]]},
+    "notifyCMO": {"main": [[{"node": "archive", "type": "main", "index": 0}]]}
+  },
+  "meta": {
+    "company": "GoDomo",
+    "useCase": "Campaign Analyst Agent",
+    "version": "2.0",
+    "nodes": 7,
+    "author": "Mission Control",
+    "status": "production-ready"
+  }
+}

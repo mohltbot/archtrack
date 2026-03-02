@@ -1,0 +1,99 @@
+{
+  "name": "Fortella - SDR Agent",
+  "description": "Researches prospects and drafts outreach sequences for human approval",
+  "version": "2.0",
+  "nodes": [
+    {
+      "id": "trigger",
+      "type": "n8n-nodes-base.webhook",
+      "name": "New Target Account",
+      "parameters": {
+        "path": "sdr-research",
+        "responseMode": "responseNode"
+      }
+    },
+    {
+      "id": "research",
+      "type": "n8n-nodes-base.httpRequest",
+      "name": "Research Company",
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.clearbit.com/v2/companies/find?domain={{ $json.domain }}"
+      }
+    },
+    {
+      "id": "findContacts",
+      "type": "n8n-nodes-base.salesforce",
+      "name": "Find Decision Makers",
+      "parameters": {
+        "operation": "search",
+        "object": "Contact",
+        "query": "Account.Domain = '{{ $json.domain }}' AND (Title LIKE '%VP%' OR Title LIKE '%Director%' OR Title LIKE '%Head%')"
+      }
+    },
+    {
+      "id": "sequence1",
+      "type": "n8n-nodes-base.openAi",
+      "name": "Draft Email 1",
+      "parameters": {
+        "model": "gpt-4o",
+        "prompt": "Draft personalized cold email to {{ $json.contactName }}, {{ $json.contactTitle }} at {{ $json.company }}. Reference: {{ $json.companyDescription }}. Pain point: {{ $json.painPoint }}. Keep under 100 words, compelling, ask for 15-min call."
+      }
+    },
+    {
+      "id": "sequence2",
+      "type": "n8n-nodes-base.openAi",
+      "name": "Draft Email 2",
+      "parameters": {
+        "model": "gpt-4o",
+        "prompt": "Draft follow-up email (3 days later) to {{ $json.contactName }} at {{ $json.company }}. Reference previous email about {{ $json.painPoint }}. Shorter, mention value prop briefly."
+      }
+    },
+    {
+      "id": "sequence3",
+      "type": "n8n-nodes-base.openAi",
+      "name": "Draft Email 3",
+      "parameters": {
+        "model": "gpt-4o",
+        "prompt": "Draft breakup email (7 days later) to {{ $json.contactName }} at {{ $json.company }}. Short, polite, mention this is last reach-out, offer value (resource/guide) regardless."
+      }
+    },
+    {
+      "id": "approvalGate",
+      "type": "n8n-nodes-base.slack",
+      "name": "Request SDR Approval",
+      "parameters": {
+        "channel": "#sdr-approvals",
+        "text": "📝 NEW OUTREACH SEQUENCE READY\nTarget: {{ $json.contactName }} ({{ $json.contactTitle }}) at {{ $json.company }}\n\n**Email 1:**\n{{ $json.email1 }}\n\n**Email 2:**\n{{ $json.email2 }}\n\n**Email 3:**\n{{ $json.email3 }}\n\nReply ✅ to approve or provide edits."
+      }
+    },
+    {
+      "id": "createSequence",
+      "type": "n8n-nodes-base.salesforce",
+      "name": "Create in Outreach",
+      "parameters": {
+        "operation": "create",
+        "object": "Campaign",
+        "name": "Auto-Sequence: {{ $json.company }}",
+        "description": "SDR Agent generated sequence for {{ $json.contactName }}"
+      }
+    }
+  ],
+  "connections": {
+    "trigger": {"main": [[{"node": "research", "type": "main", "index": 0}]]},
+    "research": {"main": [[{"node": "findContacts", "type": "main", "index": 0}]]},
+    "findContacts": {"main": [[{"node": "sequence1", "type": "main", "index": 0}]]},
+    "sequence1": {"main": [[{"node": "sequence2", "type": "main", "index": 0}]]},
+    "sequence2": {"main": [[{"node": "sequence3", "type": "main", "index": 0}]]},
+    "sequence3": {"main": [[{"node": "approvalGate", "type": "main", "index": 0}]]},
+    "approvalGate": {"main": [[{"node": "createSequence", "type": "main", "index": 0}]]}
+  },
+  "meta": {
+    "company": "Fortella",
+    "useCase": "SDR Agent",
+    "version": "2.0",
+    "nodes": 8,
+    "author": "Mission Control",
+    "status": "production-ready"
+  }
+}

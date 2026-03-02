@@ -1,0 +1,112 @@
+{
+  "name": "Tatari - Media Buying Agent",
+  "description": "Optimizes ad spend and books slots, asks for approval on budget shifts over $5k",
+  "version": "2.0",
+  "nodes": [
+    {
+      "id": "trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "name": "Every 4 Hours",
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "hour", "hours": 4}]
+        }
+      }
+    },
+    {
+      "id": "getPerformance",
+      "type": "n8n-nodes-base.httpRequest",
+      "name": "Get Campaign Data",
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.tatari.com/v1/campaigns/performance"
+      }
+    },
+    {
+      "id": "analyze",
+      "type": "n8n-nodes-base.function",
+      "name": "Analyze Performance",
+      "parameters": {
+        "functionCode": "const campaigns = $input.first().json;\n\n// Calculate ROAS for each\nconst analyzed = campaigns.map(c => ({\n  ...c,\n  roas: c.revenue / c.spend,\n  cpa: c.spend / c.conversions,\n  trend: c.roas_7d > c.roas_30d ? 'improving' : 'declining'\n}));\n\n// Identify underperformers and overperformers\nconst underperformers = analyzed.filter(c => c.roas < 2.0);\nconst overperformers = analyzed.filter(c => c.roas > 4.0);\n\nreturn { analyzed, underperformers, overperformers };"
+      }
+    },
+    {
+      "id": "calculateShift",
+      "type": "n8n-nodes-base.function",
+      "name": "Calculate Budget Shift",
+      "parameters": {
+        "functionCode": "const { underperformers, overperformers } = $input.first().json;\n\n// Proposed reallocation\nlet proposedShift = 0;\nconst actions = [];\n\nunderperformers.forEach(c => {\n  const reduction = c.dailyBudget * 0.3; // Reduce 30%\n  proposedShift += reduction;\n  actions.push({ campaign: c.id, action: 'reduce', amount: reduction });\n});\n\noverperformers.forEach(c => {\n  const increase = c.dailyBudget * 0.2; // Increase 20%\n  if (proposedShift > 0) {\n    proposedShift -= increase;\n    actions.push({ campaign: c.id, action: 'increase', amount: increase });\n  }\n});\n\nreturn { proposedShift: Math.abs(proposedShift), actions, needsApproval: Math.abs(proposedShift) > 5000 };"
+      }
+    },
+    {
+      "id": "checkApproval",
+      "type": "n8n-nodes-base.if",
+      "name": "Over $5k?",
+      "parameters": {
+        "conditions": {
+          "options": {
+            "leftValue": "={{ $json.needsApproval }}",
+            "operator": {"type": "boolean", "operation": "equals"},
+            "rightValue": "true"
+          }
+        }
+      }
+    },
+    {
+      "id": "autoOptimize",
+      "type": "n8n-nodes-base.httpRequest",
+      "name": "Apply Budget Changes",
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tatari.com/v1/campaigns/bulk-update",
+        "body": "={{ $json.actions }}"
+      }
+    },
+    {
+      "id": "requestApproval",
+      "type": "n8n-nodes-base.slack",
+      "name": "Request Ad Manager Approval",
+      "parameters": {
+        "channel": "#media-buying",
+        "text": "💰 BUDGET SHIFT REQUIRES APPROVAL\n\nProposed shift: ${{ $json.proposedShift }}\n\nActions:\n{{ $json.actions.map(a => `- ${a.action} ${a.campaign} by $${a.amount}`).join('\\n') }}\n\nReply ✅ to approve or ❌ to reject."
+      }
+    },
+    {
+      "id": "log",
+      "type": "n8n-nodes-base.googleSheets",
+      "name": "Log Optimization",
+      "parameters": {
+        "operation": "append",
+        "sheetId": "media-optimizations",
+        "range": "Log!A:D",
+        "values": [
+          "={{ $now }}",
+          "={{ $json.proposedShift }}",
+          "={{ $json.needsApproval ? 'Pending Approval' : 'Auto-Applied' }}",
+          "={{ $json.actions.length }}"
+        ]
+      }
+    }
+  ],
+  "connections": {
+    "trigger": {"main": [[{"node": "getPerformance", "type": "main", "index": 0}]]},
+    "getPerformance": {"main": [[{"node": "analyze", "type": "main", "index": 0}]]},
+    "analyze": {"main": [[{"node": "calculateShift", "type": "main", "index": 0}]]},
+    "calculateShift": {"main": [[{"node": "checkApproval", "type": "main", "index": 0}]]},
+    "checkApproval": {
+      "main": [
+        [{"node": "requestApproval", "type": "main", "index": 0}],
+        [{"node": "autoOptimize", "type": "main", "index": 0}]
+      ]
+    },
+    "autoOptimize": {"main": [[{"node": "log", "type": "main", "index": 0}]]}
+  },
+  "meta": {
+    "company": "Tatari",
+    "useCase": "Media Buying Agent",
+    "version": "2.0",
+    "nodes": 8,
+    "author": "Mission Control",
+    "status": "production-ready"
+  }
+}
