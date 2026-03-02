@@ -1,6 +1,6 @@
 #!/bin/bash
 # Google Integration Module for Mission Control
-# Provides: Sheets, Drive, Gmail, Tasks, Docs APIs
+# Provides: Sheets, Drive, Gmail, Tasks, Docs, YouTube APIs
 
 SA_FILE="/Users/mohlt/.openclaw/workspace/config/google-service-account.json"
 CLIENT_EMAIL=$(jq -r '.client_email' "$SA_FILE")
@@ -109,6 +109,34 @@ list_tasks() {
     -H "Authorization: Bearer $TOKEN" | jq '.items[]? | {title: .title, status: .status, due: .due}'
 }
 
+# YouTube Functions
+youtube_search() {
+  local QUERY="$1"
+  local TOKEN=$(get_access_token "https://www.googleapis.com/auth/youtube.readonly")
+  
+  echo "Searching YouTube for: $QUERY"
+  curl -s "https://www.googleapis.com/youtube/v3/search?part=snippet&q=$(echo "$QUERY" | sed 's/ /%20/g')&type=video&maxResults=5" \
+    -H "Authorization: Bearer $TOKEN" | jq '.items[] | {title: .snippet.title, videoId: .id.videoId, channel: .snippet.channelTitle}'
+}
+
+youtube_channel_info() {
+  local HANDLE="$1"
+  local TOKEN=$(get_access_token "https://www.googleapis.com/auth/youtube.readonly")
+  
+  echo "Getting channel info for: $HANDLE"
+  curl -s "https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&forHandle=$HANDLE" \
+    -H "Authorization: Bearer $TOKEN" | jq '.items[] | {title: .snippet.title, subscribers: .statistics.subscriberCount, views: .statistics.viewCount, videos: .statistics.videoCount}'
+}
+
+youtube_recent_uploads() {
+  local CHANNEL_ID="$1"
+  local TOKEN=$(get_access_token "https://www.googleapis.com/auth/youtube.readonly")
+  
+  echo "Recent uploads for channel: $CHANNEL_ID"
+  curl -s "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=$CHANNEL_ID&order=date&type=video&maxResults=5" \
+    -H "Authorization: Bearer $TOKEN" | jq '.items[] | {title: .snippet.title, publishedAt: .snippet.publishedAt, videoId: .id.videoId}'
+}
+
 # Export Mission Control to Sheets
 export_mission_control() {
   echo "🔄 Exporting Mission Control data to Google Sheets..."
@@ -152,8 +180,17 @@ case "$1" in
   "drive")
     upload_to_drive "$2" "$3"
     ;;
+  "youtube-search")
+    youtube_search "$2"
+    ;;
+  "youtube-channel")
+    youtube_channel_info "$2"
+    ;;
+  "youtube-uploads")
+    youtube_recent_uploads "$2"
+    ;;
   *)
-    echo "Usage: $0 {export|email|folder|task|tasks|drive}"
+    echo "Usage: $0 {export|email|folder|task|tasks|drive|youtube-search|youtube-channel|youtube-uploads}"
     echo ""
     echo "Commands:"
     echo "  export              - Export Mission Control to Sheets"
@@ -162,5 +199,8 @@ case "$1" in
     echo "  task title notes due - Create Google Task"
     echo "  tasks               - List Google Tasks"
     echo "  drive file name     - Upload file to Drive"
+    echo "  youtube-search query - Search YouTube videos"
+    echo "  youtube-channel handle - Get channel info"
+    echo "  youtube-uploads channelId - Get recent uploads"
     ;;
 esac

@@ -60,7 +60,7 @@
 
 ---
 
-### 🔄 5. Google Tasks (WORKING)
+### ✅ 5. Google Tasks (WORKING)
 **Capabilities:**
 - Two-way sync with Mission Control
 - Create tasks from Discord
@@ -75,12 +75,28 @@
 
 ---
 
+### ✅ 6. YouTube Data API (WORKING)
+**Capabilities:**
+- Search YouTube videos
+- Get channel statistics
+- List recent uploads
+- Read video metadata
+
+**Usage:**
+```bash
+./scripts/google-integrations.sh youtube-search "AI automation"
+./scripts/google-integrations.sh youtube-channel "MrBeast"
+./scripts/google-integrations.sh youtube-uploads "UCX6OQ3DkcsbYNE6H8uQQuVA"
+```
+
+---
+
 ## 🔐 Authentication
 
 All integrations use the same service account:
 - **Email:** `oc-mohlt-v2@gen-lang-client-0031285928.iam.gserviceaccount.com`
 - **Config:** `/Users/mohlt/.openclaw/workspace/config/google-service-account.json`
-- **Scopes:** Calendar, Sheets, Drive, Gmail, Tasks
+- **Scopes:** Calendar, Sheets, Drive, Gmail, Tasks, YouTube
 
 ## 📝 Next Steps
 

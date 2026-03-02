@@ -256,7 +256,7 @@
     {
       "id": 26,
       "title": "Relationship Ninja CRM (Bi-weekly)",
-      "description": "Analyzes Google Sheet contacts, identifies The Siegfried 12 (Big 4, 3+ yrs, CPA track, D Beaker Opt-ins), drafts outreach for cultivation, reports to #ninja-crm. Goal: Cultivate 12 \u2192 Recruit 3.",
+      "description": "Analyzes Google Sheet contacts, identifies The Siegfried 12 (Big 4, 3+ yrs, CPA track, D Beaker Opt-ins), drafts outreach for cultivation, reports to #ninja-crm. Goal: Cultivate 12 → Recruit 3.",
       "status": "active",
       "priority": "high",
       "category": "cron",
@@ -264,6 +264,12 @@
       "channel": "discord",
       "discord_channel": "#ninja-crm",
       "spreadsheet": "https://docs.google.com/spreadsheets/d/1BgOdW3dBF1e7yYRz0wGC9TN75QcHRgsl/edit",
+      "note": "✅ Google Sheets shared with service account. Script ready. Runs bi-weekly (Sundays 9am PST).",
+      "capabilities": [
+        "google-sheets",
+        "contact-analysis",
+        "auto-scoring"
+      ],
       "created_at": "2026-02-27T23:01:00Z",
       "target_profile": {
         "big4_experience": "3+ years",
@@ -271,7 +277,7 @@
         "cpa_status": "Working toward CPA",
         "priority": "D Beaker Opt-ins (expressed interest)",
         "exclude": "Current Siegfried employees",
-        "goal": "Identify 12 prospects \u2192 Cultivate \u2192 Recruit 3"
+        "goal": "Identify 12 prospects → Cultivate → Recruit 3"
       }
     },
     {
@@ -284,7 +290,13 @@
       "schedule": "Weekly",
       "channel": "discord",
       "discord_channel": "#luma-scout",
-      "note": "Google Calendar integration disabled - auth required",
+      "note": "✅ Google Calendar connected. Puppeteer installed. Runs weekly (Mondays 10am PST).",
+      "calendar_id": "mohltbot10@gmail.com",
+      "capabilities": [
+        "puppeteer",
+        "google-calendar",
+        "auto-add-events"
+      ],
       "created_at": "2026-02-27T23:01:00Z"
     },
     {
@@ -383,7 +395,7 @@
     {
       "id": 7,
       "description": "Afternoon session - comprehensive MC update, 8 commits, server restarts, 75K tokens",
-      "amount": 2.0,
+      "amount": 2,
       "category": "api_call",
       "provider": "moonshot",
       "model": "kimi-k2.5",
@@ -412,6 +424,17 @@
       "tokens_in": 400000,
       "tokens_out": 50000,
       "created_at": "2026-02-27T18:12:00Z"
+    },
+    {
+      "description": "Moonshot API usage (auto-sync)",
+      "amount": 3.48634,
+      "category": "api_call",
+      "provider": "moonshot",
+      "model": "kimi-k2.5",
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "id": 1772433896108,
+      "created_at": "2026-03-02T06:44:56.108Z"
     }
   ],
   "memories": [
