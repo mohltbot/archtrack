@@ -190,6 +190,8 @@ Tasks requiring manual input, approval, or interactive authentication:
 - [ ] **Domain decision** — Permanent Cloudflare tunnel requires domain setup (optional)
 - [ ] **Test v2 workflows** — Validate n8n import for Narada, Newtrul, Avaamo, KlearNow workflows
 - [ ] **Fix budget tracking bug** — Investigate expense calculation logic, reset tracked amounts to match actual
+- [ ] **Siegfried 12 Outreach — SEND TEXTS** — Phone numbers ready in Google Sheet "MY Relationships Beaker Tracker". Send drafted messages to all 14 contacts, starting with Rahul Shah (Tier 1 priority). Execution plan: `relationships/siegfried-12-outreach-execution-plan.md`
+- [ ] **Configure VC Workflow Credentials** — Set up Slack API, SMTP email, Asana, and Tai Software API credentials so all 4 n8n workflows (Narada, Newtrul, Avaamo, KlearNow) can run end-to-end. Setup guide: `workflows/WORKFLOW-VALIDATION-REPORT.md`
 
 ---
 
