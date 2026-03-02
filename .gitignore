@@ -3,3 +3,5 @@ config/google-tokens.json
 config/google-oauth.json
 config/google-tokens.json
 config/google-oauth.json
+config/google-service-account.json
+config/google-service-account.json
