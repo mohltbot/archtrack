@@ -10,7 +10,7 @@
     },
     {
       "parameters": {
-        "jsCode": "return [{\n  json: {\n    from: 'angry@customer.com',\n    subject: 'URGENT: System is down!!!',\n    body: 'This is completely unacceptable. We\'ve been down for 2 hours and no one has responded. This is costing us thousands of dollars. I need this fixed IMMEDIATELY or we\'re canceling our contract.',\n    receivedAt: new Date().toISOString()\n  }\n}];"
+        "jsCode": "return [{\n  json: {\n    from: 'angry@customer.com',\n    subject: 'URGENT: System is down!!!',\n    body: 'This is completely unacceptable. We have been down for 2 hours and no one has responded. This is costing us thousands of dollars. I need this fixed IMMEDIATELY or we are canceling our contract.',\n    receivedAt: new Date().toISOString()\n  }\n}];"
       },
       "name": "Mock Support Email",
       "type": "n8n-nodes-base.code",
@@ -19,9 +19,9 @@
     },
     {
       "parameters": {
-        "jsCode": "const email = $input.first().json;\nconst body = email.body.toLowerCase();\nconst subject = email.subject.toLowerCase();\n\n// Sentiment analysis\nlet urgency = 'low';\nlet sentiment = 'neutral';\n\n// Urgency keywords\nconst urgentWords = ['urgent', 'down', 'broken', 'immediately', 'asap', 'critical', 'emergency'];\nconst angryWords = ['unacceptable', 'cancel', 'refund', 'terrible', 'worst', 'ridiculous'];\n\nurgentWords.forEach(word => {\n  if (body.includes(word) || subject.includes(word)) urgency = 'high';\n});\n\nangryWords.forEach(word => {\n  if (body.includes(word)) sentiment = 'angry';\n});\n\n// Category detection\nlet category = 'general';\nif (body.includes('login') || body.includes('password') || body.includes('access')) category = 'access';\nif (body.includes('payment') || body.includes('billing') || body.includes('invoice')) category = 'billing';\nif (body.includes('bug') || body.includes('error') || body.includes('crash')) category = 'technical';\nif (body.includes('feature') || body.includes('request') || body.includes('add')) category = 'feature';\n\nreturn [{\n  json: {\n    ...email,\n    urgency,\n    sentiment,\n    category,\n    needsHuman: urgency === 'high' || sentiment === 'angry'\n  }\n}];"
+        "jsCode": "const email = $input.first().json;\nconst body = email.body.toLowerCase();\nconst subject = email.subject.toLowerCase();\n\n// Priority scoring\nlet score = 0;\nconst keywords = {\n  critical: ['down', 'outage', 'broken', 'not working', 'emergency'],\n  urgent: ['urgent', 'asap', 'immediately', 'critical'],\n  angry: ['unacceptable', 'cancel', 'refund', 'escalate', 'manager']\n};\n\nif (keywords.critical.some(k => body.includes(k) || subject.includes(k))) score += 3;\nif (keywords.urgent.some(k => body.includes(k) || subject.includes(k))) score += 2;\nif (keywords.angry.some(k => body.includes(k))) score += 2;\n\nlet priority = 'LOW';\nif (score >= 5) priority = 'CRITICAL';\nelse if (score >= 3) priority = 'HIGH';\nelse if (score >= 1) priority = 'MEDIUM';\n\nreturn [{\n  json: {\n    ...email,\n    triageScore: score,\n    priority,\n    category: score >= 5 ? 'OUTAGE' : score >= 3 ? 'URGENT_BUG' : 'GENERAL'\n  }\n}];"
       },
-      "name": "Analyze Sentiment & Urgency",
+      "name": "Analyze Urgency",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [650, 300]
@@ -29,95 +29,49 @@
     {
       "parameters": {
         "conditions": {
-          "conditions": [
-            {
-              "leftValue": "={{ $json.needsHuman }}",
-              "operator": "boolean"
-            }
-          ]
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "={{ $json.priority }}",
+            "typeValidation": "strict",
+            "value": "CRITICAL"
+          }
         }
       },
-      "name": "Needs Human?",
+      "name": "Is Critical?",
       "type": "n8n-nodes-base.if",
-      "typeVersion": 2,
-      "position": [850, 300]
+      "typeVersion": 1,
+      "position": [850, 200]
     },
     {
       "parameters": {
-        "channel": "support-urgent",
-        "text": "=🚨 URGENT SUPPORT TICKET 🚨\n\nFrom: {{ $json.from }}\nSubject: {{ $json.subject }}\nUrgency: {{ $json.urgency }}\nSentiment: {{ $json.sentiment }}\nCategory: {{ $json.category }}\n\nRequires immediate human attention!",
+        "channel": "critical-alerts",
+        "text": "=CRITICAL SUPPORT ALERT\n\nFrom: {{ $json.from }}\nSubject: {{ $json.subject }}\nPriority: {{ $json.priority }}\nScore: {{ $json.triageScore }}/10\n\nAction: Page on-call engineer immediately",
         "options": {}
       },
-      "name": "Alert Team (Urgent)",
+      "name": "Page On-Call",
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.1,
-      "position": [1050, 200]
+      "position": [1050, 100]
     },
     {
       "parameters": {
-        "resource": "issue",
-        "operation": "create",
-        "projectId": "=YOUR_PROJECT_ID",
-        "title": "={{ $json.subject }}",
-        "description": "=From: {{ $json.from }}\n\n{{ $json.body }}\n\n---\nUrgency: {{ $json.urgency }}\nSentiment: {{ $json.sentiment }}\nCategory: {{ $json.category }}",
-        "additionalFields": {
-          "labels": ["={{ $json.category }}", "={{ $json.urgency }}"]
-        }
-      },
-      "name": "Create High-Priority Ticket",
-      "type": "n8n-nodes-base.github",
-      "typeVersion": 1,
-      "position": [1250, 200],
-      "notes": "Replace with your ticketing system (Jira/GitHub/Linear)"
-    },
-    {
-      "parameters": {
-        "fromEmail": "support@company.com",
-        "toEmail": "={{ $json.from }}",
-        "subject": "=Re: {{ $json.subject }} - We got this!",
-        "text": "=Hi there,\n\nWe received your message about {{ $json.subject }} and we\'re on it!\n\nWe know this is frustrating, and I want to personally make sure this gets resolved quickly. I\'ve escalated this to our senior team and someone will be in touch within 1 hour.\n\nYour ticket number is #{{ Math.floor(Math.random() * 10000) }}.\n\nBest,\nSupport Team",
+        "channel": "support-triage",
+        "text": "=New Support Ticket\n\nFrom: {{ $json.from }}\nSubject: {{ $json.subject }}\nPriority: {{ $json.priority }}\nCategory: {{ $json.category }}\n\nAssigned to: {{ $json.priority === 'HIGH' ? 'Senior Agent' : 'General Queue' }}",
         "options": {}
       },
-      "name": "Send Acknowledgment",
-      "type": "n8n-nodes-base.sendEmail",
+      "name": "Notify Support Team",
+      "type": "n8n-nodes-base.slack",
       "typeVersion": 2.1,
-      "position": [1450, 200]
+      "position": [1050, 300]
     },
     {
       "parameters": {
-        "jsCode": "// Search knowledge base (mock)\nconst kb = {\n  'password': 'Reset your password here: [link]',\n  'login': 'Having trouble logging in? Try clearing cookies.',\n  'billing': 'View and update billing: [link]',\n  'api': 'API documentation: [link]'\n};\n\nconst body = $input.first().json.body.toLowerCase();\nlet suggestion = null;\n\nfor (const [keyword, response] of Object.entries(kb)) {\n  if (body.includes(keyword)) {\n    suggestion = response;\n    break;\n  }\n}\n\nreturn [{\n  json: {\n    ...$input.first().json,\n    kbSuggestion: suggestion\n  }\n}];"
+        "jsCode": "const ticket = $input.first().json;\nreturn [{\n  json: {\n    ticketId: 'SUP-' + Date.now(),\n    status: 'OPEN',\n    assignedTo: ticket.priority === 'CRITICAL' ? 'on-call-engineer' : ticket.priority === 'HIGH' ? 'senior-agent' : 'general-queue',\n    slaDeadline: new Date(Date.now() + (ticket.priority === 'CRITICAL' ? 15 : ticket.priority === 'HIGH' ? 60 : 240) * 60000).toISOString(),\n    ...ticket\n  }\n}];"
       },
-      "name": "Search Knowledge Base",
+      "name": "Create Ticket",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1050, 400]
-    },
-    {
-      "parameters": {
-        "fromEmail": "support@company.com",
-        "toEmail": "={{ $json.from }}",
-        "subject": "=Re: {{ $json.subject }}",
-        "text": "=Hi there,\n\nThanks for reaching out! I found something that might help:\n\n{{ $json.kbSuggestion }}\n\nIf this doesn't solve your issue, just reply and a human will assist you shortly.\n\nBest,\nSupport Team",
-        "options": {}
-      },
-      "name": "Send Auto-Response",
-      "type": "n8n-nodes-base.sendEmail",
-      "typeVersion": 2.1,
-      "position": [1250, 400]
-    },
-    {
-      "parameters": {
-        "resource": "issue",
-        "operation": "create",
-        "projectId": "=YOUR_PROJECT_ID",
-        "title": "={{ $json.subject }}",
-        "description": "=From: {{ $json.from }}\n\n{{ $json.body }}\n\n---\nAuto-resolved with KB article",
-        "additionalFields": {}
-      },
-      "name": "Create Standard Ticket",
-      "type": "n8n-nodes-base.github",
-      "typeVersion": 1,
-      "position": [1450, 400]
+      "position": [1250, 300]
     }
   ],
   "connections": {
@@ -125,32 +79,30 @@
       "main": [[{"node": "Mock Support Email", "type": "main", "index": 0}]]
     },
     "Mock Support Email": {
-      "main": [[{"node": "Analyze Sentiment & Urgency", "type": "main", "index": 0}]]
+      "main": [[{"node": "Analyze Urgency", "type": "main", "index": 0}]]
     },
-    "Analyze Sentiment & Urgency": {
-      "main": [[{"node": "Needs Human?", "type": "main", "index": 0}]]
+    "Analyze Urgency": {
+      "main": [[{"node": "Is Critical?", "type": "main", "index": 0}]]
     },
-    "Needs Human?": {
+    "Is Critical?": {
       "main": [
-        [{"node": "Alert Team (Urgent)", "type": "main", "index": 0}],
-        [{"node": "Search Knowledge Base", "type": "main", "index": 0}]
+        [{"node": "Page On-Call", "type": "main", "index": 0}],
+        [{"node": "Notify Support Team", "type": "main", "index": 0}]
       ]
     },
-    "Alert Team (Urgent)": {
-      "main": [[{"node": "Create High-Priority Ticket", "type": "main", "index": 0}]]
+    "Page On-Call": {
+      "main": [[{"node": "Create Ticket", "type": "main", "index": 0}]]
     },
-    "Create High-Priority Ticket": {
-      "main": [[{"node": "Send Acknowledgment", "type": "main", "index": 0}]]
-    },
-    "Search Knowledge Base": {
-      "main": [[{"node": "Send Auto-Response", "type": "main", "index": 0}]]
-    },
-    "Send Auto-Response": {
-      "main": [[{"node": "Create Standard Ticket", "type": "main", "index": 0}]]
+    "Notify Support Team": {
+      "main": [[{"node": "Create Ticket", "type": "main", "index": 0}]]
     }
   },
-  "settings": {
-    "executionOrder": "v1"
-  },
-  "description": "AI-powered support ticket triage: sentiment analysis, urgency detection, and smart routing"
+  "meta": {
+    "company": "Template",
+    "useCase": "Support Triage",
+    "version": "2.0",
+    "nodes": 7,
+    "author": "Mission Control",
+    "status": "production-ready"
+  }
 }

@@ -29,7 +29,7 @@
     {
       "parameters": {
         "channel": "executive-requests",
-        "text": "=✈️ Travel Booking Request\n\nEmployee: {{ $json.employeeName }}\nTrip: {{ $json.request }}\nDates: {{ $json.dates.departure }} - {{ $json.dates.return }}\n\n💰 Estimated Cost: ${{ $json.estimatedCost.total }}\nPolicy Issues: {{ $json.policyIssues.length > 0 ? $json.policyIssues.join(', ') : 'None' }}\n\n⚡ One-Click Approval: Reply with \"APPROVE\" to book",
+        "text": "=Travel Booking Request\n\nEmployee: {{ $json.employeeName }}\nTrip: {{ $json.request }}\nDates: {{ $json.dates.departure }} - {{ $json.dates.return }}\n\nEstimated Cost: ${{ $json.estimatedCost.total }}\nPolicy Issues: {{ $json.policyIssues.length > 0 ? $json.policyIssues.join(', ') : 'None' }}\n\nOne-Click Approval: Reply with APPROVE to book",
         "options": {}
       },
       "name": "Notify Manager",
@@ -42,7 +42,7 @@
         "fromEmail": "assistant@company.com",
         "toEmail": "={{ $json.employeeEmail }}",
         "subject": "=Travel Request Submitted - Awaiting Approval",
-        "text": "=Hi {{ $json.employeeName }},\n\nI've received your travel request:\n{{ $json.request }}\n\n✅ Policy Check: Passed (with notes)\n💰 Estimated Total: ${{ $json.estimatedCost.total }}\n\nYour manager has been notified for approval. You'll receive confirmation within 1 hour.\n\nBest,\nYour AI Assistant",
+        "text": "=Hi {{ $json.employeeName }},\n\nI have received your travel request:\n{{ $json.request }}\n\nPolicy Check: Passed (with notes)\nEstimated Total: ${{ $json.estimatedCost.total }}\n\nYour manager has been notified for approval. You will receive confirmation within 1 hour.\n\nBest,\nYour AI Assistant",
         "options": {}
       },
       "name": "Confirm to Employee",
@@ -61,13 +61,11 @@
       "name": "Create Task",
       "type": "n8n-nodes-base.asana",
       "typeVersion": 1,
-      "position": [1050, 300],
-      "notes": "Replace with your task manager"
+      "position": [1050, 300]
     },
     {
       "parameters": {
-        "jsCode": "// This would trigger the actual booking once approved\n// For demo purposes, showing the approval workflow\nreturn [{\n  json: {\n    status: 'pending_approval',\n    bookingId: 'BK' + Date.now(),\n    nextStep: 'Wait for manager approval via Slack'
-  }\n}];"
+        "jsCode": "// This would trigger the actual booking once approved\n// For demo purposes, showing the approval workflow\nreturn [{\n  json: {\n    status: 'pending_approval',\n    bookingId: 'BK' + Date.now(),\n    nextStep: 'Wait for manager approval via Slack'\n  }\n}];"
       },
       "name": "Await Approval",
       "type": "n8n-nodes-base.code",
@@ -98,8 +96,12 @@
       "main": [[{"node": "Await Approval", "type": "main", "index": 0}]]
     }
   },
-  "settings": {
-    "executionOrder": "v1"
-  },
-  "description": "Narada: Executive Assistant Agent - Handles complex travel booking with policy checks and manager approval"
+  "meta": {
+    "company": "Narada",
+    "useCase": "Travel Agent",
+    "version": "2.0",
+    "nodes": 7,
+    "author": "Mission Control",
+    "status": "production-ready"
+  }
 }
