@@ -1,0 +1,104 @@
+{
+  "name": "Narada - Meeting Intelligence",
+  "description": "Auto-transcribe, summarize, extract action items from meetings",
+  "version": "2.0",
+  "nodes": [
+    {
+      "id": "zoomTrigger",
+      "type": "n8n-nodes-base.zoomTrigger",
+      "name": "Meeting Ended",
+      "parameters": {
+        "event": "recording.completed"
+      }
+    },
+    {
+      "id": "getRecording",
+      "type": "n8n-nodes-base.httpRequest",
+      "name": "Download Recording",
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.recording.download_url }}"
+      }
+    },
+    {
+      "id": "transcribe",
+      "type": "n8n-nodes-base.openAi",
+      "name": "Whisper Transcribe",
+      "parameters": {
+        "operation": "transcribe",
+        "model": "whisper-1",
+        "file": "={{ $json.data }}"
+      }
+    },
+    {
+      "id": "summarize",
+      "type": "n8n-nodes-base.openAi",
+      "name": "GPT Summarize",
+      "parameters": {
+        "model": "gpt-4o",
+        "prompt": "Summarize this meeting transcript:\n\n{{ $json.text }}\n\nProvide:\n1. Key discussion points (bullet list)\n2. Decisions made\n3. Action items with owners\n4. Next steps\n\nKeep it concise but comprehensive."
+      }
+    },
+    {
+      "id": "extractActions",
+      "type": "n8n-nodes-base.function",
+      "name": "Parse Action Items",
+      "parameters": {
+        "functionCode": "const summary = $input.first().json.content;\n// Extract action items with regex\nconst actionRegex = /- \[ \] (.+?)(?:\n|$)/g;\nconst actions = [];\nlet match;\nwhile ((match = actionRegex.exec(summary)) !== null) {\n  actions.push(match[1]);\n}\nreturn { actions, summary };"
+      }
+    },
+    {
+      "id": "createNotion",
+      "type": "n8n-nodes-base.notion",
+      "name": "Create Meeting Notes",
+      "parameters": {
+        "operation": "create",
+        "resource": "page",
+        "parentDatabaseId": "meetings-db",
+        "properties": {
+          "Name": "={{ $json.meetingTopic }}",
+          "Date": "={{ $json.startTime }}",
+          "Attendees": "={{ $json.participants }}",
+          "Summary": "={{ $json.summary }}"
+        }
+      }
+    },
+    {
+      "id": "slackSummary",
+      "type": "n8n-nodes-base.slack",
+      "name": "Post to Channel",
+      "parameters": {
+        "channel": "#meeting-notes",
+        "text": "📝 Meeting Summary: {{ $json.meetingTopic }}\n\n{{ $json.summary }}\n\n📋 Action Items:\n{{ $json.actions.map(a => \"- \" + a).join(\"\\n\") }}\n\n🔗 Full notes in Notion"
+      }
+    },
+    {
+      "id": "emailAttendees",
+      "type": "n8n-nodes-base.gmail",
+      "name": "Email Summary",
+      "parameters": {
+        "to": "={{ $json.participants.join(',') }}",
+        "subject": "Meeting Notes: {{ $json.meetingTopic }}",
+        "body": "Hi team,\n\nHere are the notes from today's meeting:\n\n{{ $json.summary }}\n\nAction items:\n{{ $json.actions.map(a => \"- \" + a).join(\"\\n\") }}\n\nFull transcript and notes: {{ $json.notionUrl }}"
+      }
+    }
+  ],
+  "connections": {
+    "zoomTrigger": {"main": [[{"node": "getRecording", "type": "main", "index": 0}]]},
+    "getRecording": {"main": [[{"node": "transcribe", "type": "main", "index": 0}]]},
+    "transcribe": {"main": [[{"node": "summarize", "type": "main", "index": 0}]]},
+    "summarize": {"main": [[{"node": "extractActions", "type": "main", "index": 0}]]},
+    "extractActions": {"main": [[{"node": "createNotion", "type": "main", "index": 0}]]},
+    "createNotion": {"main": [[{"node": "slackSummary", "type": "main", "index": 0}]]},
+    "slackSummary": {"main": [[{"node": "emailAttendees", "type": "main", "index": 0}]]}
+  },
+  "meta": {
+    "company": "Narada",
+    "useCase": "Meeting Intelligence",
+    "version": "2.0",
+    "nodes": 8,
+    "author": "Mission Control",
+    "status": "production-ready",
+    "roi": "Eliminate manual note-taking"
+  }
+}
