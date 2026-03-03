@@ -494,3 +494,61 @@ Mon Mar  2 23:24:04 PST 2026: Tunnel started with PID 1203
 2026-03-03T07:24:12Z INF Starting metrics server on 127.0.0.1:20241/metrics
 2026-03-03T07:24:12Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.200.233
 2026-03-03T07:24:12Z INF Registered tunnel connection connIndex=0 connection=22fdba5b-392e-4e04-9dfc-6cf083cb3d97 event=0 ip=198.41.200.233 location=sjc10 protocol=quic
+2026-03-03T20:38:44Z INF Initiating graceful shutdown due to signal terminated ...
+2026-03-03T20:38:44Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.200.233
+2026-03-03T20:38:44Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.233
+2026-03-03T20:38:44Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.233
+2026-03-03T20:38:44Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.233
+2026-03-03T20:38:44Z ERR Connection terminated connIndex=0
+2026-03-03T20:38:44Z ERR no more connections active and exiting
+2026-03-03T20:38:44Z INF Tunnel server stopped
+2026-03-03T20:38:44Z INF Metrics server stopped
+Tue Mar  3 12:39:06 PST 2026: Tunnel died, restarting...
+Tue Mar  3 12:39:06 PST 2026: Tunnel started with PID 15000
+2026-03-03T20:39:07Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-03-03T20:39:07Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-03-03T20:39:10Z INF +--------------------------------------------------------------------------------------------+
+2026-03-03T20:39:10Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-03-03T20:39:10Z INF |  https://assume-outdoors-pottery-reader.trycloudflare.com                                  |
+2026-03-03T20:39:10Z INF +--------------------------------------------------------------------------------------------+
+2026-03-03T20:39:10Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-03-03T20:39:10Z INF Version 2026.2.0 (Checksum dc6e60da390e702c4db3332d0cc9cf4e98a88df99f17273e9b3d83f435695fb4)
+2026-03-03T20:39:10Z INF GOOS: darwin, GOVersion: go1.25.7, GoArch: arm64
+2026-03-03T20:39:10Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:3001]
+2026-03-03T20:39:10Z INF cloudflared will not automatically update if installed by a package manager.
+2026-03-03T20:39:10Z INF Generated Connector ID: 34edcfac-7144-4c13-8161-976a0523ab9f
+2026-03-03T20:39:10Z INF Initial protocol quic
+2026-03-03T20:39:10Z INF ICMP proxy will use 10.0.0.249 as source for IPv4
+2026-03-03T20:39:10Z INF ICMP proxy will use fe80::c85:9135:eaf5:f391 in zone en1 as source for IPv6
+2026-03-03T20:39:10Z INF Created ICMP proxy listening on 10.0.0.249:0
+2026-03-03T20:39:10Z INF ICMP proxy will use 10.0.0.249 as source for IPv4
+2026-03-03T20:39:10Z INF ICMP proxy will use fe80::c85:9135:eaf5:f391 in zone en1 as source for IPv6
+2026-03-03T20:39:10Z INF Starting metrics server on 127.0.0.1:20242/metrics
+2026-03-03T20:39:10Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:10Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:10Z ERR failed to serve tunnel connection error="control stream encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:10Z ERR Serve tunnel error error="control stream encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:10Z INF Retrying connection in up to 2s connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:12Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.200.73
+Tue Mar  3 12:39:12 PST 2026: Tunnel URL: https://assume-outdoors-pottery-reader.trycloudflare.com
+2026-03-03T20:39:12Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:12Z ERR failed to serve tunnel connection error="control stream encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:12Z ERR Serve tunnel error error="control stream encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:12Z INF Retrying connection in up to 4s connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:14Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:14Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:14Z ERR failed to serve tunnel connection error="control stream encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:14Z ERR Serve tunnel error error="control stream encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:14Z INF Retrying connection in up to 8s connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:19Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:19Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:19Z ERR failed to serve tunnel connection error="control stream encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:19Z ERR Serve tunnel error error="control stream encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:19Z INF Retrying connection in up to 16s connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:20Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:20Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:20Z ERR failed to serve tunnel connection error="control stream encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:20Z ERR Serve tunnel error error="control stream encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:20Z INF Retrying connection in up to 32s connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:32Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.200.73
+2026-03-03T20:39:32Z INF Registered tunnel connection connIndex=0 connection=590732d3-f403-44d7-8b41-c4799d1abbcf event=0 ip=198.41.200.73 location=sjc08 protocol=quic

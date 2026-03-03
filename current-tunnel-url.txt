@@ -1,1 +1,1 @@
-https://api.trycloudflare.com/tunnel":
+https://assume-outdoors-pottery-reader.trycloudflare.com

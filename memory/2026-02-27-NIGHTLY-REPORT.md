@@ -43,12 +43,6 @@
 
 ## Remaining Tasks
 
-### ⏳ Task 16: Setup Persistent Cloudflare Tunnel
-**Status:** Pending (requires interactive auth)  
-**Note:** Script `setup-persistent-tunnel.sh` ready. Requires:
-1. Run `cloudflared tunnel login` manually
-2. Then execute the setup script
-
 ### ⏳ Task 18: Post LinkedIn About Accounting Skill
 **Status:** Pending (awaiting approval)  
 **Note:** Post ready at `linkedin-post.md`. Awaiting user go-ahead.
@@ -65,7 +59,7 @@
 ## Next Actions for User
 
 1. **LinkedIn Post:** Review and approve post when ready
-2. **Cloudflare Tunnel:** Run auth manually, then I can complete setup
+
 3. **Ben's Bites:** Friday 6 AM scan scheduled for tomorrow
 
 ---

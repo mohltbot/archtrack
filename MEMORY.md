@@ -62,7 +62,6 @@ Help Mohammed build a "1-person unicorn" — a massive business run by him + AI 
 ### Mission Control (v0.1 ✅ LIVE)
 - Next.js 15 dashboard for tracking tasks, expenses, agents, memories
 - Running at: http://localhost:3000
-- Cloudflare tunnel for remote access
 - Glassmorphism UI with gradients, animations
 
 ### Automated Work Sessions
@@ -88,7 +87,6 @@ Help Mohammed build a "1-person unicorn" — a massive business run by him + AI 
 
 **API Keys:**
 - Tavily: Stored in TOOLS.md
-- Cloudflare: Account created, tunnel configured
 
 ---
 
