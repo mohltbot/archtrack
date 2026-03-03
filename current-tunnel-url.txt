@@ -1,1 +1,1 @@
-https://fighters-windsor-excess-nascar.trycloudflare.com
+https://api.trycloudflare.com/tunnel":

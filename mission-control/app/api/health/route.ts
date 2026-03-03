@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getTasks } from '@/lib/store';
-import { getExpenses } from '@/lib/expenses';
-import { getMonthlySpend } from '@/lib/expenses';
+import { getExpenses, getMonthlySpend } from '@/lib/expense-tracker';
 
 interface HealthStatus {
   status: 'healthy' | 'degraded' | 'unhealthy';
