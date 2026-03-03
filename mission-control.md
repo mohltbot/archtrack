@@ -1,7 +1,39 @@
 # Mission Control Board
 
-**Last Updated:** March 2, 2026 at 8:03 AM PST (4-Hour Sync)  
-**Source:** Automated 4-hour sync + comprehensive activity audit
+**Last Updated:** March 2, 2026 at 5:57 PM PST (Ghost Shift)  
+**Source:** Ghost Shift execution — 3 tasks completed, 2 proactive additions
+
+---
+
+## ✅ GHOST SHIFT — Mar 2, 2026 (5:57 PM)
+
+**3 Tasks Completed | 2 Proactive Additions | 0 Cost (MLX)**
+
+### Executed Tasks:
+1. ✅ **Expense Tracking Automation** — `scripts/sync-expenses-to-sheets.mjs`
+   - Google Sheets integration for API cost sync
+   - Budget reconciliation to fix tracking bug
+   - Provider-level spend analysis
+   
+2. ✅ **Memory Browser API** — `mission-control/app/api/memory/route.ts`
+   - GET /api/memory — List all memory files
+   - GET /api/memory?file=DATE — Read specific memory log
+   - CORS-enabled for dashboard integration
+
+3. ✅ **Backup Automation** — `scripts/backup-mission-control.sh`
+   - Daily automated backups with 30-day retention
+   - Integrity verification
+   - Optional rclone cloud sync
+
+### Proactive Additions:
+1. ✅ **PR #11 Merge Decision Helper** — `docs/pr-11-merge-decision.md`
+   - Risk assessment: 3.2/10 (Acceptable)
+   - Recommendation: MERGE with post-merge tasks
+   - Structured decision matrix for user review
+
+2. 🔄 **Workflow Deployment Validation** — Partial (existing script base)
+   - Found `scripts/test-workflows.sh` already exists
+   - Needs expansion to cover all 28 workflows
 
 ---
 
@@ -109,10 +141,10 @@ cd mission-control
 | Metric | Value |
 |--------|-------|
 | **Budget** | ~$4.50 / $200 (2.25%) ✅ |
-| **Tasks** | 38 total — 36 done, 2 pending |
-| **Open PRs** | 1 (PR #11 - Self-Diagnostics under review) |
+| **Tasks** | 41 total — 39 done, 2 pending |
+| **Open PRs** | 1 (PR #11 - Self-Diagnostics — merge decision ready) |
 | **API Spend Status** | Healthy — **MLX now ACTIVE ($0 inference!)** |
-| **Last Ghost Shift** | Mar 2, 2026 4:03-8:03 AM PST (23 commits) |
+| **Last Ghost Shift** | Mar 2, 2026 5:57 PM PST (3 tasks, 2 proactive) |
 | **Last 4h Commits** | 23 commits — Ghost shifts + MLX integration + 17 workflows |
 | **Last 4h Tokens** | 33K in / 8K out via MLX = **$0.00** |
 | **Workflows Built** | 17 new workflows across ghost-shift sessions |
@@ -131,8 +163,10 @@ Tasks I can execute autonomously without manual input:
 - [~] **Fix Model Optimizer API endpoint** — Routes added in commit cd1b2b16, diagnostic scripts created — *IN PROGRESS: testing 404 fix*
 - [ ] **Wire diagnostics to actual agent execution** — Connect self-diagnostics module
 - [x] **Set BROWSER_USE_API_KEY in .env** — Created .env.example template with all required variables — *Completed Feb 28, 12:09 PM*
-- [ ] **Add memory browser to Mission Control** — Dashboard feature for viewing logs
-- [ ] **Create expense tracking automation** — Auto-log API costs to spreadsheet
+- [x] **Add memory browser to Mission Control** — Dashboard feature for viewing logs
+  * **COMPLETED Mar 2, 5:57 PM:** Created `app/api/memory/route.ts` with GET /api/memory (list files) and GET /api/memory?file=DATE (read specific)
+- [x] **Create expense tracking automation** — Auto-log API costs to spreadsheet
+  * **COMPLETED Mar 2, 5:57 PM:** Created `scripts/sync-expenses-to-sheets.mjs` with Google Sheets sync, budget reconciliation, provider totals
 - [x] **Batch memory maintenance** — Review daily logs, distill to MEMORY.md — *Completed Feb 27*
 - [x] **Test nightly work session** — Verify 2 AM automation runs correctly — *Completed Feb 28, 2:00 AM*
 - [x] **Fix npm permission issues** — Ongoing setup cleanup — *Already resolved via JSON store (better-sqlite3 removed)*
@@ -161,6 +195,12 @@ Tasks I can execute autonomously without manual input:
   * **COMPLETED Mar 2, 4:03 AM:** Added YouTube Data API v3 integration with search, channel stats, and video metadata
 - [x] **[Proactive] Execute Ghost-Shift Workflows** — 17 workflows built across 4 ghost-shift sessions (7:33-7:55 AM)
   * **COMPLETED Mar 2, 7:55 AM:** Maximum velocity execution, all workflows operational
+- [x] **[Proactive] Create automated Mission Control backup system** — Daily automated backups of DB, configs, and logs to cloud storage
+  * **COMPLETED Mar 2, 5:57 PM:** Created `scripts/backup-mission-control.sh` with 30-day retention, integrity checks, optional rclone cloud sync
+- [x] **[Proactive] Build PR #11 merge decision helper** — Create decision matrix and risk assessment for Self-Diagnostics module
+  * **COMPLETED Mar 2, 5:57 PM:** Created `docs/pr-11-merge-decision.md` with risk assessment, recommendation: MERGE with follow-ups
+- [-] **[Proactive] Create workflow deployment validation script** — Automated testing for all 28 n8n workflows before deployment
+  * **IN PROGRESS:** Partial validation exists in `scripts/test-workflows.sh`, needs expansion for all 28 workflows
 
 ---
 
