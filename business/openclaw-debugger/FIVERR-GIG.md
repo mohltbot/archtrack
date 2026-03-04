@@ -52,28 +52,27 @@ I'll get you unstuck in 30 minutes, not 3 hours.
 
 ## Package Tiers
 
-### Basic — $75
+### Basic — $15
 - 1 OpenClaw configuration issue
 - Root cause diagnosis
-- Fix + 5-minute explanation
+- Fix + explanation
 - 1 revision
 - Delivery: 24 hours
 
-### Standard — $150 ⭐ POPULAR
+### Standard — $25 ⭐ POPULAR
 - Up to 3 related issues
-- Complete config review
-- Fix + detailed documentation
+- Config review
+- Fix + documentation
 - 3 revisions
 - Priority support (12-hour delivery)
 - Follow-up check (7 days)
 
-### Premium — $300
-- Complete OpenClaw setup audit
-- Up to 5 issues or full reconfiguration
-- Performance optimization
-- Fix + video walkthrough
+### Premium — $50
+- Emergency fix
+- Up to 5 issues
+- Express delivery (2-6 hours)
+- Video walkthrough
 - Unlimited revisions (7 days)
-- Express delivery (6 hours)
 - 30 days of email support
 
 ---
