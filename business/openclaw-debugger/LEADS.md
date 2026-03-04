@@ -6,8 +6,8 @@
 
 | Name | Source | Issue | Contact | Status | Date Added | Last Contact | Next Action | Draft Ready |
 |------|--------|-------|---------|--------|------------|--------------|-------------|-------------|
-| @rstormsf | Twitter | General stability/babysitting complaints | https://x.com/rstormsf | 🔥 Hot | 2026-03-03 | Never | **SEND DM TODAY** — monitoring service | ✅ See DRAFTS.md |
-| @matthewjetthall | Twitter | Node22 + Telegram, 14 hours lost | https://x.com/matthewjetthall | 🔥 Hot | 2026-03-03 | Never | **SEND DM TODAY** — Docker fix + free help | ✅ See DRAFTS.md |
+| @rstormsf | Twitter | General stability/babysitting complaints | https://x.com/rstormsf | 🔥 Hot | 2026-03-03 | **March 3 — DM SENT** | Wait for response | ✅ See DRAFTS.md |
+| @matthewjetthall | Twitter | Node22 + Telegram, 14 hours lost | https://x.com/matthewjetthall | 🔥 Hot | 2026-03-03 | **March 3 — DM SENT** | Wait for response | ✅ See DRAFTS.md |
 | @StMichaelsForge | Twitter | All models failed to respond | https://x.com/StMichaelsForge | 🟡 Warm | 2026-03-03 | **March 3 — Replied** | Follow up in 2 days | ✅ See DRAFTS.md |
 
 ## 🟡 Warm Leads (Engaged — Follow Up)
