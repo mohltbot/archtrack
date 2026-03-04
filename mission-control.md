@@ -386,7 +386,7 @@ Completed tasks from recent work sessions:
 - [x] **Avaamo Workflow Simplification** — Streamlined for n8n import compatibility — *Completed Feb 27*
 - [x] **Ghost Shift — Feb 27, 12:09 PM** — Reviewed PR #13 (Apple On-Device LLM), created accounting-tax docs, memory maintenance
 - [x] **Initial Setup** — GitHub account (mohltbot), mission-control repo created
-- [x] **Mission Control Dashboard v0.1** — Next.js 15 glassmorphism UI, running at localhost:3000
+- [x] **Mission Control Dashboard v0.1** — Next.js 15 glassmorphism UI
 - [x] **Automated Work Sessions** — 2 AM nightly + 12 PM mid-day check-ins configured
 - [x] **Ben's Bites Scanner** — Wed 6 AM / Fri 6 PM cron schedule
 - [x] **Cloudflare Tunnel (Temporary)** — Working via temporary tunnel
@@ -404,7 +404,7 @@ Completed tasks from recent work sessions:
 
 ### Mission Control Dashboard
 **Status:** v0.1 Live ✅  
-**URL:** http://localhost:3000 (local) / Cloudflare tunnel (remote)  
+**Access:** Local development environment  
 **Features:** Task board, budget tracker, agent monitor, mobile-optimized
 
 ### Apple On-Device LLM (MLX) — MAJOR BREAKTHROUGH! 🚀
@@ -592,8 +592,7 @@ Completed tasks from recent work sessions:
 
 - **GitHub Repo:** https://github.com/mohltbot/mission-control
 - **Open PRs:** None (all merged)
-- **Local Dashboard:** http://localhost:3000
-- **MLX Server:** http://localhost:8787
+- **MLX Server:** Local development endpoint
 - **ClawHub:** accounting-tax skill submitted
 - **Accounting-Tax Docs:** `docs/accounting-tax-skill.md`
 - **VC Portfolio Docs:** `docs/vc-portfolio-agentification.md`
