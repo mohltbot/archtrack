@@ -108,7 +108,7 @@ If you do today's actions:
 1. Ask for their config (redact API keys)
 2. Diagnose in 5 minutes
 3. Quote: "$75 for fix, $300/month for monitoring"
-4. Send Fiverr link or PayPal
+4. Send Fiverr link: https://www.fiverr.com/s/xX3QNLD
 
 **If they have questions:**
 - Answer briefly

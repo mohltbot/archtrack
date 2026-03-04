@@ -235,7 +235,7 @@ Most fixes: 30 minutes
 Price: $75
 Guarantee: Fixed or free
 
-DM me → [your landing page URL]
+DM me → https://www.fiverr.com/s/xX3QNLD
 ```
 
 ---
