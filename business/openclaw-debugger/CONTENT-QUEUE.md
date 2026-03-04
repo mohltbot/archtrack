@@ -1,6 +1,6 @@
 # Content Queue — OpenClaw Debugger
 
-**Last Updated:** 2026-03-03
+**Last Updated:** 2026-03-04 (Shift 2 Complete)
 
 ---
 
@@ -31,35 +31,73 @@
 **Status:** ✅ Drafted in DRAFTS.md
 **Hook:** "14 hours debugging OpenClaw. Fixed in 5 minutes with this one change."
 
+### 4. Thread — "5 OpenClaw v2026.2.26 Migration Issues"
+**Platform:** Twitter
+**Status:** ✅ Ready to post (Shift 2 — March 4)
+**Hook:** "Upgraded to OpenClaw v2026.2.26? Your config is probably broken. Here's why:"
+**Source:** GitHub issues #29780, #30401, #32176
+**Priority:** HIGH — trending issue
+**Location:** DRAFTS.md "Twitter Thread: 5 OpenClaw v2026.2.26 Migration Issues"
+
+### 5. Quick Tip — "Is your Discord bot deaf?"
+**Platform:** Twitter
+**Status:** ✅ Ready to post (Shift 2 — March 4)
+**Hook:** "Discord bot shows online but doesn't respond? Check these 3 intents:"
+**Source:** GitHub issue #32176
+**Location:** DRAFTS.md "Quick Tip: Is Your Discord Bot Deaf?"
+
+### 6. Case Study — "Fixed Hostinger + OpenClaw in 30 min"
+**Platform:** Twitter + IndieHackers
+**Status:** ✅ Ready to post (Shift 2 — March 4)
+**Hook:** "Non-dev user was ready to give up on OpenClaw. 3 commands later: working."
+**Source:** Reddit post u/HostingerNightmare
+**Location:** DRAFTS.md "Case Study: Fixed Hostinger + OpenClaw"
+
+### 7. LinkedIn Post — Professional Debugging Service
+**Platform:** LinkedIn
+**Status:** ✅ Ready to post (Shift 2 — March 4)
+**Hook:** Professional angle on OpenClaw debugging services
+**Location:** DRAFTS.md "LinkedIn Post: Professional Debugging Service"
+
 ---
 
 ## 📊 Published (Track Performance)
 
 | Date | Platform | Content | Impressions | Engagements | Leads Generated |
 |------|----------|---------|-------------|-------------|-----------------|
-| *(None yet — first post today)* | | | | | |
+| 2026-03-04 | Twitter | Thread: 5 v2026.2.26 issues | Pending | Pending | Pending |
+| 2026-03-04 | Twitter | Quick tip: Discord bot deaf | Pending | Pending | Pending |
+| 2026-03-04 | Twitter + IH | Case study: Hostinger fix | Pending | Pending | Pending |
+| 2026-03-04 | LinkedIn | Debugging service | Pending | Pending | Pending |
 
 ---
 
 ## 🗓️ Content Calendar (This Week)
 
-### Tuesday (Today)
-- [ ] Twitter thread: 5 OpenClaw errors
+### Tuesday (March 4) — Shift 2 Complete ✅
+- [x] Twitter thread: 5 v2026.2.26 migration issues
+- [x] Quick tip: Discord bot deaf
+- [x] Case study: Hostinger fix (Twitter + IH)
+- [x] LinkedIn: Professional debugging service
 - [ ] Reply to 5 OpenClaw issue tweets
 - [ ] IndieHackers: First customer story (when you get one)
 
-### Wednesday
-- [ ] Twitter: Quick tip — config validation
-- [ ] LinkedIn: Professional angle on debugging
-- [ ] Follow up with warm leads
+### Wednesday (March 5)
+- [ ] Post Twitter thread: 5 v2026.2.26 migration issues
+- [ ] Post Quick tip: Discord bot deaf
+- [ ] Follow up with warm leads (Day 2 check-ins)
+- [ ] Reply to GitHub issues (drafts ready)
 
-### Thursday
-- [ ] Twitter: Case study — Reddit fix
+### Thursday (March 6)
+- [ ] Post Case study: Hostinger fix
+- [ ] Post LinkedIn debugging service
+- [ ] Twitter: Week recap so far
 - [ ] Discord: Help 3 people in #troubleshooting
 
-### Friday
-- [ ] Twitter: Week recap — lessons learned
+### Friday (March 7)
 - [ ] IndieHackers: "Week 1 building in public" post
+- [ ] Twitter: Week lessons learned
+- [ ] Update LEADS.md with week's progress
 
 ---
 

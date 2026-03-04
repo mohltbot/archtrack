@@ -14,12 +14,10 @@ SHIFT_NUM=$1
 
 echo "[$TIMESTAMP] Starting OpenClaw Debugger Shift $SHIFT_NUM" >> "$LOG_DIR/debugger-cron.log"
 
-# Spawn sub-agent for this shift
-openclaw sessions spawn \
-  --runtime subagent \
-  --mode run \
-  --label "debugger-shift-$SHIFT_NUM" \
-  --task "Read /Users/mohlt/.openclaw/workspace/business/openclaw-debugger/AGENT-PROMPT.md and execute Shift $SHIFT_NUM tasks. Work on the OpenClaw debugger business: outreach, content, follow-ups, or planning as specified in the prompt. Log all activity to memory/YYYY-MM-DD.md and update LEADS.md and CONTENT-QUEUE.md. Be proactive and autonomous." \
-  >> "$LOG_DIR/debugger-cron.log" 2>&1
+# NOTE: This script is called by launchd but actual spawning is done via OpenClaw Gateway API
+# The openclaw CLI doesn't support sessions spawn directly
+# For manual runs, use: openclaw agent --message "..."
+echo "[$TIMESTAMP] Shift $SHIFT_NUM triggered via launchd" >> "$LOG_DIR/debugger-cron.log"
+echo "[$TIMESTAMP] Use Control UI or 'openclaw agent' command to execute shift tasks" >> "$LOG_DIR/debugger-cron.log"
 
 echo "[$TIMESTAMP] Completed Shift $SHIFT_NUM" >> "$LOG_DIR/debugger-cron.log"
