@@ -1,0 +1,13 @@
+{
+  "id": "ghost-marketing-1772705586829",
+  "parent_session": 1772705586825,
+  "task": {
+    "id": 18,
+    "title": "Post LinkedIn about accounting skill",
+    "description": "LinkedIn post ready at linkedin-post.md. Post when ready!",
+    "category": "marketing",
+    "priority": "high"
+  },
+  "workspace": "/Users/mohlt/.openclaw/workspace",
+  "spawned_at": "2026-03-05T10:13:06.829Z"
+}

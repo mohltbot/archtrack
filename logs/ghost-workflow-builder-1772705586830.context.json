@@ -1,0 +1,13 @@
+{
+  "id": "ghost-workflow-builder-1772705586830",
+  "parent_session": 1772705586825,
+  "task": {
+    "id": 21,
+    "title": "Test 4 v2 VC Portfolio Workflows",
+    "description": "Test all 4 research-based v2 workflows in n8n (KlearNow.AI, Narada, Newtrul, Avaamo). Run each workflow, verify execution, check notifications. Provide feedback on which to demo to VC.",
+    "category": "vc_portfolio",
+    "priority": "high"
+  },
+  "workspace": "/Users/mohlt/.openclaw/workspace",
+  "spawned_at": "2026-03-05T10:13:06.830Z"
+}

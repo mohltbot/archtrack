@@ -1,0 +1,13 @@
+{
+  "id": "ghost-infrastructure-1772705586827",
+  "parent_session": 1772705586825,
+  "task": {
+    "id": 16,
+    "title": "Run PR #5 - Setup persistent Cloudflare tunnel",
+    "description": "Run ./scripts/setup-persistent-tunnel.sh to create permanent Mission Control URL",
+    "category": "infrastructure",
+    "priority": "high"
+  },
+  "workspace": "/Users/mohlt/.openclaw/workspace",
+  "spawned_at": "2026-03-05T10:13:06.828Z"
+}
