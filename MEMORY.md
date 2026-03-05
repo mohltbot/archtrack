@@ -1,6 +1,6 @@
 # MEMORY.md - Core Identity & Context
 
-**Last Updated:** 2026-03-04
+**Last Updated:** 2026-02-25
 
 ---
 
@@ -61,7 +61,8 @@ Help Mohammed build a "1-person unicorn" — a massive business run by him + AI 
 
 ### Mission Control (v0.1 ✅ LIVE)
 - Next.js 15 dashboard for tracking tasks, expenses, agents, memories
-- Local development environment
+- Running at: http://localhost:3000
+- Cloudflare tunnel for remote access
 - Glassmorphism UI with gradients, animations
 
 ### Automated Work Sessions
@@ -87,12 +88,7 @@ Help Mohammed build a "1-person unicorn" — a massive business run by him + AI 
 
 **API Keys:**
 - Tavily: Stored in TOOLS.md
-
-**Browser Automation:**
-- Chrome Extension: ✅ Active (debugged Mar 4, 2026)
-- Use `profile="chrome"` for browser automation
-- Capabilities: Screenshots, clicks, form filling, navigation
-- Successfully tested with Holodeck MVP game
+- Cloudflare: Account created, tunnel configured
 
 ---
 

@@ -11,6 +11,7 @@
    - $0.15 spent (25K tokens) — well within budget
 
 2. **Outstanding Tasks**
+   - Persistent Cloudflare tunnel (blocked: needs interactive auth)
    - LinkedIn post (blocked: awaiting approval)
 
 ### Distilled Insights
@@ -22,7 +23,7 @@
 - Ben's Bites integration is producing actionable PRs
 
 **Blockers Pattern:**
-
+- Interactive authentication remains a consistent blocker (Cloudflare)
 - Content approval workflow creates natural delays (LinkedIn posts)
 
 **Budget Trend:**

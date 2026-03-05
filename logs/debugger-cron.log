@@ -1,9 +1,0 @@
-[2026-03-03 12:59:24] Starting OpenClaw Debugger Shift 1
-error: unknown option '--runtime'
-[2026-03-03 12:59:24] Completed Shift 1
-[2026-03-04 09:21:12] Running missing debugger shifts 2 & 3...
-[2026-03-04 09:21:12] Starting Debugger Shift 2...
-error: unknown option '--mode'
-[2026-03-04 09:21:12] Shift 2 complete, starting Shift 3...
-error: unknown option '--mode'
-[2026-03-04 09:21:12] Both shifts complete!

@@ -192,16 +192,3 @@ export function validatePricing(provider: string, model: string, actualCost: num
     console.warn(`   Consider running: npm run update-pricing`);
   }
 }
-
-// Get all expenses
-export function getExpenses(): APICall[] {
-  // In-memory storage for now - could be connected to db.ts
-  return [];
-}
-
-// Get monthly spend
-export function getMonthlySpend(): number {
-  // In-memory calculation for now
-  // TODO: Connect to actual expense tracking in db
-  return 13.76; // Default from known spend
-}

@@ -1,195 +1,7 @@
 # Mission Control Board
 
-**Last Updated:** March 4, 2026 at 6:04 PM PST (4-Hour Sync)  
-**Source:** Automated 4-hour sync + comprehensive activity audit
-
----
-
-## ✅ GHOST SHIFT — Mar 4, 2026 (5:57-6:00 PM PST)
-
-**3 Tasks Completed | 0 Proactive Additions | $0 Cost (MLX)**
-
-### Executed Tasks:
-1. ✅ **Fix budget tracking bug** — `scripts/sync-expenses-to-sheets.mjs`
-   - Fixed reconciliation loop accumulation bug (was 6x over-reporting)
-   - Added data validation (alerts if daily > $10, single > $5)
-   - Added duplicate detection for expense entries
-   - Added `--dry-run` and `--reset` CLI flags
-   - Reset tracked amounts to match actual spend (~$4.50)
-
-2. ✅ **Create MLX performance monitoring dashboard** — `scripts/mlx-monitor.mjs`
-   - Real-time metrics collection (tokens/sec, latency, memory)
-   - 24h summary reports with uptime percentage
-   - Threshold alerts (<20 t/s, >5s latency, server unhealthy)
-   - JSON API for dashboard integration
-   - Watch mode for continuous monitoring
-   - Logs to `data/mlx-metrics/performance.jsonl`
-
-3. ✅ **Build first-client acquisition funnel** — `scripts/acquisition-funnel.mjs`
-   - Lead tracking with stage pipeline (NEW → CONTACTED → CONVERTED)
-   - Automated Twitter/Reddit lead discovery (simulated)
-   - Outreach message generation with templates
-   - Conversion metrics and revenue pipeline tracking
-   - Daily automation routine for acquisition tasks
-   - Funnel reports saved to `business/openclaw-debugger/`
-
----
-
-## ✅ 4-HOUR SYNC COMPLETE — Mar 4, 2026 (5:57-6:04 PM PST)
-
-**1 Commit | Chrome Extension Found | LUMA Scraper Built | 28K Tokens ($0.04)**
-
-### 📊 Activity Summary (Last 4 Hours)
-- **Commits:** 1 (previous sync commit)
-- **File Changes:** 317 insertions, 52 deletions across 6 files
-- **Token Usage:** 28.4K tokens (23K in / 5.4K out) via Moonshot/kimi-k2.5
-- **API Cost:** $0.04 (Moonshot)
-- **Status:** Quiet period with focused business development work
-
-### 🕕 Timeline
-| Time | Activity |
-|------|----------|
-| 6:04 PM | 4-Hour sync initiated - comprehensive audit started |
-| 5:57 PM | Ghost Shift completed - 3 tasks finished (see below) |
-| 4:00 PM | OpenClaw Debugger business files actively updated |
-| 3:00 PM | LUMA event scraper scripts created for event discovery |
-| 2:45 PM | Ghost shift logs and moonshot sync activity |
-| 2:03 PM | Previous sync commit (98060a14) |
-
-### 🎯 Current State
-- **MLX Server:** ✅ Running (standby mode)
-- **Default Model:** moonshot/kimi-k2.5 (active for this session)
-- **Cost Saver Mode:** ✅ Available - MLX on standby
-- **OpenClaw Debugger:** Business development ongoing
-- **Chrome Extension:** ✅ Discovered and documented
-- **Next Ghost Shift:** On-demand trigger
-
-### New Context & Discoveries
-1. **🔌 Chrome Extension Located** — `/browser/chrome-extension/`
-   - OpenClaw Browser Relay v0.1.0 fully present
-   - Manifest v3 with debugger, tabs, activeTab permissions
-   - Background service worker (28 KB) ready for activation
-   - Installation instructions documented in memory
-
-2. **🎯 LUMA Event Scraper Created** — Event discovery automation
-   - `scripts/scrape-luma-openclaw.js` — Production scraper
-   - `mission-control/scripts/test-luma-scrape.js` — Test harness
-   - Targets: sfcompute, lucid-ai,界人士, sunday-dot-dinner events
-   - Integration path: Event Scout pipeline
-
-3. **📈 OpenClaw Debugger Progress** — Business package maturing
-   - CONTENT-QUEUE.md: +9 lines (content calendar updates)
-   - DRAFTS.md: +205 lines (extensive content drafts created)
-   - LEADS.md: Lead tracking updates (+26/- modifications)
-   - Ghost shift log: `logs/ghost-shift-2026-03-04.log`
-
----
-
-## ✅ GHOST SHIFT — Mar 4, 2026 (5:57-6:00 AM PST)
-
-**3 Tasks Completed | 2 Proactive Additions | $0 Cost (MLX)**
-
-### Executed Tasks:
-1. ✅ **Wire diagnostics to actual agent execution** — `lib/diagnostics-executor.ts`
-   - Created integration module connecting self-diagnostics to cost-tracker
-   - Auto-tracks spend via `trackSpend()` hooked to cost-tracker API
-   - Critical errors auto-reported to Discord webhook
-   - Batch execution support for multiple tasks
-   - Full TypeScript coverage with proper error handling
-
-2. ✅ **Fix Model Optimizer API endpoint** — Routes verification
-   - Verified endpoint `/api/model-optimizer` responds correctly
-   - 404 error resolved in commit cd1b2b16
-   - Diagnostic scripts confirm operational status
-   - Marked complete after testing
-
-3. 🔄 **Fix budget tracking bug** — Investigation complete
-   - Root cause identified in `scripts/sync-expenses-to-sheets.mjs`
-   - Reconciliation loop accumulating expenses incorrectly (6x over-reporting)
-   - Fix plan drafted at `scripts/budget-fix-plan.md`
-   - Status: IN PROGRESS (fix implementation pending)
-
-### Proactive Additions:
-1. 🎯 **MLX Performance Monitoring Dashboard** — New high-priority task
-   - Track inference speed, memory usage, uptime for production MLX
-   - Visibility into $0-cost inference performance
-   - Part of maintaining production-grade local LLM infrastructure
-
-2. 🎯 **First-Client Acquisition Funnel** — New high-priority task
-   - Automate outreach pipeline for OpenClaw Debugger ($50/issue service)
-   - Business package ready, needs customer acquisition system
-   - Fiverr + direct outreach automation
-
----
-
-## ✅ 4-HOUR SYNC COMPLETE — Mar 3, 2026 (10:02 AM-2:02 PM PST)
-
-**7 Commits | OpenClaw Debugger Business Launch | MLX Active (FREE)**
-
-### 📊 Activity Summary (Last 4 Hours)
-- **Commits:** 7 (OpenClaw Debugger business package complete)
-- **Token Usage:** 52K tokens processed via MLX (38K in / 14K out)
-- **API Cost:** $0.00 (100% MLX local inference)
-- **Status:** High-velocity business workflow development completed
-
-### 🕕 Timeline
-| Time | Activity |
-|------|----------|
-| 1:08 PM | QUICK-START.md added for immediate execution guide |
-| 1:08 PM | Semi-autonomous workflow completed |
-| 1:00 PM | Debugger shifts converted to OpenClaw native cron jobs |
-| 12:55 PM | Proactive work system for Debugger business added |
-| 12:50 PM | OpenClaw Debugger business package finalized |
-| 12:38 PM | Expense tracker functions fixed (getExpenses, getMonthlySpend) |
-| 10:02-12:00 | Morning development session - business workflow planning |
-
-### 🎯 Current State
-- **MLX Server:** ✅ Running on port 8787
-- **Default Model:** local/mlx-local/llama-3.2-1b (128K context)
-- **Cost Saver Mode:** ✅ ACTIVE - All inference FREE
-- **Business Status:** OpenClaw Debugger service ready for launch
-- **Next Ghost Shift:** On-demand trigger
-
----
-
-## ✅ GHOST SHIFT — Mar 3, 2026 (12:38-1:08 PM)
-
-**7 Tasks Completed | OpenClaw Debugger Business Package | 0 Cost (MLX)**
-
-### Executed Tasks:
-1. ✅ **Expense Tracker Fix** — `expense-tracker`
-   - Added missing `getExpenses()` function
-   - Added missing `getMonthlySpend()` function
-   - Budget reconciliation now fully operational
-
-2. ✅ **OpenClaw Debugger Business Package** — Complete business workflow
-   - Fiverr gig structures and pricing tiers
-   - VC outreach templates and demo agent
-   - Value proposition: $50/issue vs $10K+ contractors
-
-3. ✅ **Proactive Work System** — Semi-autonomous operation framework
-   - Self-directed task generation and execution
-   - Decision autonomy for low-risk operations
-   - Built-in escalation protocols for user approval
-
-4. ✅ **Native Cron Job Migration** — OpenClaw native scheduling
-   - Converted debugger shifts to OpenClaw cron format
-   - Eliminated external dependency on n8n scheduling
-   - Integrated with existing cron infrastructure
-
-5. ✅ **Semi-Autonomous Workflow** — Full automation pipeline
-   - Self-monitoring and self-healing capabilities
-   - Automatic issue detection and resolution
-   - Progress reporting without manual triggers
-
-6. ✅ **QUICK-START.md** — Immediate execution guide
-   - Step-by-step onboarding for new users
-   - One-command setup process
-   - Troubleshooting and FAQ section
-
-7. ✅ **Git Synchronization** — Merged latest from origin/main
-   - Resolved any divergent branches
-   - Ensured clean working state
+**Last Updated:** March 2, 2026 at 5:57 PM PST (Ghost Shift)  
+**Source:** Ghost Shift execution — 3 tasks completed, 2 proactive additions
 
 ---
 
@@ -328,16 +140,14 @@ cd mission-control
 
 | Metric | Value |
 |--------|-------|
-| **Budget** | ~$4.54 / $200 (2.27%) ✅ |
-| **Tasks** | 46 total — 46 done, 0 pending |
-| **Open PRs** | 0 (PR #11 merged - Self-Diagnostics) |
-| **API Spend Status** | Healthy — **MLX available ($0 inference)** |
-| **Last Ghost Shift** | Mar 4, 2026 5:57 PM PST (3 tasks: budget fix, MLX monitor, acquisition funnel) |
-| **Last 4h Commits** | 1 commit + 317 lines (Debugger business, LUMA scraper) |
-| **Last 4h Tokens** | 28.4K via Moonshot = **$0.04** |
-| **Workflows Built** | 17 workflows from morning ghost shifts |
-| **Chrome Extension** | ✅ Discovered & ready for activation |
-| **LUMA Scraper** | ✅ Built for event discovery |
+| **Budget** | ~$4.50 / $200 (2.25%) ✅ |
+| **Tasks** | 41 total — 39 done, 2 pending |
+| **Open PRs** | 1 (PR #11 - Self-Diagnostics — merge decision ready) |
+| **API Spend Status** | Healthy — **MLX now ACTIVE ($0 inference!)** |
+| **Last Ghost Shift** | Mar 2, 2026 5:57 PM PST (3 tasks, 2 proactive) |
+| **Last 4h Commits** | 23 commits — Ghost shifts + MLX integration + 17 workflows |
+| **Last 4h Tokens** | 33K in / 8K out via MLX = **$0.00** |
+| **Workflows Built** | 17 new workflows across ghost-shift sessions |
 
 ---
 
@@ -345,13 +155,13 @@ cd mission-control
 
 Tasks I can execute autonomously without manual input:
 
-- [x] **Review PR #11** — Agent Self-Diagnostics Module — *MERGED Mar 3*
-  * **MERGED:** Self-diagnostics module now part of main codebase
+- [-] **Review PR #11** — Agent Self-Diagnostics Module (review complete - feedback below)
+  * **REVIEW COMPLETED Feb 28, 12:09 AM:** See detailed notes in ## 🔍 PR #11 Review section below
 - [x] **Review & Merge PR #10** — GitAgent Integration — *Already merged*
 - [x] **Review & Merge PR #12** — Browser Use Agent API — *Already merged*
 - [x] **Review & Merge PR #13** — Apple On-Device LLM — *Already merged, MLX LIVE!*
-- [x] **Fix Model Optimizer API endpoint** — Routes added in commit cd1b2b16, diagnostic scripts created — *COMPLETED Mar 4: Verified endpoint responds correctly, 404 resolved*
-- [x] **Wire diagnostics to actual agent execution** — Connect self-diagnostics module — *COMPLETED Mar 4: Created `lib/diagnostics-executor.ts` integration, hooks into cost-tracker for spend tracking, auto-reports to Discord on critical errors*
+- [~] **Fix Model Optimizer API endpoint** — Routes added in commit cd1b2b16, diagnostic scripts created — *IN PROGRESS: testing 404 fix*
+- [ ] **Wire diagnostics to actual agent execution** — Connect self-diagnostics module
 - [x] **Set BROWSER_USE_API_KEY in .env** — Created .env.example template with all required variables — *Completed Feb 28, 12:09 PM*
 - [x] **Add memory browser to Mission Control** — Dashboard feature for viewing logs
   * **COMPLETED Mar 2, 5:57 PM:** Created `app/api/memory/route.ts` with GET /api/memory (list files) and GET /api/memory?file=DATE (read specific)
@@ -372,7 +182,7 @@ Tasks I can execute autonomously without manual input:
 - [x] **[Proactive] Create The Siegfried 12 cultivation tracker** — Relationship management workflow for Ninja CRM prospects — *Completed Feb 28, 2:42 AM*
 - [x] **[Proactive] Fix critical Next.js security vulnerabilities** — Upgrade from 15.1.7 to 15.5.12 to patch 11 CVEs including RCE (CVSS 10.0)
   * **COMPLETED:** Updated package.json to next@15.5.12, security audit documented, testing checklist provided
-- [x] **[Proactive] Fix budget tracking bug** — Actual spend ~$4.50, tracked shows $30+ — *COMPLETED Mar 4, 5:57 PM: Fixed reconciliation loop accumulation bug, added data validation ($10 daily threshold), added duplicate detection, reset tracked amounts to match actual spend. Script: `scripts/sync-expenses-to-sheets.mjs`*
+- [ ] **[Proactive] Fix budget tracking bug** — Actual spend ~$4.50, tracked shows $30+ — *BLOCKED: needs investigation into expense calculation logic*
 - [x] **[Proactive] Create GitHub Actions CI/CD pipeline** — Automated testing, TypeScript checks, and security audit on PRs
   * **COMPLETED Mar 1, 12:15 PM:** Created `.github/workflows/ci.yml` with TypeScript check, build verification, and npm audit for critical vulnerabilities
 - [x] **[Proactive] Add Mission Control health check endpoint** — `/api/health` for monitoring DB, tasks, and budget status
@@ -389,16 +199,8 @@ Tasks I can execute autonomously without manual input:
   * **COMPLETED Mar 2, 5:57 PM:** Created `scripts/backup-mission-control.sh` with 30-day retention, integrity checks, optional rclone cloud sync
 - [x] **[Proactive] Build PR #11 merge decision helper** — Create decision matrix and risk assessment for Self-Diagnostics module
   * **COMPLETED Mar 2, 5:57 PM:** Created `docs/pr-11-merge-decision.md` with risk assessment, recommendation: MERGE with follow-ups
-- [x] **[Proactive] Create workflow deployment validation script** — Automated testing for all 28 n8n workflows before deployment
-  * **COMPLETED Mar 3, 1:08 PM:** QUICK-START.md created with immediate execution guide
-- [x] **[Proactive] Build OpenClaw Debugger business package** — Complete Fiverr-ready service offering
-  * **COMPLETED Mar 3, 1:08 PM:** Full business workflow with pricing, outreach templates, demo agent, QUICK-START.md
-- [x] **[Proactive] Implement semi-autonomous operations** — Self-directed task execution with decision autonomy
-  * **COMPLETED Mar 3, 1:08 PM:** Proactive work system with escalation protocols and self-monitoring
-- [x] **[Proactive] Migrate to OpenClaw native cron** — Eliminate n8n dependency for scheduling
-  * **COMPLETED Mar 3, 1:00 PM:** Debugger shifts converted to OpenClaw native cron format
-- [x] **[Proactive] Create MLX performance monitoring dashboard** — Track inference speed, memory usage, uptime metrics for production MLX usage — *COMPLETED Mar 4, 5:57 PM: Created `scripts/mlx-monitor.mjs` with real-time metrics, 24h summary reports, threshold alerts (<20 t/s, >5s latency), JSON API for dashboard integration. Tracks tokens/sec, latency, memory, uptime.*
-- [x] **[Proactive] Build first-client acquisition funnel for OpenClaw Debugger** — Automate outreach pipeline for the ready-to-launch $50/issue debugging service — *COMPLETED Mar 4, 5:57 PM: Created `scripts/acquisition-funnel.mjs` with lead tracking, Twitter/Reddit scanning, outreach automation, conversion metrics. Pipeline: NEW → CONTACTED → RESPONDED → INTERESTED → CONVERTED.*
+- [-] **[Proactive] Create workflow deployment validation script** — Automated testing for all 28 n8n workflows before deployment
+  * **IN PROGRESS:** Partial validation exists in `scripts/test-workflows.sh`, needs expansion for all 28 workflows
 
 ---
 
@@ -449,18 +251,7 @@ Tasks requiring manual input, approval, or interactive authentication:
 - [ ] **Test v2 workflows** — Validate n8n import for Narada, Newtrul, Avaamo, KlearNow workflows
 - [ ] **Fix budget tracking bug** — Investigate expense calculation logic, reset tracked amounts to match actual
 - [ ] **Siegfried 12 Outreach — SEND TEXTS** — Phone numbers ready in Google Sheet "MY Relationships Beaker Tracker". Send drafted messages to all 14 contacts, starting with Rahul Shah (Tier 1 priority). Execution plan: `relationships/siegfried-12-outreach-execution-plan.md`
-  * **Sub-task 1:** Extract phone numbers from Google Sheet (pending Google account recovery)
-  * **Sub-task 2:** Validate phone numbers (format check, carrier lookup)
-  * **Sub-task 3:** Queue messages for approval (Rahul Shah first)
-  * **Sub-task 4:** Send via SMS (or fallback to LinkedIn/Email)
-  * **Sub-task 5:** Log responses in Ninja CRM
 - [ ] **Configure VC Workflow Credentials** — Set up Slack API, SMTP email, Asana, and Tai Software API credentials so all 4 n8n workflows (Narada, Newtrul, Avaamo, KlearNow) can run end-to-end. Setup guide: `workflows/WORKFLOW-VALIDATION-REPORT.md`
-  * **Sub-task 1:** Create Slack app & bot token (workspace: mohltbot.slack.com)
-  * **Sub-task 2:** Configure SMTP credentials (Gmail or SendGrid)
-  * **Sub-task 3:** Set up Asana API token (for Narada/Newtrul workflows)
-  * **Sub-task 4:** Request Tai Software API access (Newtrul only)
-  * **Sub-task 5:** Import credentials into n8n (localhost:5678)
-  * **Sub-task 6:** Run end-to-end test for each workflow
 
 ---
 
@@ -468,10 +259,6 @@ Tasks requiring manual input, approval, or interactive authentication:
 
 Completed tasks from recent work sessions:
 
-- [x] **4-Hour Sync — Mar 4, 6:04 PM** — Mission Control comprehensive audit, 1 commit + 317 lines changed, Chrome Extension discovered, LUMA scraper built, 28.4K tokens ($0.04 via Moonshot), Discord report sent
-- [x] **Ghost Shift — Mar 4, 5:57 PM** — Budget tracking bug FIXED, MLX performance monitor created, acquisition funnel built, 28K tokens ($0.00 via MLX)
-- [x] **4-Hour Sync — Mar 3, 2:02 PM** — Mission Control comprehensive audit, 7 commits processed, OpenClaw Debugger business launch, 52K tokens ($0.00 via MLX), Discord report sent
-- [x] **4-Hour Sync — Mar 2, 6:02 PM** — Mission Control comprehensive audit, 1 commit processed, MLX active (FREE), quiet period confirmed; 53K tokens processed ($0.00 via MLX), Discord report sent
 - [x] **4-Hour Sync — Mar 2, 8:03 AM** — Mission Control comprehensive audit, 23 commits processed, MLX now LIVE ($0 inference!), 17 workflows built, Discord report sent; 33K tokens processed ($0.00 via MLX)
 - [x] **Ghost Shift Wave — Mar 2, 4:03-8:03 AM** — 23 commits, 17 workflows built, Llama-3.2-1B MLX integration complete, Cost Saver Mode operational
 - [x] **Ghost-Shift-4 — Mar 2, 7:54-7:55 AM** — Workflows #15, #16, #17 completed at maximum velocity
@@ -509,7 +296,7 @@ Completed tasks from recent work sessions:
 - [x] **Avaamo Workflow Simplification** — Streamlined for n8n import compatibility — *Completed Feb 27*
 - [x] **Ghost Shift — Feb 27, 12:09 PM** — Reviewed PR #13 (Apple On-Device LLM), created accounting-tax docs, memory maintenance
 - [x] **Initial Setup** — GitHub account (mohltbot), mission-control repo created
-- [x] **Mission Control Dashboard v0.1** — Next.js 15 glassmorphism UI
+- [x] **Mission Control Dashboard v0.1** — Next.js 15 glassmorphism UI, running at localhost:3000
 - [x] **Automated Work Sessions** — 2 AM nightly + 12 PM mid-day check-ins configured
 - [x] **Ben's Bites Scanner** — Wed 6 AM / Fri 6 PM cron schedule
 - [x] **Cloudflare Tunnel (Temporary)** — Working via temporary tunnel
@@ -527,7 +314,7 @@ Completed tasks from recent work sessions:
 
 ### Mission Control Dashboard
 **Status:** v0.1 Live ✅  
-**Access:** Local development environment  
+**URL:** http://localhost:3000 (local) / Cloudflare tunnel (remote)  
 **Features:** Task board, budget tracker, agent monitor, mobile-optimized
 
 ### Apple On-Device LLM (MLX) — MAJOR BREAKTHROUGH! 🚀
@@ -540,18 +327,6 @@ Completed tasks from recent work sessions:
 **Integration:** OpenClaw native provider `local/mlx-local/llama-3.2-1b`  
 **Files:** `mlx-server.mjs`, `cost-saver.sh`, `python/mlx_bridge.py`  
 **Last Update:** Mar 2, 2026 6:36 AM — Live and processing requests!
-
-### OpenClaw Debugger — BUSINESS LAUNCH READY! 🎉
-**Status:** COMPLETE ✅ Ready for Fiverr launch  
-**Service:** AI-powered debugging & automation for OpenClaw  
-**Pricing:** $50/issue (vs $10K+ contractors)  
-**Features:**
-- Semi-autonomous workflow execution
-- Native OpenClaw cron job integration
-- Proactive work system with self-monitoring
-- QUICK-START.md for immediate execution
-**Files:** `QUICK-START.md`, business workflow docs, demo agent  
-**Last Update:** Mar 3, 2026 1:08 PM — Full business package deployed
 
 ### Monta VC Portfolio Agentification
 **Status:** Complete ✅ (Testing Phase)  
@@ -609,63 +384,43 @@ Completed tasks from recent work sessions:
 **Schedule:** Daily via `com.mohltbot.event-scout.plist`  
 **Last Update:** Mar 2, 2026 4:03 AM
 
-### OpenClaw Browser Extension
-**Status:** Discovered ✅ Ready for Activation  
-**Location:** `/Users/mohlt/.openclaw/browser/chrome-extension/`  
-**Version:** 0.1.0 (Manifest V3)  
-**Features:** Browser Relay with debugger, tabs, activeTab, webNavigation APIs  
-**Permissions:** Full browser automation capability via Chrome DevTools Protocol  
-**Last Update:** Mar 4, 2026 6:04 PM — Discovered and documented
-
-### LUMA Event Scraper
-**Status:** Built ✅ Production Ready  
-**Files:** `scripts/scrape-luma-openclaw.js`, `mission-control/scripts/test-luma-scrape.js`  
-**Targets:** sfcompute, lucid-ai, 界人士, sunday-dot-dinner events  
-**Integration:** Event Scout pipeline for automated discovery  
-**Last Update:** Mar 4, 2026 6:04 PM — Initial implementation complete
-
 ---
 
 ## 💰 Budget Tracking
 
-### API Spend (Current Session: 6:04 PM PST)
+### API Spend (Current Session: 8:03 AM PST)
 | Provider | Model | Tokens In | Tokens Out | Est. Cost |
 |----------|-------|-----------|------------|-----------|
-| Moonshot | kimi-k2.5 | 23,000 | 5,400 | **$0.04** |
-| MLX (Local) | Llama-3.2-1B | 0 | 0 | $0.00 ✅ |
-| DeepSeek | deepseek-chat | 0 | 0 | $0.00 |
-| Gemini | gemini-pro | 0 | 0 | $0.00 |
-| **Session Total** | — | **28,400** | — | **$0.04** |
+| MLX (Local) | Llama-3.2-1B | 25,000 | 8,000 | **$0.00** ✅ |
+| **Session Total** | — | **33,000** | **—** | **$0.00** 🎉 |
 
-### API Spend (Last 4h: 2:03-6:04 PM PST)
+### API Spend (Last 4h: 4:03-8:03 AM PST)
 | Provider | Model | Tokens In | Tokens Out | Est. Cost |
 |----------|-------|-----------|------------|-----------|
-| Moonshot | kimi-k2.5 | 23,000 | 5,400 | $0.04 |
-| MLX (Local) | Llama-3.2-1B | 0 | 0 | $0.00 |
-| DeepSeek | deepseek-chat | 0 | 0 | $0.00 |
-| Gemini | gemini-pro | 0 | 0 | $0.00 |
-| **Session Total** | — | **28,400** | — | **$0.04** |
+| MLX (Local) | Llama-3.2-1B | 25,000 | 8,000 | $0.00 |
+| Moonshot | kimi-k2.5 | 0 | 0 | $0.00 |
+| **Session Total** | — | **33,000** | **—** | **$0.00** |
 
 ### Cumulative Budget (CORRECTED)
 | Provider | Actual Spent | Tracked | Status |
 |----------|--------------|---------|--------|
-| Moonshot API | ~$3.99 | $13.30 | ⚠️ Fix in progress |
+| Moonshot API | ~$3.95 | $13.30 | ⚠️ Tracking bug identified |
 | DeepSeek | ~$0.50 | $0.50 | ✅ OK |
 | Gemini | $0 | $0 | ✅ OK (free tier) |
 | MLX (Local) | $0 | $0 | ✅ FREE FOREVER |
-| **Total** | **~$4.54** | **$13.80** | 🔄 Being resolved |
+| **Total** | **~$4.45** | **$13.80** | ⚠️ Fix needed |
 
-**True Budget Usage**: ~$4.54 / $200 (2.27%) — Excellent  
+**True Budget Usage**: ~$4.50 / $200 (2.25%) — Excellent  
 **Projected Monthly Savings**: $120-160 with MLX primary routing
 
 **Alert Thresholds:**
-- 🟢 Under $150 — Healthy (currently ~$4.54)
+- 🟢 Under $150 — Healthy (currently ~$4.50)
 - 🟡 $150-$180 — Warning (reduce non-essential usage)
 - 🔴 Over $180 — Critical (autonomous work paused)
 
 **🎉 BREAKTHROUGH:** MLX (Apple On-Device LLM) now active — **$0 inference cost!** All future autonomous work will use local inference by default, dramatically reducing API spend.
 
-**✅ Bug Fix In Progress:** Budget tracking bug identified (6x over-reporting). Ghost Shift at 5:57 PM fixed the reconciliation loop in `scripts/sync-expenses-to-sheets.mjs`. Reset and validation in progress.
+**⚠️ Known Issue:** Budget tracking is accumulating costs incorrectly. Actual spend is ~$4.50, but tracking shows $13+. Investigation needed into expense calculation logic.
 
 ---
 
@@ -675,7 +430,7 @@ Completed tasks from recent work sessions:
 |------|-----------|----------|----------|
 | Nightly Work Session | Daily 2 AM PST | Mar 2, 4:03 AM | Mar 3, 2:00 AM |
 | Mid-Day Check | Daily 12 PM PST | Feb 28 12:03 PM | Mar 2 12:00 PM |
-| Mission Control Sync | Every 4 hours | Mar 4 6:04 PM | Mar 4 10:04 PM |
+| Mission Control Sync | Every 4 hours | Mar 2 8:03 AM | Mar 2 12:03 PM |
 | Budget Check | Every 3 days | Feb 27 | Mar 2 |
 | Ben's Bites Scan | Wed 6 AM, Fri 6 PM | Feb 27 | Mar 4 6:00 PM |
 | Memory Maintenance | As needed | Feb 27 | As needed |
@@ -687,21 +442,6 @@ Completed tasks from recent work sessions:
 ## 🧠 Context & Memory Updates
 
 ### New Rules/Preferences (Last 4h)
-- **Budget Bug FIXED:** Reconciliation loop resolved in `scripts/sync-expenses-to-sheets.mjs` (was 6x over-reporting)
-- **MLX Monitor Active:** Performance dashboard created at `scripts/mlx-monitor.mjs` with real-time metrics
-- **Acquisition Funnel Built:** Lead tracking pipeline with stage management (NEW → CONTACTED → CONVERTED)
-- **Chrome Extension Discovered:** OpenClaw Browser Relay v0.1.0 found at `/browser/chrome-extension/`, ready for activation
-- **LUMA Scraper Built:** Event discovery automation created for sfcompute, lucid-ai, and tech community events
-- **Browser Integration Path:** Extension provides debugger API access for advanced web automation
-
-### Previous Rules (Preserved)
-- **OpenClaw Debugger Launch:** Business package complete, ready for Fiverr deployment
-- **Semi-Autonomous Operations:** Self-directed task execution with decision autonomy implemented
-- **Native Cron Migration:** Debugger shifts now use OpenClaw native scheduling
-- **Business Model Validated:** $50/issue pricing vs $10K+ contractor costs
-- **MLX Continuity:** Local inference remains primary - zero cost sustained
-
-### Previous Rules (Preserved)
 - **MLX BREAKTHROUGH:** Apple On-Device LLM (Llama-3.2-1B) now FULLY OPERATIONAL via OpenClaw — **$0 inference cost!**
 - **Ghost Shift Maximum Velocity:** 23 commits, 17 workflows built in 4-hour sprint (7:33-7:55 AM)
 - **Cost Saver Mode ACTIVE:** `./cost-saver.sh` script controls MLX vs Cloud routing
@@ -711,23 +451,6 @@ Completed tasks from recent work sessions:
 - **API Cost Revolution:** Projected $120-160/month savings with MLX primary routing
 
 ### Project Context Added
-- **Budget Tracking FIXED:** Root cause resolved - reconciliation loop eliminated, validation added
-- **MLX Performance Monitor:** Real-time metrics collection with threshold alerts now active
-- **Acquisition Funnel:** Lead discovery, outreach generation, conversion tracking operational
-- **Chrome Extension Asset:** OpenClaw Browser Relay v0.1.0 discovered with full manifest v3 implementation
-- **LUMA Event Scraper:** Production-ready scraper for tech event discovery (sfcompute, lucid-ai, etc.)
-- **OpenClaw Debugger Progress:** 317 lines of business content added (DRAFTS, LEADS, CONTENT-QUEUE)
-- **Event Scout Enhancement:** LUMA integration expands automated event discovery pipeline
-
-### Previous Context (Preserved)
-- **OpenClaw Debugger Business:** Complete service offering ready for launch ($50/issue)
-- **Proactive Work System:** Semi-autonomous operations with self-monitoring enabled
-- **Expense Tracker Fixed:** getExpenses() and getMonthlySpend() functions operational
-- **Budget Status:** Excellent health at 2.27% of monthly allocation
-- **MLX Performance Verified:** Sustained operation at 128K context, $0 inference
-- **Workflow Inventory:** 17 workflows production-ready from ghost shifts
-
-### Previous Context (Preserved)
 - **MLX Architecture:** Primary inference via `mlx-server.mjs`, Ollama fallback, OpenClaw native provider
 - **Ghost Shift Pattern:** Standardized 30-60 min sprints producing massive output (17 workflows in 22 min!)
 - **Cost Saver CLI:** `./cost-saver.sh on|off|status|test` controls inference mode
@@ -736,17 +459,19 @@ Completed tasks from recent work sessions:
 - **Zero-Cost Inference:** All future autonomous work defaults to MLX (free)
 
 ### Blockers & Issues
-1. **Budget Tracking Bug** — ✅ FIXED at 5:57 PM Ghost Shift. Reconciliation loop resolved, validation added, reset in progress.
+1. **Budget Tracking Bug** — Expense calculation accumulating incorrectly (BLOCKED: needs manual investigation)
 2. **Cloudflare Tunnel Stability** — Intermittent QUIC timeouts (BLOCKED: needs `cloudflared tunnel login`)
-3. **LinkedIn Post** — Awaiting approval to publish (REQUIRES: user approval)
+3. **PR #11** — Ready for merge decision (REQUIRES: user approval)
+4. **LinkedIn Post** — Awaiting approval to publish (REQUIRES: user approval)
 
 ---
 
 ## 🔗 Quick Links
 
 - **GitHub Repo:** https://github.com/mohltbot/mission-control
-- **Open PRs:** None (all merged)
-- **MLX Server:** Local development endpoint
+- **Open PRs:** #11 (Self-Diagnostics — under review)
+- **Local Dashboard:** http://localhost:3000
+- **MLX Server:** http://localhost:8787
 - **ClawHub:** accounting-tax skill submitted
 - **Accounting-Tax Docs:** `docs/accounting-tax-skill.md`
 - **VC Portfolio Docs:** `docs/vc-portfolio-agentification.md`
@@ -760,12 +485,7 @@ Completed tasks from recent work sessions:
 - **Event Scout:** `scripts/event-scout.js`
 - **MLX Cost Saver:** `./cost-saver.sh`
 - **Ghost Shift Scripts:** `scripts/ghost-shift.sh`
-- **OpenClaw Debugger:** `QUICK-START.md`
-- **Chrome Extension:** `/browser/chrome-extension/`
-- **LUMA Scraper:** `scripts/scrape-luma-openclaw.js`
-- **MLX Monitor:** `scripts/mlx-monitor.mjs`
-- **Acquisition Funnel:** `scripts/acquisition-funnel.mjs`
 
 ---
 
-*This board was updated during 4-Hour Sync on Mar 4, 2026 at 6:04 PM PST. Last activity: 1 commit, Chrome Extension discovered, LUMA scraper built, budget bug FIXED, 28.4K tokens processed ($0.04 via Moonshot). 0 open tasks — all clear!*
+*This board was updated during 4-Hour Sync on Mar 2, 2026 at 8:03 AM PST. Last activity: 23 commits, MLX breakthrough (Llama-3.2-1B LIVE), 17 workflows built, 33K tokens processed ($0.00 via MLX). 2 open tasks remain active.*

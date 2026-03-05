@@ -3,15 +3,9 @@
     "nightlyWorkSession": 1740657000,
     "email": null,
     "calendar": null,
+    "bensbitesScan": 1740748440
     "bensbitesScan": 1740748440,
-    "missionControlMigration": 1740754140,
-    "browserExtension": 1741148220
-  },
-  "browserExtension": {
-    "status": "active",
-    "lastTested": "2026-03-04",
-    "working": true,
-    "notes": "Successfully tested with Holodeck MVP game. Chrome Relay extension confirmed functional."
+    "missionControlMigration": 1740754140
   },
   "lastSession": {
     "date": "2026-02-27",
@@ -20,10 +14,12 @@
       "Configure OpenClaw mixed model routing",
       "Submit accounting-tax skill to ClawHub marketplace",
       "Nightly Work Session - Feb 27",
+      "Ben's Bites Scan - Feb 27"
       "Ben's Bites Scan - Feb 27",
       "Mission Control migration to GitHub"
     ],
     "tasksRemaining": [
+      "Run PR #5 - Setup persistent Cloudflare tunnel (needs interactive auth)",
       "Post LinkedIn about accounting skill (awaiting approval)",
       "Review Ben's Bites sub-agent output"
     ],

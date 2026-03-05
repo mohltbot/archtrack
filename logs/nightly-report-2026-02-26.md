@@ -74,7 +74,7 @@ mission-control/
 
 1. **Build is now working** - You can run `npm run build` in mission-control without errors
 2. **No SQLite required** - Switched to pure JSON store to avoid native compilation issues
-3. **Tunnel working** - Temporary tunnel active (URL not stored for security)
+3. **Tunnel working** - Current temp tunnel is active at: https://publicity-winners-cognitive-montana.trycloudflare.com
 4. **Persistent tunnel** - When ready, run: `cloudflared tunnel login` then `./scripts/setup-persistent-tunnel.sh`
 
 ---

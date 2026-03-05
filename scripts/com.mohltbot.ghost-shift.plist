@@ -6,8 +6,8 @@
     <string>com.mohltbot.ghost-shift</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/bin/zsh</string>
-        <string>/Users/mohlt/.openclaw/workspace/scripts/ghost-shift.sh</string>
+        <string>/Users/mohlt/.nvm/versions/node/v24.14.0/bin/node</string>
+        <string>/Users/mohlt/.openclaw/workspace/ghost-shift-work/scripts/ghost-shift-v3.js</string>
     </array>
     <key>WorkingDirectory</key>
     <string>/Users/mohlt/.openclaw/workspace</string>
