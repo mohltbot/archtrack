@@ -1,6 +1,6 @@
 # MEMORY.md - Core Identity & Context
 
-**Last Updated:** 2026-02-25
+**Last Updated:** 2026-03-04
 
 ---
 
@@ -87,6 +87,12 @@ Help Mohammed build a "1-person unicorn" — a massive business run by him + AI 
 
 **API Keys:**
 - Tavily: Stored in TOOLS.md
+
+**Browser Automation:**
+- Chrome Extension: ✅ Active (debugged Mar 4, 2026)
+- Use `profile="chrome"` for browser automation
+- Capabilities: Screenshots, clicks, form filling, navigation
+- Successfully tested with Holodeck MVP game
 
 ---
 
