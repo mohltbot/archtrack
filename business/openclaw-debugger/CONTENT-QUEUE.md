@@ -1,6 +1,6 @@
 # Content Queue — OpenClaw Debugger
 
-**Last Updated:** 2026-03-04 (Shift 2 Complete)
+**Last Updated:** 2026-03-04 (Shift 4 Complete — Analysis & Planning)
 
 ---
 
@@ -65,39 +65,44 @@
 
 | Date | Platform | Content | Impressions | Engagements | Leads Generated |
 |------|----------|---------|-------------|-------------|-----------------|
-| 2026-03-04 | Twitter | Thread: 5 v2026.2.26 issues | Pending | Pending | Pending |
-| 2026-03-04 | Twitter | Quick tip: Discord bot deaf | Pending | Pending | Pending |
-| 2026-03-04 | Twitter + IH | Case study: Hostinger fix | Pending | Pending | Pending |
-| 2026-03-04 | LinkedIn | Debugging service | Pending | Pending | Pending |
+| 2026-03-05 | Twitter | Thread: 5 v2026.2.26 issues | SCHEDULED | — | — |
+| 2026-03-05 | IndieHackers | Case study: Hostinger fix | SCHEDULED | — | — |
+| 2026-03-05 | LinkedIn | Debugging service | SCHEDULED | — | — |
+| 2026-03-05 | Twitter | Quick tip: Discord bot deaf | SCHEDULED | — | — |
 
 ---
 
 ## 🗓️ Content Calendar (This Week)
 
-### Tuesday (March 4) — Shift 2 Complete ✅
+### Tuesday (March 4) — Shift 2 & 4 Complete ✅
 - [x] Twitter thread: 5 v2026.2.26 migration issues
 - [x] Quick tip: Discord bot deaf
-- [x] Case study: Hostinger fix (Twitter + IH)
-- [x] LinkedIn: Professional debugging service
+- [x] Case study: Hostinger fix (Twitter + IH) — READY TO POST
+- [x] LinkedIn: Professional debugging service — READY TO POST
+- [x] IndieHackers case study — READY TO POST (Shift 4 prep)
+- [x] Tomorrow's content queued (3 new pieces)
 - [ ] Reply to 5 OpenClaw issue tweets
 - [ ] IndieHackers: First customer story (when you get one)
 
-### Wednesday (March 5)
+### Wednesday (March 5) — Shift 4 Prepped ✅
 - [ ] Post Twitter thread: 5 v2026.2.26 migration issues
-- [ ] Post Quick tip: Discord bot deaf
+- [ ] Post IndieHackers: Hostinger case study
+- [ ] Post LinkedIn: Professional debugging service
 - [ ] Follow up with warm leads (Day 2 check-ins)
 - [ ] Reply to GitHub issues (drafts ready)
+- [ ] **NEW:** Twitter thread — "$75 vs 14 Hours"
 
 ### Thursday (March 6)
-- [ ] Post Case study: Hostinger fix
-- [ ] Post LinkedIn debugging service
-- [ ] Twitter: Week recap so far
+- [ ] Post Twitter: Week recap so far
+- [ ] Post IndieHackers: "Week 1 building in public"
+- [ ] Post Quick tip: openclaw doctor --fix
 - [ ] Discord: Help 3 people in #troubleshooting
 
 ### Friday (March 7)
-- [ ] IndieHackers: "Week 1 building in public" post
 - [ ] Twitter: Week lessons learned
+- [ ] LinkedIn: First week retrospective
 - [ ] Update LEADS.md with week's progress
+- [ ] Plan Week 2 content themes
 
 ---
 
