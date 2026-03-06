@@ -68,6 +68,7 @@
 
 | Date | Platform | Content | Impressions | Engagements | Leads Generated |
 |------|----------|---------|-------------|-------------|-----------------|
+| 2026-03-04 | Twitter | Thread: Chrome Extension Hidden Folder | ✅ POSTED | 29 | — |
 | 2026-03-05 | Twitter | Thread: 5 OpenClaw Errors | ✅ POSTED | 11 | — |
 | 2026-03-05 | Twitter | Thread: Sandbox Mode Broke My OpenClaw | ✅ POSTED | 11 | — |
 | 2026-03-05 | Twitter | Thread: 5 v2026.2.26 issues | READY | — | — |

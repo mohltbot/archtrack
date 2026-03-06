@@ -48,11 +48,33 @@
 
 ---
 
+### Twitter Thread: "Chrome Extension Hidden Folder Fix"
+**Status:** ✅ Posted  
+**Author:** @Mohammed__Wasif  
+**Date:** March 4, 2026  
+**Platform:** Twitter/X  
+**Views:** 29 (as of posting)
+
+**Thread Summary:**
+- **Tweet 1:** Anyone else unable to find ~/.openclaw/browser/chrome-extension? (especially Mac Mini users coming from Windows)
+- **Tweet 2:** Run `openclaw browser extension install` if you haven't already
+- **Tweet 3:** Follow steps until "Load unpacked" → select: ~/.openclaw/browser/chrome-extension
+- **Tweet 4:** Run `openclaw browser extension path`
+- **Tweet 5:** Finder won't show the path — folder is hidden
+- **Tweet 6:** Hit Command + Shift + G, paste the path
+- **Tweet 7:** Your welcome
+
+**Key Lesson:** Hidden folders (.) don't show in Finder by default. Cmd+Shift+G is the bypass.
+
+**Performance:** _To be tracked in LEADS.md_
+
+---
+
 ## 📝 CONTENT IDEAS (Drafted)
 
 ### 1. Quick Tip: Config Validation
 **Platform:** Twitter  
-**Status:** ✅ Drafted  
+**Status:** ✅ Drafted (NOT posted — still in queue)  
 **Hook:** "This one config line prevents 80% of OpenClaw crashes"
 
 ### 2. Case Study: Reddit Fix
