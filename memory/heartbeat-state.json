@@ -5,7 +5,6 @@
     "calendar": null,
     "bensbitesScan": 1740748440
     "bensbitesScan": 1740748440,
-    "missionControlMigration": 1740754140
   },
   "lastSession": {
     "date": "2026-02-27",
@@ -15,8 +14,7 @@
       "Submit accounting-tax skill to ClawHub marketplace",
       "Nightly Work Session - Feb 27",
       "Ben's Bites Scan - Feb 27"
-      "Ben's Bites Scan - Feb 27",
-      "Mission Control migration to GitHub"
+      "Ben's Bites Scan - Feb 27"
     ],
     "tasksRemaining": [
       "Run PR #5 - Setup persistent Cloudflare tunnel (needs interactive auth)",

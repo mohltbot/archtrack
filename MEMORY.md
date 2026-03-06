@@ -1,6 +1,6 @@
 # MEMORY.md - Core Identity & Context
 
-**Last Updated:** 2026-02-25
+**Last Updated:** 2026-03-05
 
 ---
 
@@ -59,12 +59,6 @@ Help Mohammed build a "1-person unicorn" — a massive business run by him + AI 
 
 ## Active Projects
 
-### Mission Control (v0.1 ✅ LIVE)
-- Next.js 15 dashboard for tracking tasks, expenses, agents, memories
-- Running at: http://localhost:3000
-- Cloudflare tunnel for remote access
-- Glassmorphism UI with gradients, animations
-
 ### Automated Work Sessions
 - **Nightly:** 2 AM PST — 30-60 min autonomous work
 - **Mid-Day:** 12 PM PST — 10 min check-in
@@ -114,14 +108,12 @@ Help Mohammed build a "1-person unicorn" — a massive business run by him + AI 
 3. **The budget** — $200/mo, watch it carefully
 4. **The separation** — He's fighting for his marriage, wants to be "undeniable"
 5. **The work ethic** — 5:30 AM wake up, Type A, action-biased
-6. **Mission Control** — The central dashboard for everything
-7. **Nightly work sessions** — 2 AM automation to surprise him every morning
+6. **Nightly work sessions** — 2 AM automation to surprise him every morning
 
 ---
 
 ## Things to Remember Daily
 
-- Check Mission Control for pending tasks
 - Track API spend vs $200 budget
 - Look for opportunities to automate
 - Keep Mohammed updated on progress
