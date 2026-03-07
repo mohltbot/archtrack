@@ -1,0 +1,11 @@
+{
+  "defaultAccount": "mohltbot10@gmail.com",
+  "outputFormat": "json",
+  "cacheEnabled": true,
+  "cacheTTL": 300,
+  "fallbackToGog": true,
+  "rateLimit": {
+    "maxRetries": 5,
+    "backoffMultiplier": 2
+  }
+}
