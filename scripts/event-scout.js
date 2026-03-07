@@ -26,6 +26,34 @@ const KEYWORDS = [
   'generative AI', 'OpenAI', 'anthropic', 'claude'
 ];
 
+// Events to exclude (already registered or aware of)
+const EXCLUDED_EVENTS = [
+  'Building AI Agents',  // User already registered for March 12
+  'OpenClaw Silicon Valley'  // User already aware of this group
+];
+
+// Check if event conflicts with user's calendar
+async function checkCalendarConflict(calendar, eventDate) {
+  try {
+    const timeMin = new Date(eventDate);
+    timeMin.setHours(0, 0, 0, 0);
+    const timeMax = new Date(eventDate);
+    timeMax.setHours(23, 59, 59, 999);
+    
+    const response = await calendar.events.list({
+      calendarId: CALENDAR_ID,
+      timeMin: timeMin.toISOString(),
+      timeMax: timeMax.toISOString(),
+      singleEvents: true,
+    });
+    
+    return response.data.items && response.data.items.length > 0;
+  } catch (error) {
+    console.error('Calendar check error:', error);
+    return false;
+  }
+}
+
 async function getCalendarAuth() {
   const auth = new google.auth.GoogleAuth({
     keyFile: KEYFILEPATH,
@@ -136,9 +164,20 @@ async function scrapeLumaEvents() {
   
   // Deduplicate by URL
   const seen = new Set();
-  return events.filter(e => {
+  const uniqueEvents = events.filter(e => {
     if (seen.has(e.url)) return false;
     seen.add(e.url);
+    return true;
+  });
+  
+  // Filter out excluded events (already registered/aware of)
+  return uniqueEvents.filter(e => {
+    for (const excluded of EXCLUDED_EVENTS) {
+      if (e.title.toLowerCase().includes(excluded.toLowerCase())) {
+        console.log(`🚫 Excluding "${e.title}" - already registered/aware`);
+        return false;
+      }
+    }
     return true;
   });
 }
@@ -344,9 +383,16 @@ async function runEventScout() {
       console.log(`   🔗 ${e.url}\n`);
     });
     
-    // Add top events to calendar
+    // Add top events to calendar (check for conflicts first)
     const addedEvents = [];
     for (const event of scoredEvents.slice(0, 3)) {
+      // Check for calendar conflicts
+      const hasConflict = await checkCalendarConflict(calendar, event.date);
+      if (hasConflict) {
+        console.log(`⚠️  Skipping "${event.title}" - conflicts with existing calendar event`);
+        continue;
+      }
+      
       const added = await addEventToCalendar(calendar, event);
       if (added) {
         addedEvents.push(event);
