@@ -76,6 +76,8 @@
 | 2026-03-05 | IndieHackers | Case study: Hostinger fix | READY | — | — |
 | 2026-03-05 | LinkedIn | Debugging service | READY | — | — |
 | 2026-03-05 | Twitter | Quick tip: Discord bot deaf | READY | — | — |
+| 2026-03-06 | Twitter | Thread: 3 Discord Bot Mistakes | ✅ READY | — | — |
+| 2026-03-06 | Twitter | Quick tip: Hidden config file | ✅ READY | — | — |
 
 ---
 
@@ -99,7 +101,9 @@
 - [ ] Reply to GitHub issues (drafts ready)
 - [ ] **NEW:** Twitter thread — "$75 vs 14 Hours"
 
-### Thursday (March 6)
+### Thursday (March 6) — Shift 2 Complete ✅
+- [x] **NEW:** Twitter thread: "3 Discord Bot Mistakes" — READY TO POST
+- [x] **NEW:** Quick tip: Hidden config file — READY TO POST
 - [ ] Post Twitter: Week recap so far
 - [ ] Post IndieHackers: "Week 1 building in public"
 - [ ] Post Quick tip: openclaw doctor --fix
