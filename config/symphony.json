@@ -1,0 +1,17 @@
+{
+  "enabled": false,
+  "symphonyPath": null,
+  "maxConcurrentRuns": 3,
+  "defaultTimeout": 3600000,
+  "logDirectory": "./logs/symphony",
+  "stateDirectory": "./data/symphony-state",
+  "features": {
+    "ghostShiftIntegration": false,
+    "nightlySessions": false,
+    "taskIsolation": true
+  },
+  "fallback": {
+    "enabled": true,
+    "fallbackToGhostShift": true
+  }
+}
