@@ -1,33 +1,29 @@
 # Lead Tracker — OpenClaw Debugger
 
-**Last Updated:** 2026-03-04 (Shift 4 Complete — All 4 Shifts Done)
+**Last Updated:** 2026-03-06 (Shift 3 Complete — Follow-ups Drafted)
 
 ## 🔥 Hot Leads (Ready to Buy — Act Now)
 
 | Name | Source | Issue | Contact | Status | Date Added | Last Contact | Next Action | Draft Ready |
 |------|--------|-------|---------|--------|------------|--------------|-------------|-------------|
-| @rstormsf | Twitter | General stability/babysitting complaints | https://x.com/rstormsf | 🔥 Hot | 2026-03-03 | **March 3 — DM SENT** | **March 5: Day 2 follow-up** | ✅ See DRAFTS.md |
-| @matthewjetthall | Twitter | Node22 + Telegram, 14 hours lost | https://x.com/matthewjetthall | 🔥 Hot | 2026-03-03 | **March 3 — DM SENT** | **March 5: Day 2 follow-up** | ✅ See DRAFTS.md |
-| u/HostingerNightmare | Reddit | Drowning in issues - Hostinger + Chrome Extension + agent paths | https://reddit.com/r/openclaw/comments/1rja32v | 🔥 Hot | 2026-03-04 | Never | **March 4: Reply + offer help** | ✅ See DRAFTS.md |
-| GitHub #32176 | GitHub | Discord bot deaf - receives no messages, health monitor stuck | https://github.com/openclaw/openclaw/issues/32176 | 🔥 Hot | 2026-03-04 | Never | **March 4: Comment with fix** | ✅ See DRAFTS.md |
-| @StMichaelsForge | Twitter | All models failed to respond | https://x.com/StMichaelsForge | 🟡 Warm | 2026-03-03 | **March 3 — Replied** | **March 5: Day 2 follow-up** | ✅ See DRAFTS.md |
-|------|--------|-------|---------|--------|------------|--------------|-------------|-------------|
-| @rstormsf | Twitter | General stability/babysitting complaints | https://x.com/rstormsf | 🔥 Hot | 2026-03-03 | **March 3 — DM SENT** | Wait for response | ✅ See DRAFTS.md |
-| @matthewjetthall | Twitter | Node22 + Telegram, 14 hours lost | https://x.com/matthewjetthall | 🔥 Hot | 2026-03-03 | **March 3 — DM SENT** | Wait for response | ✅ See DRAFTS.md |
-| u/HostingerNightmare | Reddit | Drowning in issues - Hostinger + Chrome Extension + agent paths | https://reddit.com/r/openclaw/comments/1rja32v | 🔥 Hot | 2026-03-04 | Never | Reply + offer help | ✅ See DRAFTS.md |
-| GitHub #32176 | GitHub | Discord bot deaf - receives no messages, health monitor stuck | https://github.com/openclaw/openclaw/issues/32176 | 🔥 Hot | 2026-03-04 | Never | Comment with fix | ✅ See DRAFTS.md |
-| @StMichaelsForge | Twitter | All models failed to respond | https://x.com/StMichaelsForge | 🟡 Warm | 2026-03-03 | **March 3 — Replied** | Follow up in 2 days | ✅ See DRAFTS.md |
+| @rstormsf | Twitter | General stability/babysitting complaints | https://x.com/rstormsf | 🔥 Hot | 2026-03-03 | **March 5 — Day 2 Sent** | Wait for response | ✅ See DRAFTS.md |
+| @matthewjetthall | Twitter | Node22 + Telegram, 14 hours lost | https://x.com/matthewjetthall | 🔥 Hot | 2026-03-03 | **March 5 — Day 2 Sent** | Wait for response | ✅ See DRAFTS.md |
+| u/HostingerNightmare | Reddit | Drowning in issues - Hostinger + Chrome Extension + agent paths | https://reddit.com/r/openclaw/comments/1rja32v | 🔥 Hot | 2026-03-04 | Never | **March 6: Reply drafted** | ✅ See DRAFTS.md |
+| GitHub #32176 | GitHub | Discord bot deaf - receives no messages, health monitor stuck | https://github.com/openclaw/openclaw/issues/32176 | 🔥 Hot | 2026-03-04 | Never | **March 6: Comment drafted** | ✅ See DRAFTS.md |
+| @StMichaelsForge | Twitter | All models failed to respond | https://x.com/StMichaelsForge | 🟡 Warm | 2026-03-03 | **March 5 — Day 2 Sent** | Wait for response | ✅ See DRAFTS.md |
 
 ## 🟡 Warm Leads (Engaged — Follow Up)
 
 | Name | Source | Issue | Date Added | Last Contact | Next Action | Draft Ready |
 |------|--------|-------|------------|--------------|-------------|-------------|
-| @Franzferdinan57 | Twitter | Duckbot OAuth scope error | 2026-03-03 | **March 3 — Replied** | **March 5: Day 2 follow-up** | ✅ See DRAFTS.md |
-| @Shpigford | Twitter | Cron jobs + hooks broken | 2026-03-03 | **March 3 — Replied** | **March 5: Day 2 follow-up** | ✅ See DRAFTS.md |
+| @Franzferdinan57 | Twitter | Duckbot OAuth scope error | 2026-03-03 | **March 5 — Day 2 Sent** | Wait for response | ✅ See DRAFTS.md |
+| @Shpigford | Twitter | Cron jobs + hooks broken | 2026-03-03 | **March 5 — Day 2 Sent** | Wait for response | ✅ See DRAFTS.md |
 | Reddit user (r/openclaw) | Reddit | maxTokens string vs number | 2026-03-03 | Never | Comment with fix | ✅ See DRAFTS.md |
-| u/GeminiOverloaded | Reddit | "AI service overloaded" error - Gemini 3.1 Pro Preview | 2026-03-04 | Never | **March 4: Reply with context fix** | ✅ See DRAFTS.md |
-| GitHub #29780 | GitHub | Gateway crash loop - invalid keys injection | 2026-03-04 | Never | **March 4: Comment with workaround** | ✅ See DRAFTS.md |
-| GitHub #30401 | GitHub | Gateway crashes with tilde path in logging.file | 2026-03-04 | Never | **March 4: Comment with fix** | ✅ See DRAFTS.md |
+| u/GeminiOverloaded | Reddit | "AI service overloaded" error - Gemini 3.1 Pro Preview | 2026-03-04 | Never | **March 6: Reply drafted** | ✅ See DRAFTS.md |
+| GitHub #29780 | GitHub | Gateway crash loop - invalid keys injection | 2026-03-04 | Never | **March 6: Comment drafted** | ✅ See DRAFTS.md |
+| GitHub #30401 | GitHub | Gateway crashes with tilde path in logging.file | 2026-03-04 | Never | **March 6: Comment drafted** | ✅ See DRAFTS.md |
+| GitHub #37813 | GitHub | Model ID fallback chain bypass | 2026-03-06 | Never | **March 6: Comment drafted** | ✅ See DRAFTS.md |
+| GitHub #38204 | GitHub | Grok 4.2 Multi Model support | 2026-03-06 | Never | **March 6: Comment drafted** | ✅ See DRAFTS.md |
 
 ## 🔵 Cold Leads (Long-term Nurture)
 
@@ -48,16 +44,18 @@
 
 | Lead | Day 2 Follow-up | Day 7 Follow-up | Day 14 Follow-up |
 |------|-----------------|-----------------|------------------|
-| @rstormsf | **March 5** ✅ Drafted | March 10 | March 17 |
-| @matthewjetthall | **March 5** ✅ Drafted | March 10 | March 17 |
-| @StMichaelsForge | **March 5** ✅ Drafted | March 10 | March 17 |
-| @Franzferdinan57 | **March 5** ✅ Drafted | March 10 | March 17 |
-| @Shpigford | **March 5** ✅ Drafted | March 10 | March 17 |
-| u/HostingerNightmare | March 6 | March 11 | March 18 |
-| u/GeminiOverloaded | March 6 | March 11 | March 18 |
-| GitHub #32176 | March 6 | March 11 | March 18 |
-| GitHub #29780 | March 6 | March 11 | March 18 |
-| GitHub #30401 | March 6 | March 11 | March 18 |
+| @rstormsf | **March 5** ✅ Sent | March 10 | March 17 |
+| @matthewjetthall | **March 5** ✅ Sent | March 10 | March 17 |
+| @StMichaelsForge | **March 5** ✅ Sent | March 10 | March 17 |
+| @Franzferdinan57 | **March 5** ✅ Sent | March 10 | March 17 |
+| @Shpigford | **March 5** ✅ Sent | March 10 | March 17 |
+| u/HostingerNightmare | **March 6** ✅ Drafted | March 11 | March 18 |
+| u/GeminiOverloaded | **March 6** ✅ Drafted | March 11 | March 18 |
+| GitHub #32176 | **March 6** ✅ Drafted | March 11 | March 18 |
+| GitHub #29780 | **March 6** ✅ Drafted | March 11 | March 18 |
+| GitHub #30401 | **March 6** ✅ Drafted | March 11 | March 18 |
+| GitHub #37813 | March 7 | March 12 | March 19 |
+| GitHub #38204 | March 7 | March 12 | March 19 |
 
 ## ✅ Converted
 
@@ -76,11 +74,11 @@
 ## Quick Stats
 
 - **Hot leads:** 4
-- **Warm leads:** 6  
+- **Warm leads:** 8  
 - **Cold leads:** 1
-- **Total pipeline:** 11
+- **Total pipeline:** 13
 - **Converted:** 0
-- **Potential revenue:** $300-1,500
+- **Potential revenue:** $375-1,950
 
 ---
 
