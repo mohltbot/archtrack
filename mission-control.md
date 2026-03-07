@@ -1,7 +1,29 @@
 # Mission Control Board
 
-**Last Updated:** March 7, 2026 at 6:04 AM PST (4-Hour Sync)  
-**Source:** Morning autonomous work session — Event Scout improvements + Event sourcing guidelines
+**Last Updated:** March 7, 2026 at 10:04 AM PST (4-Hour Sync)  
+**Source:** OpenClaw Debugger Shift 1 — Lead research, 2 new high-quality leads identified
+
+---
+
+## ✅ 4-HOUR SYNC — Mar 7, 2026 (10:04 AM)
+
+**1 Task In Progress | 0 Major Features | 1 Commit Processed**
+
+### Summary:
+Quiet period in the 6:04 AM - 10:04 AM window. OpenClaw Debugger Shift 1 completed — focused on lead research and pipeline development. Found 2 new high-quality GitHub issue leads: OAuth recovery loop bug (🔥 hot) and LMStudio embedder support request (🟡 warm). Pipeline now at 16 total leads with $450-2,400 potential revenue. No new infrastructure changes — business operations mode.
+
+### Commits Reviewed:
+1. `8316fdeb` — chore(sync): comprehensive 4-hour update [March 7, 2026 - 6:04 AM PST]
+
+### Key Findings:
+- **Mission Control Server:** Stable and operational
+- **Budget Status:** ~$4.75 / $200 limit (2.38%) — healthy
+- **Pending Tasks:** 11 total (3 blocked, 8 pending) — unchanged
+- **Ghost Shift Status:** Previous 5 shifts complete — all stable
+- **System Health:** All autonomous systems active, business operations mode
+- **OpenClaw Debugger:** Shift 1 complete — 2 new leads, 2 comment drafts ready
+- **Pipeline Growth:** 16 total leads (+2), $450-2,400 potential revenue
+- **New Lead Types:** OAuth recovery loop bug, LMStudio integration gap
 
 ---
 
@@ -287,16 +309,17 @@ Evening ghost shift focused on infrastructure hygiene and cost optimization. Two
 
 | Metric | Value |
 |--------|-------|
-| **Budget** | ~$4.73 / $200 (2.37%) ✅ |
+| **Budget** | ~$4.75 / $200 (2.38%) ✅ |
 | **Tasks** | 11 total — 3 done, 8 pending |
 | **Open PRs** | 0 |
 | **API Spend Status** | Healthy — **MLX now ACTIVE ($0 inference!)** |
-| **Last Sync** | Mar 7, 2026 6:04 AM PST (4-hour audit complete) |
+| **Last Sync** | Mar 7, 2026 10:04 AM PST (4-hour audit complete) |
 | **Last Ghost Shift** | Mar 7, 2026 5:57 AM PST (Shift 5 complete) |
 | **Tunnel Status** | 🔴 DOWN (QUIC timeout) — fix pending |
 | **New Features** | 0 (refinement period — Event Scout improvements) |
 | **Lines Added** | ~545 in last 4h (Event Scout fixes + guidelines) |
 | **Week 1 Pipeline** | 13 leads, $375-1,950 potential revenue |
+| **Current Pipeline** | 16 leads, $450-2,400 potential revenue |
 | **Business Packages** | 3 complete (Launch Accelerator, OpenClaw Outreach, Coinbase Wallet) |
 
 ---
@@ -375,6 +398,23 @@ cloudflared tunnel login
 - `mission-control/data/db.json` (expense entries)
 - `mission-control/lib/db.ts` (expense tracking logic)
 - `mission-control/scripts/log-expense.mjs` (expense logging)
+
+---
+
+## 💰 API Usage — Last 4 Hours (6:04 AM - 10:04 AM Mar 7)
+
+| Model | Tokens Used | Est. Cost |
+|-------|-------------|-----------|
+| **Total** | ~35K tokens | ~$0.05 |
+| kimi-k2.5 | ~35K tokens | ~$0.05 |
+| MLX Local | ~0 tokens | $0.00 |
+
+**Notes:**
+- OpenClaw Debugger Shift 1 — Lead research and pipeline updates
+- Current cron session: ~35K tokens (sync audit + file updates)
+- No MLX local inference used in this window
+- 1 commit processed, business operations focus
+- 2 new leads identified, 2 comment drafts created
 
 ---
 
@@ -490,6 +530,8 @@ cloudflared tunnel login
    - Respect EXCLUDED_EVENTS list (Building AI Agents, OpenClaw SV)
    - Check calendar conflicts before suggesting events
    - Filter events user already registered for or is aware of
+8. **OAuth Recovery Loop Bug** — Critical bug where OAuth renewal updates auth-profiles.json but NOT auth-profiles.provisioned.json, causing infinite safe-mode recovery loops
+9. **LMStudio Embedder Gap** — OpenClaw's mem0 integration doesn't support LMStudio as embedder provider, even though standalone mem0 library does
 
 ### Preferences Captured:
 - Twitter/X scheduling preferred over real-time posting
@@ -511,6 +553,13 @@ cloudflared tunnel login
 - **Architectural Firm Dashboard shipped** — Complete SaaS product (24K+ lines) with admin dashboard, desktop time tracker, real-time sync
 - **Business Service Packages ready** — Launch Accelerator, OpenClaw Outreach, Coinbase Wallet integrations complete
 - **Event Scout v2** — Now respects user preferences, avoids duplicates, checks calendar conflicts
+- **OpenClaw Debugger Week 2 Started** — Shift 1 complete, 2 new leads identified, pipeline at 16 leads ($450-2,400)
+- **OAuth Recovery Loop** — New hot lead category: auth bugs causing multi-hour debugging sessions
+- **LMStudio Integration Gap** — Feature request pattern: users want local AI stack compatibility (qdrant + lmstudio)
+
+---
+
+*This board was updated during 4-Hour Sync on Mar 7, 2026 at 10:04 AM PST. Last activity: OpenClaw Debugger Shift 1 — Lead research identified 2 new high-quality GitHub leads (OAuth recovery loop bug, LMStudio embedder support). Pipeline now at 16 leads ($450-2,400 potential). 2 comment drafts ready for manual posting. Budget stable at ~$4.75 (healthy), Discord report sent. Business operations mode — autonomous systems performing well.*
 
 ---
 
