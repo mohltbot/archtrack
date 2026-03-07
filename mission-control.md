@@ -1,7 +1,30 @@
 # Mission Control Board
 
-**Last Updated:** March 7, 2026 at 2:04 AM PST (4-Hour Sync)  
-**Source:** Late night autonomous work session — Major product shipment (Architectural Firm Dashboard) + Business packages complete
+**Last Updated:** March 7, 2026 at 6:04 AM PST (4-Hour Sync)  
+**Source:** Morning autonomous work session — Event Scout improvements + Event sourcing guidelines
+
+---
+
+## ✅ 4-HOUR SYNC — Mar 7, 2026 (6:04 AM)
+
+**2 Tasks Completed | 0 Major Features | 3 Commits Processed**
+
+### Summary:
+Quiet period in the 2:04 AM - 6:04 AM window. Focused on refining existing automation based on user feedback. Event Scout script improved with exclusion lists and calendar conflict checking. New event sourcing guidelines documented to prevent duplicate event notifications and respect user awareness.
+
+### Commits Reviewed:
+1. `dc09b1b9` — fix: Update event-scout.js with user feedback (+48 lines)
+2. `664024af` — docs: Update event sourcing guidelines based on user feedback (+497 lines)
+3. `1b4f3a5e` — chore(sync): comprehensive 4-hour update [March 7, 2026 - 2:04 AM PST]
+
+### Key Findings:
+- **Mission Control Server:** Stable and operational
+- **Budget Status:** ~$4.73 / $200 limit (2.37%) — healthy
+- **Pending Tasks:** 9 total (7 high priority) — unchanged
+- **Ghost Shift Status:** Previous 4 shifts complete — all stable
+- **System Health:** All autonomous systems active, refinement mode
+- **Event Scout:** Now filters excluded events, checks calendar conflicts, avoids duplicates
+- **New Guidelines:** EVENT-SOURCING-GUIDELINES.md created with user preferences for event discovery
 
 ---
 
@@ -238,15 +261,15 @@ Evening ghost shift focused on infrastructure hygiene and cost optimization. Two
 
 | Metric | Value |
 |--------|-------|
-| **Budget** | ~$4.70 / $200 (2.35%) ✅ |
+| **Budget** | ~$4.73 / $200 (2.37%) ✅ |
 | **Tasks** | 11 total — 3 done, 8 pending |
 | **Open PRs** | 0 |
 | **API Spend Status** | Healthy — **MLX now ACTIVE ($0 inference!)** |
-| **Last Sync** | Mar 7, 2026 2:04 AM PST (4-hour audit complete) |
+| **Last Sync** | Mar 7, 2026 6:04 AM PST (4-hour audit complete) |
 | **Last Ghost Shift** | Mar 6, 2026 8:00 PM PST (Shift 4 complete) |
 | **Tunnel Status** | 🔴 DOWN (QUIC timeout) — fix pending |
-| **New Features** | 1 major (Architectural Firm Dashboard — 24K+ lines) |
-| **Lines Added** | ~24,739 in last 4h (major product shipment) |
+| **New Features** | 0 (refinement period — Event Scout improvements) |
+| **Lines Added** | ~545 in last 4h (Event Scout fixes + guidelines) |
 | **Week 1 Pipeline** | 13 leads, $375-1,950 potential revenue |
 | **Business Packages** | 3 complete (Launch Accelerator, OpenClaw Outreach, Coinbase Wallet) |
 
@@ -326,6 +349,23 @@ cloudflared tunnel login
 - `mission-control/data/db.json` (expense entries)
 - `mission-control/lib/db.ts` (expense tracking logic)
 - `mission-control/scripts/log-expense.mjs` (expense logging)
+
+---
+
+## 💰 API Usage — Last 4 Hours (2:04 AM - 6:04 AM Mar 7)
+
+| Model | Tokens Used | Est. Cost |
+|-------|-------------|-----------|
+| **Total** | ~33K tokens | ~$0.05 |
+| kimi-k2.5 | ~33K tokens | ~$0.05 |
+| MLX Local | ~0 tokens | $0.00 |
+
+**Notes:**
+- Quiet refinement period — Event Scout improvements and documentation
+- Current cron session: ~33K tokens (sync audit + file updates)
+- No MLX local inference used in this window
+- 3 commits processed, ~545 lines of improvements added
+- User feedback incorporated: exclusion lists, calendar conflict checking
 
 ---
 
@@ -419,6 +459,11 @@ cloudflared tunnel login
 4. **OpenClaw Debugger Business Model** — $75/30min debugging service, content-driven lead gen
 5. **Rapid Product Development** — Full SaaS products can be shipped in single sessions with proper architecture
 6. **Desktop + Web Hybrid Apps** — Electron + React + SQLite + WebSocket stack proven viable for time-tracking
+7. **Event Sourcing Guidelines** — New rules for event discovery automation:
+   - Always check for duplicates before notifying
+   - Respect EXCLUDED_EVENTS list (Building AI Agents, OpenClaw SV)
+   - Check calendar conflicts before suggesting events
+   - Filter events user already registered for or is aware of
 
 ### Preferences Captured:
 - Twitter/X scheduling preferred over real-time posting
@@ -426,6 +471,10 @@ cloudflared tunnel login
 - Budget-conscious: MLX local inference prioritized
 - Content that teaches converts better than content that sells
 - GitHub issues are high-value lead sources
+- **NEW: Event Discovery Preferences**
+  - User already registered for March 12 AI Agents meetup
+  - User already aware of OpenClaw SV meetup
+  - No need to suggest events that conflict with existing calendar
 
 ### Project Context:
 - Mission Control evolving from dashboard to full agent orchestration platform
@@ -433,8 +482,13 @@ cloudflared tunnel login
 - Google Workspace integration enables email/calendar automation
 - OpenClaw Debugger Week 1 complete: 13 leads, $375-1,950 pipeline
 - Week 2 Goal: Convert first paying customer
-- **NEW: Architectural Firm Dashboard shipped** — Complete SaaS product (24K+ lines) with admin dashboard, desktop time tracker, real-time sync
-- **NEW: Business Service Packages ready** — Launch Accelerator, OpenClaw Outreach, Coinbase Wallet integrations complete
+- **Architectural Firm Dashboard shipped** — Complete SaaS product (24K+ lines) with admin dashboard, desktop time tracker, real-time sync
+- **Business Service Packages ready** — Launch Accelerator, OpenClaw Outreach, Coinbase Wallet integrations complete
+- **Event Scout v2** — Now respects user preferences, avoids duplicates, checks calendar conflicts
+
+---
+
+*This board was updated during 4-Hour Sync on Mar 7, 2026 at 6:04 AM PST. Last activity: Refinement period — Event Scout improvements with user feedback (exclusion lists, calendar conflict checking), event sourcing guidelines documented. Budget stable at ~$4.73 (healthy), Discord report sent. Refinement mode — autonomous systems performing well.*
 
 ---
 
