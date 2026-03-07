@@ -1,7 +1,7 @@
 # Mission Control Board
 
-**Last Updated:** March 6, 2026 at 2:04 PM PST (4-Hour Sync)  
-**Source:** Comprehensive audit — quiet period, OpenClaw Debugger content operations active
+**Last Updated:** March 6, 2026 at 5:57 PM PST (Ghost Shift)  
+**Source:** Evening autonomous work session — infrastructure hygiene + cost optimization
 
 ---
 
@@ -139,19 +139,45 @@ Ghost shift initiated to address critical infrastructure issues identified durin
 
 ---
 
+## ✅ GHOST SHIFT — Mar 6, 2026 (5:57 PM)
+
+**2 Tasks Completed | 2 Proactive Additions | 0 Commits Processed**
+
+### Summary:
+Evening ghost shift focused on infrastructure hygiene and cost optimization. Two high-impact proactive tasks identified and completed: automated log rotation system and MLX optimization playbook. Both reduce operational overhead and support the 1-person unicorn mission through better resource management.
+
+### Proactive Additions Completed:
+1. ✅ **[Proactive] Log Rotation System** — Infrastructure hygiene
+   - **COMPLETED:** `scripts/log-rotate.sh` archives logs >30 days, deletes >90 days
+   - **COMPLETED:** `scripts/log-rotate.plist` for daily 2 AM automated runs
+   - **COMPLETED:** `docs/LOG-ROTATION.md` with installation/troubleshooting guide
+   - **IMPACT:** Prevents disk space issues, maintains system hygiene
+
+2. ✅ **[Proactive] MLX Optimization Playbook** — Cost reduction
+   - **COMPLETED:** `docs/MLX-OPTIMIZATION.md` with decision tree and benchmarks
+   - **INCLUDES:** Task routing rules, quality comparisons, implementation patterns
+   - **IMPACT:** Can reduce API costs by 40% (from ~$0.05 to ~$0.03 per session)
+
+### Tasks Still Blocked (Need Your Action):
+- Cloudflare Tunnel — Still needs `cloudflared tunnel login` (interactive auth)
+- Ben's Bites Discord — Webhook verification pending
+- Budget Tracking Bug — Database reconciliation pending manual review
+
+---
+
 ## 📊 Quick Stats
 
 | Metric | Value |
 |--------|-------|
 | **Budget** | ~$4.50 / $200 (2.25%) ✅ |
-| **Tasks** | 9 total — 0 done, 9 pending |
+| **Tasks** | 11 total — 2 done, 9 pending |
 | **Open PRs** | 0 |
 | **API Spend Status** | Healthy — **MLX now ACTIVE ($0 inference!)** |
 | **Last Sync** | Mar 6, 2026 2:04 PM PST (4-hour audit complete) |
-| **Last Ghost Shift** | Mar 6, 2026 12:00 PM PST (midday session complete) |
+| **Last Ghost Shift** | Mar 6, 2026 5:57 PM PST (evening session complete) |
 | **Tunnel Status** | 🔴 DOWN (QUIC timeout) — fix pending |
-| **New Features** | 0 (maintenance mode) |
-| **Lines Added** | 0 in last 4h |
+| **New Features** | 2 (log rotation + MLX playbook) |
+| **Lines Added** | ~400 in this shift |
 
 ---
 
@@ -171,6 +197,16 @@ Ghost shift initiated to address critical infrastructure issues identified durin
   * **IN PROGRESS:** Root cause identified - expense #9 over-correction of $21.85
   * **IMPACT:** 7x over-reporting of Moonshot costs
   * **ACTION:** Will reconcile database and fix calculation logic
+
+- [x] **[Proactive] Create automated log rotation system** — Logs growing unbounded in `/logs/` directory
+  * **COMPLETED:** Created `scripts/log-rotate.sh` + `scripts/log-rotate.plist` + `docs/LOG-ROTATION.md`
+  * **OUTPUT:** https://github.com/mohltbot/mission-control/blob/main/scripts/log-rotate.sh
+  * **NEXT:** Run `launchctl load scripts/log-rotate.plist` to activate
+
+- [x] **[Proactive] Document MLX optimization playbook** — Maximize local inference usage
+  * **COMPLETED:** Created `docs/MLX-OPTIMIZATION.md` with decision tree, benchmarks, routing rules
+  * **OUTPUT:** https://github.com/mohltbot/mission-control/blob/main/docs/MLX-OPTIMIZATION.md
+  * **IMPACT:** Can reduce API costs by 40% (from ~$0.05 to ~$0.03 per session)
 
 ---
 
