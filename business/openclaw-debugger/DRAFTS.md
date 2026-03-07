@@ -302,6 +302,90 @@ If you're stuck, DM me. I'll point you in the right direction either way.
 
 ---
 
+## 🆕 NEW LEADS — Shift 1 (March 7, 2026)
+
+### GitHub Comment: Issue #38336 (OAuth Recovery Loop)
+**Status:** ✅ READY TO SEND
+**Platform:** GitHub
+**Issue:** https://github.com/openclaw/openclaw/issues/38336
+**Date Added:** March 7, 2026
+**Lead Status:** 🔥 Hot
+
+**Draft Comment:**
+```
+This is a frustrating one — the safe-mode recovery reads from auth-profiles.provisioned.json (golden copy) but `openclaw onboard` only updates auth-profiles.json (live copy).
+
+Quick fix right now:
+
+```bash
+# After running openclaw onboard, manually sync the files:
+cp ~/.openclaw/agents/main/agent/auth-profiles.json \
+   ~/.openclaw/agents/main/agent/auth-profiles.provisioned.json
+
+# Then restart gateway:
+openclaw gateway restart
+```
+
+This stops the recovery loop because both files now have the fresh OAuth token.
+
+**Why this happens:**
+- Live copy = what gateway reads/writes during normal operation
+- Golden copy = what safe-mode recovery reads (survives shutdown persistence)
+- Onboard updates live copy but not golden copy
+- Recovery reads stale golden copy → thinks OAuth is broken → stays in safe mode
+
+**Long-term:** The fix needs to be in `openclaw onboard` to sync both files after OAuth renewal. But the manual copy unblocks you immediately.
+
+Want me to review your auth setup? I can spot other potential issues quickly — most OAuth problems have the same 2-3 root causes.
+```
+
+---
+
+### GitHub Comment: mem0ai/mem0 #4235 (LMStudio Embedder)
+**Status:** ✅ READY TO SEND
+**Platform:** GitHub (mem0ai/mem0 repo)
+**Issue:** https://github.com/mem0ai/mem0/issues/4235
+**Date Added:** March 7, 2026
+**Lead Status:** 🟡 Warm
+
+**Draft Comment:**
+```
+The OpenClaw mem0 integration uses a limited provider whitelist for embedders — lmstudio isn't on it yet.
+
+**Workaround options:**
+
+1. **Use Ollama instead** (if you can switch):
+   ```json
+   "embedder": {
+     "provider": "ollama",
+     "config": {
+       "model": "nomic-embed-text",
+       "ollama_base_url": "http://192.168.200.83:11434"
+     }
+   }
+   ```
+
+2. **Use OpenAI-compatible endpoint** (if LMStudio supports it):
+   ```json
+   "embedder": {
+     "provider": "openai",
+     "config": {
+       "model": "text-embedding-gte-qwen2-1.5b-instruct",
+       "apiKey": "not-needed",
+       "openai_base_url": "http://192.168.200.83:1234/v1"
+     }
+   }
+   ```
+
+3. **Wait for official support** — the mem0 library supports lmstudio but OpenClaw's wrapper doesn't pass it through yet.
+
+The OpenAI-compatible approach usually works because LMStudio mimics the OpenAI API format. Worth a shot!
+
+If you get stuck configuring the workaround, happy to help — I've set up a few local embedding pipelines with OpenClaw.
+```
+
+---
+
 ## 🆕 NEW CONTENT — Shift 2 (March 6, 2026)
 
 ### Twitter Thread: "3 OpenClaw Discord Bot Mistakes (And Why Your Bot Is 'Deaf')"

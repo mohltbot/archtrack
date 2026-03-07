@@ -1,26 +1,32 @@
 # Content Queue — OpenClaw Debugger
 
-## TODAY (March 6, 2026) — POST THESE
+## ✅ COMPLETED (March 7, 2026)
 
-### 1. Twitter Thread: "3 Discord Bot Mistakes"
-**Status:** READY TO COPY-PASTE  
-**Location:** DRAFTS.md section "Twitter Thread: 3 OpenClaw Discord Bot Mistakes"
-**Time:** Morning
-
-### 2. Twitter Quick Tip: "Hidden Config File"
-**Status:** READY TO COPY-PASTE  
-**Location:** DRAFTS.md section "Quick Tip: The Hidden Config File That Breaks Everything"
-**Time:** Afternoon
-
-### 3. Day 2 Follow-ups (Send Today)
-**Status:** READY TO SEND
-- Reddit: u/HostingerNightmare (DRAFTS.md)
-- Reddit: u/GeminiOverloaded (DRAFTS.md)
-- GitHub: Issue #32176 (DRAFTS.md)
+### Day 2 Follow-ups — ALL SENT
+- [x] Reddit: u/HostingerNightmare
+- [x] Reddit: u/GeminiOverloaded
+- [x] GitHub: Issue #32176
+- [x] GitHub: Issue #29780
+- [x] GitHub: Issue #30401
+- [x] GitHub: Issue #38336
 
 ---
 
-**Last Updated:** 2026-03-06
+## TODAY (March 7, 2026) — OPTIONAL
+
+### Twitter Thread: "3 Discord Bot Mistakes"
+**Status:** READY TO COPY-PASTE  
+**Location:** TODAY.md
+**Time:** 5 minutes
+
+### Twitter Quick Tip: "Hidden Config File"
+**Status:** READY TO COPY-PASTE  
+**Location:** TODAY.md
+**Time:** 2 minutes
+
+---
+
+**Last Updated:** 2026-03-07
 
 ---
 
