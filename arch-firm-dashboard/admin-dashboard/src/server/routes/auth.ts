@@ -18,26 +18,22 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Email and password are required' });
     }
 
+    // Use raw query to bypass TypeScript class field shadowing
     const employee = await Employee.findOne({ 
-      where: { email }
+      where: { email },
+      raw: true
     });
+    
     if (!employee) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Debug: Log what we got
-    console.log('Employee found:', employee.email);
-    console.log('Employee data:', JSON.stringify(employee.get({ plain: true }), null, 2));
-    
-    // Get password using dataValues to bypass TypeScript class field shadowing
-    const employeeData = employee.get({ plain: true });
-    const hashedPassword = employeeData.password;
-    
-    console.log('Hashed password:', hashedPassword);
+    // Access password from raw data
+    const hashedPassword = (employee as any).password;
     
     if (!hashedPassword) {
       console.error('Password not found for employee:', email);
-      return res.status(500).json({ error: 'Server configuration error' });
+      return res.status(500).json({ error: 'Server configuration error - password not found' });
     }
 
     const isValidPassword = await bcrypt.compare(password, hashedPassword);
