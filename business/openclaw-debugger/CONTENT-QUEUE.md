@@ -10,13 +10,14 @@
 - [x] GitHub: Issue #30401
 - [x] GitHub: Issue #38336
 
----
-
-## ✅ COMPLETED (March 7, 2026)
-
-### Twitter Content — POSTED
+### Twitter Content — ALL POSTED
 - [x] Twitter Thread: "3 Discord Bot Mistakes"
 - [x] Twitter Quick Tip: "Hidden Config File"
+- [x] Twitter Thread: "OAuth Recovery Loop Bug"
+
+### Other Platforms — REMAINING
+- [ ] IndieHackers Post: "5 Issues I See Daily"
+- [ ] LinkedIn Post: "Hidden Cost of Open-Source AI Tools"
 
 ---
 
@@ -35,68 +36,34 @@
 
 ## 📤 Ready to Publish (Copy-Paste)
 
-### 1. Twitter Thread: "The OAuth Recovery Loop Bug Nobody Talks About" 🆕
-**Status:** READY TO COPY-PASTE  
-**Location:** DRAFTS.md section "Twitter Thread: The OAuth Recovery Loop Bug Nobody Talks About"
-**Time:** Afternoon (post now)
-**Priority:** HIGH — trending issue, high engagement potential
-
-### 2. IndieHackers Post: "5 Issues I See Daily"
+### 1. IndieHackers Post: "5 Issues I See Daily"
 **Status:** READY TO COPY-PASTE  
 **Location:** DRAFTS.md section "IndieHackers Post: I Debug OpenClaw for a Living"
 **Time:** Evening (post now)
 
-### 3. LinkedIn Post: "Hidden Cost of Open-Source AI Tools"
+### 2. LinkedIn Post: "Hidden Cost of Open-Source AI Tools"
 **Status:** READY TO COPY-PASTE  
 **Location:** DRAFTS.md section "LinkedIn Post: The Hidden Cost of Open-Source AI Tools"
 **Time:** Evening (post now)
 
 ---
 
-## 📝 Content Ideas (Drafted)
+## 📝 Content Ideas (Drafted for Future)
 
 ### 1. Quick Tip: Config Validation
 **Platform:** Twitter
-**Status:** ✅ Drafted in DRAFTS.md
+**Status:** Drafted in DRAFTS.md
 **Hook:** "This one config line prevents 80% of OpenClaw crashes"
 
 ### 2. Case Study: Reddit Fix
 **Platform:** Twitter + IndieHackers
-**Status:** ✅ Drafted in DRAFTS.md
+**Status:** Drafted in DRAFTS.md
 **Hook:** "maxTokens: expected number, received string — here's the 30-second fix"
 
 ### 3. Thread: Docker vs Node Versions
 **Platform:** Twitter
-**Status:** ✅ Drafted in DRAFTS.md
+**Status:** Drafted in DRAFTS.md
 **Hook:** "14 hours debugging OpenClaw. Fixed in 5 minutes with this one change."
-
-### 4. Thread — "5 OpenClaw v2026.2.26 Migration Issues"
-**Platform:** Twitter
-**Status:** ✅ Ready to post (Shift 2 — March 4)
-**Hook:** "Upgraded to OpenClaw v2026.2.26? Your config is probably broken. Here's why:"
-**Source:** GitHub issues #29780, #30401, #32176
-**Priority:** HIGH — trending issue
-**Location:** DRAFTS.md "Twitter Thread: 5 OpenClaw v2026.2.26 Migration Issues"
-
-### 5. Quick Tip — "Is your Discord bot deaf?"
-**Platform:** Twitter
-**Status:** ✅ Ready to post (Shift 2 — March 4)
-**Hook:** "Discord bot shows online but doesn't respond? Check these 3 intents:"
-**Source:** GitHub issue #32176
-**Location:** DRAFTS.md "Quick Tip: Is Your Discord Bot Deaf?"
-
-### 6. Case Study — "Fixed Hostinger + OpenClaw in 30 min"
-**Platform:** Twitter + IndieHackers
-**Status:** ✅ Ready to post (Shift 2 — March 4)
-**Hook:** "Non-dev user was ready to give up on OpenClaw. 3 commands later: working."
-**Source:** Reddit post u/HostingerNightmare
-**Location:** DRAFTS.md "Case Study: Fixed Hostinger + OpenClaw"
-
-### 7. LinkedIn Post — Professional Debugging Service
-**Platform:** LinkedIn
-**Status:** ✅ Ready to post (Shift 2 — March 4)
-**Hook:** Professional angle on OpenClaw debugging services
-**Location:** DRAFTS.md "LinkedIn Post: Professional Debugging Service"
 
 ---
 
@@ -106,53 +73,18 @@
 |------|----------|---------|-------------|-------------|-----------------|
 | 2026-03-03 | Twitter | Thread: 5 OpenClaw Errors | ✅ POSTED | 11 | — |
 | 2026-03-04 | Twitter | Thread: Chrome Extension Hidden Folder | ✅ POSTED | 29 | — |
-| 2026-03-04 | Twitter | Thread: 5 v2026.2.26 Migration Issues | ✅ POSTED | — | — |
 | 2026-03-05 | Twitter | Thread: Sandbox Mode Broke My OpenClaw | ✅ POSTED | 11 | — |
-| 2026-03-05 | Twitter | Thread: 5 v2026.2.26 issues | READY | — | — |
-| 2026-03-05 | IndieHackers | Case study: Hostinger fix | READY | — | — |
-| 2026-03-05 | LinkedIn | Debugging service | READY | — | — |
-| 2026-03-05 | Twitter | Quick tip: Discord bot deaf | READY | — | — |
-| 2026-03-06 | Twitter | Thread: 3 Discord Bot Mistakes | ✅ READY | — | — |
-| 2026-03-06 | Twitter | Quick tip: Hidden config file | ✅ READY | — | — |
-| 2026-03-06 | IndieHackers | 5 Issues I See Daily | ✅ READY | — | — |
-| 2026-03-06 | LinkedIn | Hidden Cost of Open-Source AI | ✅ READY | — | — |
-| 2026-03-07 | Twitter | Thread: OAuth Recovery Loop Bug | ✅ READY | — | — |
+| 2026-03-06 | Twitter | Thread: 3 Discord Bot Mistakes | ✅ POSTED | — | — |
+| 2026-03-06 | Twitter | Quick tip: Hidden config file | ✅ POSTED | — | — |
+| 2026-03-07 | Twitter | Thread: OAuth Recovery Loop Bug | ✅ POSTED | — | — |
 
 ---
 
-## 🗓️ Content Calendar (This Week)
+## 🗓️ Content Calendar (Next Week)
 
-### Tuesday (March 4) — Shift 2 & 4 Complete ✅
-- [x] Twitter thread: 5 v2026.2.26 migration issues
-- [x] Quick tip: Discord bot deaf
-- [x] Case study: Hostinger fix (Twitter + IH) — READY TO POST
-- [x] LinkedIn: Professional debugging service — READY TO POST
-- [x] IndieHackers case study — READY TO POST (Shift 4 prep)
-- [x] Tomorrow's content queued (3 new pieces)
-- [ ] Reply to 5 OpenClaw issue tweets
-- [ ] IndieHackers: First customer story (when you get one)
-
-### Wednesday (March 5) — Shift 4 Prepped ✅
-- [ ] Post Twitter thread: 5 v2026.2.26 migration issues
-- [ ] Post IndieHackers: Hostinger case study
-- [ ] Post LinkedIn: Professional debugging service
-- [ ] Follow up with warm leads (Day 2 check-ins)
-- [ ] Reply to GitHub issues (drafts ready)
-- [ ] **NEW:** Twitter thread — "$75 vs 14 Hours"
-
-### Thursday (March 6) — Shift 2 Complete ✅
-- [x] **NEW:** Twitter thread: "3 Discord Bot Mistakes" — READY TO POST
-- [x] **NEW:** Quick tip: Hidden config file — READY TO POST
-- [ ] Post Twitter: Week recap so far
-- [ ] Post IndieHackers: "Week 1 building in public"
-- [ ] Post Quick tip: openclaw doctor --fix
-- [ ] Discord: Help 3 people in #troubleshooting
-
-### Friday (March 7) — Shift 2 Complete ✅
-- [x] **NEW:** Twitter thread: "OAuth Recovery Loop Bug" — READY TO POST
-- [ ] Twitter: Week lessons learned — DRAFT READY
-- [ ] LinkedIn: First week retrospective — DRAFT READY
-- [ ] Update LEADS.md with week's progress
+### Monday (March 10)
+- [ ] IndieHackers: "5 Issues I See Daily" — READY TO POST
+- [ ] LinkedIn: "Hidden Cost of Open-Source AI" — READY TO POST
 - [ ] Plan Week 2 content themes
 
 ---
@@ -160,9 +92,9 @@
 ## 🎯 Content Goals
 
 **This Week:**
-- 5 Twitter threads/tips
-- 2 IndieHackers posts
-- 1 LinkedIn post
+- ✅ 5 Twitter threads/tips (DONE)
+- ⏳ 2 IndieHackers posts (1 remaining)
+- ⏳ 1 LinkedIn post (1 remaining)
 - Daily engagement (replies, likes, follows)
 
 **Metrics to Track:**
@@ -173,4 +105,4 @@
 
 ---
 
-*All drafts ready in DRAFTS.md — copy, schedule, post.*
+*Remaining drafts ready in DRAFTS.md — copy, schedule, post.*

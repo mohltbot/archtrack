@@ -8,7 +8,7 @@
 |------|--------|-------|---------|--------|------------|--------------|-------------|-------------|
 | @rstormsf | Twitter | General stability/babysitting complaints | https://x.com/rstormsf | 🔥 Hot | 2026-03-03 | **March 5 — Day 2 Sent** | Wait for response | ✅ See DRAFTS.md |
 | @matthewjetthall | Twitter | Node22 + Telegram, 14 hours lost | https://x.com/matthewjetthall | 🔥 Hot | 2026-03-03 | **March 5 — Day 2 Sent** | Wait for response | ✅ See DRAFTS.md |
-| u/HostingerNightmare | Reddit | Drowning in issues - Hostinger + Chrome Extension + agent paths | https://reddit.com/r/openclaw/comments/1rja32v | 🔥 Hot | 2026-03-04 | Never | **March 6: Reply drafted** | ✅ See DRAFTS.md |
+| u/HostingerNightmare | Reddit | Drowning in issues - Hostinger + Chrome Extension + agent paths | https://reddit.com/r/openclaw/comments/1rja32v | 🔥 Hot | 2026-03-04 | **March 7: Reply sent** | Wait for response | ✅ See DRAFTS.md |
 | GitHub #32176 | GitHub | Discord bot deaf - receives no messages, health monitor stuck | https://github.com/openclaw/openclaw/issues/32176 | 🔥 Hot | 2026-03-04 | Never | **March 6: Comment drafted** | ✅ See DRAFTS.md |
 | @StMichaelsForge | Twitter | All models failed to respond | https://x.com/StMichaelsForge | 🟡 Warm | 2026-03-03 | **March 5 — Day 2 Sent** | Wait for response | ✅ See DRAFTS.md |
 
@@ -57,11 +57,12 @@
 | @StMichaelsForge | **March 5** ✅ Sent | March 10 | March 17 |
 | @Franzferdinan57 | **March 5** ✅ Sent | March 10 | March 17 |
 | @Shpigford | **March 5** ✅ Sent | March 10 | March 17 |
-| u/HostingerNightmare | **March 6** ✅ Drafted | March 11 | March 18 |
-| u/GeminiOverloaded | **March 6** ✅ Drafted | March 11 | March 18 |
-| GitHub #32176 | **March 6** ✅ Drafted | March 11 | March 18 |
-| GitHub #29780 | **March 6** ✅ Drafted | March 11 | March 18 |
-| GitHub #30401 | **March 6** ✅ Drafted | March 11 | March 18 |
+| u/HostingerNightmare | **March 7** ✅ Sent | March 11 | March 18 |
+| u/GeminiOverloaded | **March 7** ✅ Sent | March 11 | March 18 |
+| GitHub #32176 | **March 7** ✅ Sent | March 11 | March 18 |
+| GitHub #29780 | **March 7** ✅ Sent | March 11 | March 18 |
+| GitHub #30401 | **March 7** ✅ Sent | March 11 | March 18 |
+| GitHub #38336 | **March 7** ✅ Sent | March 12 | March 19 |
 | GitHub #37813 | March 7 | March 12 | March 19 |
 | GitHub #38204 | March 7 | March 12 | March 19 |
 | GitHub #38336 | March 9 | March 14 | March 21 |

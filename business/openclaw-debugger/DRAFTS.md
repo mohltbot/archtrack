@@ -7,7 +7,7 @@
 ## 🆕 NEW CONTENT — Shift 2 (March 7, 2026)
 
 ### Twitter Thread: "The OAuth Recovery Loop Bug Nobody Talks About"
-**Status:** ✅ READY TO POST
+**Status:** ✅ POSTED March 7, 2026
 **Platform:** Twitter/X
 **Hook:** "Your OpenClaw keeps entering safe mode after OAuth renewal? Here's why (and the 30-second fix)"
 **Source:** GitHub issue #38336, trending issue affecting many users
@@ -93,7 +93,7 @@ Or book: [link when ready]
 ---
 
 ### Quick Tip: "The Hidden Config File That Breaks Everything"
-**Status:** ✅ READY TO POST
+**Status:** ✅ POSTED March 7, 2026
 **Platform:** Twitter/X
 **Hook:** "Spent 2 hours debugging OpenClaw? The fix is probably in ~/.openclaw/openclaw.json"
 
@@ -115,7 +115,7 @@ Your entire config lives here. Bookmark it.
 ## 🆕 NEW FOLLOW-UPS — Shift 3 (March 6, 2026)
 
 ### Day 2 Follow-up: u/HostingerNightmare (Reddit)
-**Status:** ✅ READY TO SEND
+**Status:** ✅ SENT March 7, 2026
 **Platform:** Reddit
 **Post:** https://www.reddit.com/r/openclaw/comments/1rja32v/
 **Date Added:** March 4 → Day 2: March 6
@@ -140,7 +140,7 @@ No charge for the quick tips, just want to save you from more frustration!
 ---
 
 ### Day 2 Follow-up: u/GeminiOverloaded (Reddit)
-**Status:** ✅ READY TO SEND
+**Status:** ✅ SENT March 7, 2026
 **Platform:** Reddit
 **Date Added:** March 4 → Day 2: March 6
 
@@ -166,7 +166,7 @@ Hope that helps! Let me know if the context window adjustment fixes it.
 ---
 
 ### Day 2 Follow-up: GitHub #32176 (Discord Bot Deaf)
-**Status:** ✅ READY TO SEND
+**Status:** ✅ SENT March 7, 2026
 **Platform:** GitHub
 **Issue:** https://github.com/openclaw/openclaw/issues/32176
 **Date Added:** March 4 → Day 2: March 6
@@ -196,7 +196,7 @@ Let me know if that fixes it!
 ---
 
 ### Day 2 Follow-up: GitHub #29780 (Crash Loop)
-**Status:** ✅ READY TO SEND
+**Status:** ✅ SENT March 7, 2026
 **Platform:** GitHub
 **Issue:** https://github.com/openclaw/openclaw/issues/29780
 **Date Added:** March 4 → Day 2: March 6
@@ -227,7 +227,7 @@ Hope that unblocks you!
 ---
 
 ### Day 2 Follow-up: GitHub #30401 (Tilde Path Bug)
-**Status:** ✅ READY TO SEND
+**Status:** ✅ SENT March 7, 2026
 **Platform:** GitHub
 **Issue:** https://github.com/openclaw/openclaw/issues/30401
 **Date Added:** March 4 → Day 2: March 6
@@ -331,7 +331,7 @@ Hope that unblocks you!
 ---
 
 ### 🆕 NEW LEAD: GitHub #38336 (OAuth Recovery Loop)
-**Status:** ✅ READY TO SEND
+**Status:** ✅ SENT March 7, 2026
 **Platform:** GitHub
 **Issue:** https://github.com/openclaw/openclaw/issues/38336
 **Date Added:** March 7, 2026
@@ -850,10 +850,10 @@ I started this week with a simple idea: people are struggling with OpenClaw conf
 ## 🗓️ Content Calendar (This Week)
 
 ### Thursday (March 6) — Shift 4 Complete ✅
-- [x] **NEW:** Twitter thread: "3 Discord Bot Mistakes" — READY TO POST
-- [x] **NEW:** Quick tip: Hidden config file — READY TO POST
-- [x] **NEW:** IndieHackers post: "5 Issues I See Daily" — READY TO POST
-- [x] **NEW:** LinkedIn post: "Hidden Cost of Open-Source AI" — READY TO POST
+- [x] Twitter thread: "3 Discord Bot Mistakes" — POSTED March 7
+- [x] Quick tip: Hidden config file — POSTED March 7
+- [ ] IndieHackers post: "5 Issues I See Daily" — READY TO POST
+- [ ] LinkedIn post: "Hidden Cost of Open-Source AI" — READY TO POST
 - [ ] Post Twitter: Week recap so far
 - [ ] Post IndieHackers: "Week 1 building in public"
 - [ ] Post Quick tip: openclaw doctor --fix

@@ -1,20 +1,21 @@
 {
   "name": "archtrack",
   "version": "1.0.0",
-  "description": "Employee Monitoring & Project Management Dashboard for Architectural Firms",
+  "description": "Employee monitoring system for architectural firms",
   "private": true,
+  "workspaces": [
+    "desktop",
+    "admin",
+    "shared"
+  ],
   "scripts": {
-    "install:all": "npm install && cd desktop-app && npm install && cd ../admin-dashboard && npm install",
-    "dev:desktop": "cd desktop-app && npm run dev",
-    "dev:admin": "cd admin-dashboard && npm run dev",
+    "dev:desktop": "cd desktop && npm run dev",
+    "dev:admin": "cd admin && npm run dev",
     "dev": "concurrently \"npm run dev:admin\" \"npm run dev:desktop\"",
-    "build:desktop": "cd desktop-app && npm run build",
-    "build:admin": "cd admin-dashboard && npm run build",
-    "build": "npm run build:admin && npm run build:desktop",
-    "start:admin": "cd admin-dashboard && npm start",
-    "dist:desktop:mac": "cd desktop-app && npm run dist:mac",
-    "dist:desktop:win": "cd desktop-app && npm run dist:win",
-    "dist:desktop": "cd desktop-app && npm run dist"
+    "build": "npm run build:shared && npm run build:desktop && npm run build:admin",
+    "build:shared": "cd shared && npm run build",
+    "build:desktop": "cd desktop && npm run build",
+    "build:admin": "cd admin && npm run build"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
