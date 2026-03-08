@@ -52,21 +52,20 @@
 
 | Lead | Day 2 Follow-up | Day 7 Follow-up | Day 14 Follow-up |
 |------|-----------------|-----------------|------------------|
-| @rstormsf | **March 5** ✅ Sent | March 10 | March 17 |
-| @matthewjetthall | **March 5** ✅ Sent | March 10 | March 17 |
-| @StMichaelsForge | **March 5** ✅ Sent | March 10 | March 17 |
-| @Franzferdinan57 | **March 5** ✅ Sent | March 10 | March 17 |
-| @Shpigford | **March 5** ✅ Sent | March 10 | March 17 |
+| @rstormsf | **March 5** ✅ Sent | **March 10** 📬 DUE | March 17 |
+| @matthewjetthall | **March 5** ✅ Sent | **March 10** 📬 DUE | March 17 |
+| @StMichaelsForge | **March 5** ✅ Sent | **March 10** 📬 DUE | March 17 |
+| @Franzferdinan57 | **March 5** ✅ Sent | **March 10** 📬 DUE | March 17 |
+| @Shpigford | **March 5** ✅ Sent | **March 10** 📬 DUE | March 17 |
 | u/HostingerNightmare | **March 7** ✅ Sent | March 11 | March 18 |
 | u/GeminiOverloaded | **March 7** ✅ Sent | March 11 | March 18 |
 | GitHub #32176 | **March 7** ✅ Sent | March 11 | March 18 |
 | GitHub #29780 | **March 7** ✅ Sent | March 11 | March 18 |
 | GitHub #30401 | **March 7** ✅ Sent | March 11 | March 18 |
 | GitHub #38336 | **March 7** ✅ Sent | March 12 | March 19 |
-| GitHub #37813 | March 7 | March 12 | March 19 |
-| GitHub #38204 | March 7 | March 12 | March 19 |
-| GitHub #38336 | March 9 | March 14 | March 21 |
-| mem0ai/mem0 #4235 | March 9 | March 14 | March 21 |
+| GitHub #37813 | **March 7** ✅ Sent | March 12 | March 19 |
+| GitHub #38204 | **March 7** ✅ Sent | March 12 | March 19 |
+| mem0ai/mem0 #4235 | **March 7** ✅ Sent | March 14 | March 21 |
 
 ## ✅ Converted
 
@@ -93,7 +92,7 @@
 
 ---
 
-## 🎯 TODAY'S PRIORITY ACTIONS (March 7, 2026) — SHIFT 1 COMPLETE ✅
+## 🎯 TODAY'S PRIORITY ACTIONS (March 7, 2026) — ALL SHIFTS COMPLETE ✅
 
 ### ✅ Shift 1 (8:00 AM) — Morning Research COMPLETE
 - [x] Twitter/X search — Monitored for new issues
@@ -105,27 +104,32 @@
 - [x] **2 comment drafts created**
 - [x] **Daily report written to memory/2026-03-07.md**
 
-### 📬 SEND TODAY (Shift 1 Follow-up)
-1. **Comment on GitHub #38336** — OAuth recovery loop fix (DRAFTS.md ready)
-2. **Comment on mem0ai/mem0 #4235** — LMStudio workaround (DRAFTS.md ready)
+### ✅ Shift 2 (12:00 PM) — Content Creation COMPLETE
+- [x] Twitter Thread: "OAuth Recovery Loop Bug" — POSTED
+- [x] Quick Tip: "Hidden Config File" — POSTED
+- [x] Content for March 8-9 drafted
+
+### ✅ Shift 3 (4:00 PM) — Lead Nurture Prep COMPLETE
+- [x] Day 2 follow-ups sent for GitHub #37813 and #38204
+- [x] Updated follow-up schedule — 5 leads now due for Day 7 on March 10
+- [x] No new leads requiring immediate attention
 
 ---
 
-## 🎯 UPCOMING SHIFTS (March 7, 2026)
+## 🎯 UPCOMING: MONDAY MARCH 10, 2026 — DAY 7 FOLLOW-UPS DUE
 
-### 📬 DAY 2 FOLLOW-UPS — SEND THESE (10 min)
-1. **Reply to GitHub #37813** — Model ID fallback bug (DRAFTS.md ready)
-2. **Reply to GitHub #38204** — Grok 4.2 multi model issue (DRAFTS.md ready)
+### 📬 DAY 7 FOLLOW-UPS — SEND THESE (15 min)
+1. **DM @rstormsf** — "Still stuck on OpenClaw? Happy to help"
+2. **DM @matthewjetthall** — "Checking in — did the Docker fix work?"
+3. **Reply @StMichaelsForge** — "Still having model routing issues?"
+4. **Reply @Franzferdinan57** — "OAuth scope cleared up?"
+5. **Reply @Shpigford** — "v2.26 upgrade working smoothly now?"
 
-### 📱 CONTENT TO POST (5 min)
-3. **Twitter:** "Week 1 Lessons" thread — See DRAFTS.md "Tomorrow's Content"
-4. **LinkedIn:** "Week 1 Building in Public" — See DRAFTS.md "Tomorrow's Content"
-5. **IndieHackers:** "Week 1 Report" — See DRAFTS.md "Tomorrow's Content"
-
-### 📋 MANUAL CHECKS NEEDED
-- Check Twitter DMs for any replies from outreach
+### 📋 MANUAL CHECKS NEEDED (You Do These)
+- Check Twitter DMs for replies from Day 2 follow-ups
 - Check Fiverr messages
 - Check GitHub notifications for responses
+- Check if any leads converted to paying customers
 
 ---
 

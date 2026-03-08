@@ -1,3 +1,5 @@
+export * from './classification';
+
 // Employee types
 export interface Employee {
   id: string;
@@ -64,7 +66,26 @@ export interface CreateTaskInput {
   assignedTo?: string;
 }
 
-// Time entry types
+// Activity tracking types (NEW - replaces TimeEntry)
+export interface Activity {
+  id: string;
+  employeeId: string;
+  timestamp: string;
+  appName: string;
+  windowTitle: string;
+  category: import('./classification').ActivityCategory;
+  categoryName: string;
+  productivityScore: number;
+  productivityLevel: import('./classification').ProductivityLevel;
+  isSuspicious: boolean;
+  suspiciousReason?: string;
+  isIdle: boolean;
+  idleTimeSeconds: number;
+  durationSeconds: number;
+  createdAt: string;
+}
+
+// Legacy Time Entry (kept for compatibility)
 export interface TimeEntry {
   id: string;
   employeeId: string;
@@ -95,7 +116,7 @@ export interface UpdateTimeEntryInput {
 
 // Sync types
 export interface SyncPayload {
-  timeEntries: TimeEntry[];
+  activities: Activity[];
   lastSyncAt: string;
 }
 
@@ -114,9 +135,8 @@ export interface ApiResponse<T> {
 
 // WebSocket event types
 export interface WebSocketEvents {
-  'time-entry:started': TimeEntry;
-  'time-entry:stopped': TimeEntry;
-  'time-entry:updated': TimeEntry;
+  'activity:recorded': Activity;
+  'activity:suspicious': Activity;
   'employee:online': { employeeId: string; timestamp: string };
   'employee:offline': { employeeId: string; timestamp: string };
 }
@@ -140,7 +160,23 @@ export interface DashboardStats {
   totalHoursToday: number;
   totalHoursThisWeek: number;
   totalHoursThisMonth: number;
-  recentTimeEntries: TimeEntry[];
+  
+  // NEW: Productivity metrics
+  productivityBreakdown: {
+    softwareDev: number;
+    devops: number;
+    researchDocs: number;
+    communication: number;
+    internalTools: number;
+    designWork: number;
+    unproductive: number;
+  };
+  averageProductivityScore: number;
+  suspiciousActivityCount: number;
+  focusTimeMinutes: number;
+  distractedTimeMinutes: number;
+  
+  recentActivities: Activity[];
   employeeActivity: EmployeeActivity[];
 }
 
@@ -148,9 +184,12 @@ export interface EmployeeActivity {
   employeeId: string;
   employeeName: string;
   isOnline: boolean;
-  currentTask?: string;
+  currentActivity?: string;
+  currentCategory?: string;
+  productivityScore: number;
   hoursToday: number;
   hoursThisWeek: number;
+  suspiciousActivityCount: number;
 }
 
 export interface ReportData {
@@ -158,7 +197,32 @@ export interface ReportData {
   projectId?: string;
   startDate: string;
   endDate: string;
-  entries: TimeEntry[];
+  activities: Activity[];
   totalHours: number;
-  billableHours: number;
+  productiveHours: number;
+  unproductiveHours: number;
+  averageProductivityScore: number;
+}
+
+// NEW: Productivity report
+export interface ProductivityReport {
+  employeeId: string;
+  employeeName: string;
+  dateRange: { start: string; end: string };
+  summary: {
+    totalHours: number;
+    productiveHours: number;
+    unproductiveHours: number;
+    neutralHours: number;
+    averageProductivityScore: number;
+    focusScore: number;
+  };
+  categoryBreakdown: Record<string, number>; // minutes per category
+  suspiciousActivities: Activity[];
+  dailyTrend: Array<{
+    date: string;
+    productivityScore: number;
+    productiveMinutes: number;
+    unproductiveMinutes: number;
+  }>;
 }

@@ -19,8 +19,16 @@ import {
   createTimeEntry,
   updateTimeEntry,
   getActiveTimeEntries,
-  getDashboardStats
+  getDashboardStats,
+  // NEW: Activity tracking functions
+  createActivity,
+  getActivitiesByEmployee,
+  getAllActivities,
+  getSuspiciousActivities,
+  getActivityStats,
+  getEmployeeActivityStats
 } from './database';
+import type { Activity } from '@archtrack/shared';
 
 export function setupRoutes(app: Express): void {
   // Health check
@@ -188,7 +196,7 @@ export function setupRoutes(app: Express): void {
     }
   });
 
-  // Time Entries
+  // Legacy Time Entries
   app.get('/api/time-entries', async (req, res) => {
     try {
       let entries;
@@ -244,6 +252,121 @@ export function setupRoutes(app: Express): void {
     }
   });
 
+  // NEW: Activity Tracking Endpoints
+  
+  // Receive activities from desktop app
+  app.post('/api/activity', async (req, res) => {
+    try {
+      const { employeeId, activities } = req.body;
+      
+      if (!employeeId || !Array.isArray(activities)) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Missing employeeId or activities array' 
+        });
+      }
+
+      let suspiciousCount = 0;
+      const savedActivities: Activity[] = [];
+
+      for (const activityData of activities) {
+        const activity: Activity = {
+          id: activityData.id || uuidv4(),
+          employeeId,
+          timestamp: activityData.timestamp,
+          appName: activityData.appName,
+          windowTitle: activityData.windowTitle,
+          category: activityData.category,
+          categoryName: activityData.categoryName,
+          productivityScore: activityData.productivityScore,
+          productivityLevel: activityData.productivityLevel,
+          isSuspicious: activityData.isSuspicious || false,
+          suspiciousReason: activityData.suspiciousReason,
+          isIdle: activityData.isIdle || false,
+          idleTimeSeconds: activityData.idleTimeSeconds || 0,
+          durationSeconds: activityData.durationSeconds || 0,
+          createdAt: new Date().toISOString()
+        };
+
+        await createActivity(activity);
+        savedActivities.push(activity);
+
+        if (activity.isSuspicious) {
+          suspiciousCount++;
+        }
+      }
+
+      res.json({ 
+        success: true, 
+        data: { 
+          syncedCount: savedActivities.length,
+          suspiciousCount 
+        }
+      });
+    } catch (error) {
+      res.status(500).json({ success: false, error: String(error) });
+    }
+  });
+
+  // Get activities for an employee
+  app.get('/api/activities', async (req, res) => {
+    try {
+      let activities;
+      if (req.query.employeeId) {
+        activities = await getActivitiesByEmployee(
+          req.query.employeeId as string,
+          req.query.startDate as string,
+          req.query.endDate as string
+        );
+      } else {
+        activities = await getAllActivities(
+          req.query.startDate as string,
+          req.query.endDate as string
+        );
+      }
+      res.json({ success: true, data: activities });
+    } catch (error) {
+      res.status(500).json({ success: false, error: String(error) });
+    }
+  });
+
+  // Get suspicious activities
+  app.get('/api/activities/suspicious', async (req, res) => {
+    try {
+      const activities = await getSuspiciousActivities(
+        req.query.employeeId as string | undefined,
+        req.query.limit ? parseInt(req.query.limit as string) : 50
+      );
+      res.json({ success: true, data: activities });
+    } catch (error) {
+      res.status(500).json({ success: false, error: String(error) });
+    }
+  });
+
+  // Get activity statistics
+  app.get('/api/activities/stats', async (req, res) => {
+    try {
+      const stats = await getActivityStats(
+        req.query.employeeId as string | undefined,
+        req.query.startDate as string | undefined,
+        req.query.endDate as string | undefined
+      );
+      res.json({ success: true, data: stats });
+    } catch (error) {
+      res.status(500).json({ success: false, error: String(error) });
+    }
+  });
+
+  // Get employee activity with productivity metrics
+  app.get('/api/employees/activity', async (req, res) => {
+    try {
+      const activities = await getEmployeeActivityStats();
+      res.json({ success: true, data: activities });
+    } catch (error) {
+      res.status(500).json({ success: false, error: String(error) });
+    }
+  });
+
   // Reports
   app.get('/api/reports/summary', async (req, res) => {
     try {
@@ -270,6 +393,96 @@ export function setupRoutes(app: Express): void {
           totalHours: Math.round(totalSeconds / 3600 * 10) / 10,
           billableHours: Math.round(billableSeconds / 3600 * 10) / 10,
           entryCount: entries.length
+        }
+      });
+    } catch (error) {
+      res.status(500).json({ success: false, error: String(error) });
+    }
+  });
+
+  // NEW: Productivity report
+  app.get('/api/reports/productivity', async (req, res) => {
+    try {
+      const { employeeId, startDate, endDate } = req.query;
+      
+      if (!employeeId) {
+        return res.status(400).json({ success: false, error: 'employeeId is required' });
+      }
+
+      const activities = await getActivitiesByEmployee(
+        employeeId as string,
+        startDate as string,
+        endDate as string
+      );
+
+      const employee = await getEmployeeById(employeeId as string);
+
+      // Calculate category breakdown
+      const categoryBreakdown: Record<string, number> = {};
+      let productiveSeconds = 0;
+      let unproductiveSeconds = 0;
+      let neutralSeconds = 0;
+      let totalScore = 0;
+
+      for (const activity of activities) {
+        const minutes = activity.durationSeconds / 60;
+        categoryBreakdown[activity.categoryName] = (categoryBreakdown[activity.categoryName] || 0) + minutes;
+
+        if (activity.productivityLevel === 'productive') {
+          productiveSeconds += activity.durationSeconds;
+        } else if (activity.productivityLevel === 'unproductive') {
+          unproductiveSeconds += activity.durationSeconds;
+        } else {
+          neutralSeconds += activity.durationSeconds;
+        }
+
+        totalScore += activity.productivityScore;
+      }
+
+      const avgScore = activities.length > 0 ? Math.round(totalScore / activities.length) : 0;
+
+      // Group by day for trend
+      const dailyMap = new Map<string, { productive: number; unproductive: number; totalScore: number; count: number }>();
+      
+      for (const activity of activities) {
+        const date = activity.timestamp.split('T')[0];
+        const existing = dailyMap.get(date) || { productive: 0, unproductive: 0, totalScore: 0, count: 0 };
+        
+        if (activity.productivityLevel === 'productive') {
+          existing.productive += activity.durationSeconds;
+        } else if (activity.productivityLevel === 'unproductive') {
+          existing.unproductive += activity.durationSeconds;
+        }
+        existing.totalScore += activity.productivityScore;
+        existing.count++;
+        
+        dailyMap.set(date, existing);
+      }
+
+      const dailyTrend = Array.from(dailyMap.entries()).map(([date, data]) => ({
+        date,
+        productivityScore: data.count > 0 ? Math.round(data.totalScore / data.count) : 0,
+        productiveMinutes: Math.round(data.productive / 60),
+        unproductiveMinutes: Math.round(data.unproductive / 60)
+      })).sort((a, b) => a.date.localeCompare(b.date));
+
+      res.json({
+        success: true,
+        data: {
+          employeeId,
+          employeeName: employee?.name || 'Unknown',
+          dateRange: { start: startDate, end: endDate },
+          summary: {
+            totalHours: Math.round((productiveSeconds + unproductiveSeconds + neutralSeconds) / 3600 * 10) / 10,
+            productiveHours: Math.round(productiveSeconds / 3600 * 10) / 10,
+            unproductiveHours: Math.round(unproductiveSeconds / 3600 * 10) / 10,
+            neutralHours: Math.round(neutralSeconds / 3600 * 10) / 10,
+            averageProductivityScore: avgScore,
+            focusScore: avgScore // Alias for consistency
+          },
+          categoryBreakdown,
+          suspiciousActivities: activities.filter(a => a.isSuspicious),
+          dailyTrend
         }
       });
     } catch (error) {
