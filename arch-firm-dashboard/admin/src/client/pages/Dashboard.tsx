@@ -1,35 +1,80 @@
 import React, { useState, useEffect } from 'react';
 import { useWebSocket } from '../contexts/WebSocketContext';
-import type { Employee, Project, TimeEntry } from '@archtrack/shared';
+import type { Employee } from '@archtrack/shared';
+
+interface Activity {
+  id: string;
+  employeeId: string;
+  appName: string;
+  windowTitle: string;
+  category: string;
+  categoryName: string;
+  productivityScore: number;
+  productivityLevel: string;
+  isSuspicious: boolean;
+  suspiciousReason?: string;
+  isIdle: boolean;
+  timestamp: string;
+}
+
+interface EmployeeActivity {
+  employeeId: string;
+  employeeName: string;
+  currentActivity?: string;
+  currentCategory?: string;
+  productivityScore: number;
+  hoursToday: number;
+  suspiciousActivityCount: number;
+}
+
+interface DashboardStats {
+  totalEmployees: number;
+  activeProjects: number;
+  totalHoursToday: number;
+  totalHoursThisWeek: number;
+  productivityBreakdown: {
+    coreWork: number;
+    communication: number;
+    researchLearning: number;
+    planningDocs: number;
+    breakIdle: number;
+    entertainment: number;
+    socialMedia: number;
+    shoppingPersonal: number;
+    other: number;
+  };
+  averageProductivityScore: number;
+  suspiciousActivityCount: number;
+  focusTimeMinutes: number;
+  distractedTimeMinutes: number;
+  recentActivities: Activity[];
+  employeeActivity: EmployeeActivity[];
+}
 
 export const Dashboard: React.FC = () => {
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState<DashboardStats | null>(null);
   const [employees, setEmployees] = useState<Employee[]>([]);
-  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const { onlineEmployees, recentActivity } = useWebSocket();
 
   useEffect(() => {
     loadData();
-    const interval = setInterval(loadData, 30000); // Refresh every 30s
+    const interval = setInterval(loadData, 30000);
     return () => clearInterval(interval);
   }, []);
 
   const loadData = async () => {
     try {
-      const [statsRes, employeesRes, projectsRes] = await Promise.all([
+      const [statsRes, employeesRes] = await Promise.all([
         fetch('/api/dashboard/stats'),
-        fetch('/api/employees'),
-        fetch('/api/projects')
+        fetch('/api/employees')
       ]);
 
       const statsData = await statsRes.json();
       const employeesData = await employeesRes.json();
-      const projectsData = await projectsRes.json();
 
       if (statsData.success) setStats(statsData.data);
       if (employeesData.success) setEmployees(employeesData.data);
-      if (projectsData.success) setProjects(projectsData.data);
     } catch (error) {
       console.error('Error loading dashboard data:', error);
     } finally {
@@ -41,123 +86,228 @@ export const Dashboard: React.FC = () => {
     return <div style={styles.loading}>Loading...</div>;
   }
 
+  const getProductivityColor = (score: number) => {
+    if (score >= 80) return '#27ae60';
+    if (score >= 60) return '#f39c12';
+    if (score >= 40) return '#e67e22';
+    return '#e74c3c';
+  };
+
+  const getProductivityIcon = (level: string) => {
+    switch (level) {
+      case 'productive': return '🟢';
+      case 'idle': return '💤';
+      case 'unproductive': return '🔴';
+      default: return '🟡';
+    }
+  };
+
   return (
     <div style={styles.container}>
       <header style={styles.header}>
         <h1 style={styles.title}>Dashboard</h1>
-        <p style={styles.subtitle}>Real-time overview of your team</p>
+        <p style={styles.subtitle}>Real-time team productivity monitoring</p>
       </header>
 
+      {/* Alert Banner for Suspicious Activity */}
+      {stats && stats.suspiciousActivityCount > 0 && (
+        <div style={styles.alertBanner}>
+          ⚠️ {stats.suspiciousActivityCount} suspicious activities detected today
+        </div>
+      )}
+
       <div style={styles.grid}>
-        {/* Stats Cards */}
+        {/* Key Stats */}
         <div style={styles.statsGrid}>
-          <StatCard 
-            title="Total Employees" 
-            value={stats?.totalEmployees || 0} 
-            icon="👥" 
-            color="#3498db"
+          <StatCard
+            title="Team Productivity"
+            value={`${stats?.averageProductivityScore || 0}%`}
+            icon="📊"
+            color={getProductivityColor(stats?.averageProductivityScore || 0)}
           />
-          <StatCard 
-            title="Active Projects" 
-            value={stats?.activeProjects || 0} 
-            icon="📁" 
+          <StatCard
+            title="Focus Time Today"
+            value={`${Math.round((stats?.focusTimeMinutes || 0) / 60)}h`}
+            icon="🎯"
             color="#27ae60"
           />
-          <StatCard 
-            title="Hours Today" 
-            value={stats?.totalHoursToday || 0} 
-            icon="⏱️" 
+          <StatCard
+            title="Idle/Wasted Time"
+            value={`${Math.round((stats?.distractedTimeMinutes || 0) / 60)}h`}
+            icon="💤"
             color="#e74c3c"
           />
-          <StatCard 
-            title="Hours This Week" 
-            value={stats?.totalHoursThisWeek || 0} 
-            icon="📅" 
-            color="#f39c12"
+          <StatCard
+            title="Suspicious Activity"
+            value={stats?.suspiciousActivityCount || 0}
+            icon="⚠️"
+            color={stats?.suspiciousActivityCount ? '#e74c3c' : '#95a5a6'}
           />
         </div>
 
-        {/* Online Employees */}
+        {/* Employee Activity */}
         <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>🔴 Live Activity</h2>
-          <div style={styles.onlineList}>
+          <h2 style={styles.sectionTitle}>👥 Employee Activity</h2>
+          <div style={styles.employeeGrid}>
             {employees.map(emp => {
+              const empActivity = stats?.employeeActivity?.find(e => e.employeeId === emp.id);
               const online = onlineEmployees.has(emp.id);
-              const info = onlineEmployees.get(emp.id);
+
               return (
-                <div key={emp.id} style={styles.employeeCard(online)}>
+                <div key={emp.id} style={styles.employeeCard(online, empActivity?.isIdle)}>
                   <div style={styles.employeeHeader}>
                     <span style={styles.statusIndicator(online)} />
                     <span style={styles.employeeName}>{emp.name}</span>
-                    {online && <span style={styles.onlineBadge}>ONLINE</span>}
+                    {empActivity?.suspiciousActivityCount ? (
+                      <span style={styles.suspiciousBadge}>
+                        {empActivity.suspiciousActivityCount} ⚠️
+                      </span>
+                    ) : online ? (
+                      <span style={styles.onlineBadge}>ONLINE</span>
+                    ) : null}
                   </div>
-                  {online && info?.currentTask && (
-                    <div style={styles.currentTask}>Working on: {info.currentTask}</div>
+
+                  {empActivity ? (
+                    <>
+                      <div style={styles.currentActivity}>
+                        {getProductivityIcon(empActivity.currentCategory === 'break_idle' ? 'idle' : 'productive')}
+                        {' '}
+                        {empActivity.currentActivity || 'Unknown activity'}
+                      </div>
+                      <div style={styles.categoryTag(empActivity.currentCategory)}>
+                        {empActivity.currentCategory || 'Unknown'}
+                      </div>
+                      <div style={styles.productivityBar}>
+                        <div
+                          style={styles.productivityFill(empActivity.productivityScore)}
+                        />
+                        <span style={styles.productivityText}>
+                          {empActivity.productivityScore}% productive
+                        </span>
+                      </div>
+                      <div style={styles.employeeMeta}>
+                        {empActivity.hoursToday}h today • {emp.department}
+                      </div>
+                    </>
+                  ) : (
+                    <div style={styles.noActivity}>No activity today</div>
                   )}
-                  <div style={styles.employeeMeta}>
-                    {emp.department} • ${emp.hourlyRate}/hr
-                  </div>
                 </div>
               );
             })}
           </div>
         </div>
 
-        {/* Recent Activity */}
+        {/* Time Breakdown */}
         <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>📡 Recent Activity</h2>
+          <h2 style={styles.sectionTitle}>⏱️ Time Breakdown (Today)</h2>
+          <div style={styles.breakdownGrid}>
+            <BreakdownItem
+              label="Core Work"
+              minutes={stats?.productivityBreakdown?.coreWork || 0}
+              color="#27ae60"
+            />
+            <BreakdownItem
+              label="Communication"
+              minutes={stats?.productivityBreakdown?.communication || 0}
+              color="#3498db"
+            />
+            <BreakdownItem
+              label="Research & Learning"
+              minutes={stats?.productivityBreakdown?.researchLearning || 0}
+              color="#9b59b6"
+            />
+            <BreakdownItem
+              label="Planning & Docs"
+              minutes={stats?.productivityBreakdown?.planningDocs || 0}
+              color="#1abc9c"
+            />
+            <BreakdownItem
+              label="Break/Idle"
+              minutes={stats?.productivityBreakdown?.breakIdle || 0}
+              color="#95a5a6"
+            />
+            <BreakdownItem
+              label="Entertainment"
+              minutes={stats?.productivityBreakdown?.entertainment || 0}
+              color="#e74c3c"
+            />
+            <BreakdownItem
+              label="Social Media"
+              minutes={stats?.productivityBreakdown?.socialMedia || 0}
+              color="#e67e22"
+            />
+            <BreakdownItem
+              label="Shopping/Personal"
+              minutes={stats?.productivityBreakdown?.shoppingPersonal || 0}
+              color="#f39c12"
+            />
+          </div>
+        </div>
+
+        {/* Recent Activity Feed */}
+        <div style={styles.section}>
+          <h2 style={styles.sectionTitle}>📡 Live Activity Feed</h2>
           <div style={styles.activityList}>
-            {recentActivity.length === 0 ? (
-              <p style={styles.emptyText}>No recent activity. Start the desktop app to see live updates!</p>
+            {stats?.recentActivities?.length === 0 ? (
+              <p style={styles.emptyText}>No recent activity. Employees need to start the desktop tracker.</p>
             ) : (
-              recentActivity.slice(0, 20).map((activity, idx) => (
-                <div key={idx} style={styles.activityItem}>
-                  <span style={styles.activityType(activity.type)}>
-                    {activity.type === 'online' && '🟢'}
-                    {activity.type === 'offline' && '🔴'}
-                    {activity.type === 'tracking' && '⏱️'}
-                    {activity.type === 'stopped' && '⏹️'}
-                    {activity.type === 'sync' && '📤'}
-                  </span>
-                  <span style={styles.activityText}>
-                    <strong>{activity.employeeName}</strong> {activity.message}
-                  </span>
-                  <span style={styles.activityTime}>
-                    {new Date(activity.timestamp).toLocaleTimeString()}
-                  </span>
+              stats?.recentActivities?.slice(0, 20).map((activity) => (
+                <div
+                  key={activity.id}
+                  style={styles.activityItem(activity.isSuspicious, activity.isIdle)}
+                >
+                  <div style={styles.activityHeader}>
+                    <span style={styles.activityIcon}>
+                      {getProductivityIcon(activity.productivityLevel)}
+                    </span>
+                    <span style={styles.activityApp}>{activity.appName}</span>
+                    <span style={styles.activityCategory(activity.category)}>
+                      {activity.categoryName}
+                    </span>
+                    <span style={styles.activityTime}>
+                      {new Date(activity.timestamp).toLocaleTimeString()}
+                    </span>
+                  </div>
+                  <div style={styles.activityTitle}>{activity.windowTitle}</div>
+                  {activity.isSuspicious && activity.suspiciousReason && (
+                    <div style={styles.suspiciousReason}>
+                      ⚠️ {activity.suspiciousReason}
+                    </div>
+                  )}
                 </div>
               ))
             )}
           </div>
         </div>
 
-        {/* Recent Time Entries */}
-        <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>🕐 Recent Time Entries</h2>
-          <div style={styles.entriesList}>
-            {stats?.recentTimeEntries?.length === 0 ? (
-              <p style={styles.emptyText}>No time entries yet</p>
-            ) : (
-              stats?.recentTimeEntries?.slice(0, 10).map((entry: TimeEntry) => (
-                <div key={entry.id} style={styles.entryItem}>
-                  <div>
-                    <div style={styles.entryDescription}>
-                      {entry.description || 'Untitled'}
+        {/* Suspicious Activity Log */}
+        {stats?.recentActivities?.some(a => a.isSuspicious) && (
+          <div style={{ ...styles.section, border: '2px solid #e74c3c' }}>
+            <h2 style={{ ...styles.sectionTitle, color: '#e74c3c' }}>
+              🚨 Suspicious Activity Log
+            </h2>
+            <div style={styles.suspiciousList}>
+              {stats.recentActivities
+                .filter(a => a.isSuspicious)
+                .slice(0, 10)
+                .map((activity) => (
+                  <div key={activity.id} style={styles.suspiciousItem}>
+                    <div style={styles.suspiciousHeader}>
+                      <span style={styles.suspiciousApp}>{activity.appName}</span>
+                      <span style={styles.suspiciousTime}>
+                        {new Date(activity.timestamp).toLocaleTimeString()}
+                      </span>
                     </div>
-                    <div style={styles.entryMeta}>
-                      {new Date(entry.startTime).toLocaleString()}
+                    <div style={styles.suspiciousTitle}>{activity.windowTitle}</div>
+                    <div style={styles.suspiciousReasonText}>
+                      {activity.suspiciousReason}
                     </div>
                   </div>
-                  <div style={styles.entryDuration}>
-                    {entry.duration > 0 
-                      ? `${Math.round(entry.duration / 60)} min` 
-                      : 'In progress...'}
-                  </div>
-                </div>
-              ))
-            )}
+                ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
@@ -165,7 +315,7 @@ export const Dashboard: React.FC = () => {
 
 interface StatCardProps {
   title: string;
-  value: number;
+  value: string | number;
   icon: string;
   color: string;
 }
@@ -174,11 +324,30 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color }) => (
   <div style={{ ...styles.statCard, borderLeftColor: color }}>
     <div style={styles.statIcon(color)}>{icon}</div>
     <div>
-      <div style={styles.statValue}>{value}</div>
+      <div style={{ ...styles.statValue, color }}>{value}</div>
       <div style={styles.statTitle}>{title}</div>
     </div>
   </div>
 );
+
+interface BreakdownItemProps {
+  label: string;
+  minutes: number;
+  color: string;
+}
+
+const BreakdownItem: React.FC<BreakdownItemProps> = ({ label, minutes, color }) => {
+  const hours = Math.round((minutes / 60) * 10) / 10;
+  return (
+    <div style={styles.breakdownItem}>
+      <div style={styles.breakdownLabel}>
+        <span style={{ ...styles.breakdownDot, backgroundColor: color }} />
+        {label}
+      </div>
+      <div style={styles.breakdownValue}>{hours}h</div>
+    </div>
+  );
+};
 
 const styles: { [key: string]: React.CSSProperties | any } = {
   container: {
@@ -190,7 +359,7 @@ const styles: { [key: string]: React.CSSProperties | any } = {
     color: '#666'
   },
   header: {
-    marginBottom: '32px'
+    marginBottom: '24px'
   },
   title: {
     fontSize: '32px',
@@ -202,6 +371,15 @@ const styles: { [key: string]: React.CSSProperties | any } = {
     fontSize: '16px',
     color: '#7f8c8d',
     marginTop: '4px'
+  },
+  alertBanner: {
+    backgroundColor: '#fdf2f2',
+    border: '1px solid #fee2e2',
+    color: '#e74c3c',
+    padding: '12px 16px',
+    borderRadius: '8px',
+    marginBottom: '24px',
+    fontWeight: 500
   },
   grid: {
     display: 'grid',
@@ -230,8 +408,7 @@ const styles: { [key: string]: React.CSSProperties | any } = {
   }),
   statValue: {
     fontSize: '28px',
-    fontWeight: 700,
-    color: '#2c3e50'
+    fontWeight: 700
   },
   statTitle: {
     fontSize: '14px',
@@ -249,23 +426,23 @@ const styles: { [key: string]: React.CSSProperties | any } = {
     marginBottom: '16px',
     color: '#2c3e50'
   },
-  onlineList: {
+  employeeGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-    gap: '12px'
+    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+    gap: '16px'
   },
-  employeeCard: (online: boolean) => ({
+  employeeCard: (online: boolean, isIdle?: boolean) => ({
     padding: '16px',
     borderRadius: '8px',
-    backgroundColor: online ? '#f0fff4' : '#f8f9fa',
-    border: `1px solid ${online ? '#27ae60' : '#e0e0e0'}`,
+    backgroundColor: isIdle ? '#fff5f5' : online ? '#f0fff4' : '#f8f9fa',
+    border: `2px solid ${isIdle ? '#e74c3c' : online ? '#27ae60' : '#e0e0e0'}`,
     transition: 'all 0.2s'
   }),
   employeeHeader: {
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
-    marginBottom: '4px'
+    marginBottom: '8px'
   },
   statusIndicator: (online: boolean) => ({
     width: '10px',
@@ -276,59 +453,86 @@ const styles: { [key: string]: React.CSSProperties | any } = {
   employeeName: {
     fontWeight: 600,
     fontSize: '16px',
-    color: '#2c3e50'
+    color: '#2c3e50',
+    flex: 1
   },
   onlineBadge: {
     fontSize: '10px',
     fontWeight: 700,
     color: '#27ae60',
     backgroundColor: '#d4edda',
-    padding: '2px 6px',
-    borderRadius: '4px',
-    marginLeft: 'auto'
+    padding: '2px 8px',
+    borderRadius: '4px'
   },
-  currentTask: {
-    fontSize: '13px',
-    color: '#27ae60',
-    marginTop: '4px',
-    fontWeight: 500
+  suspiciousBadge: {
+    fontSize: '10px',
+    fontWeight: 700,
+    color: '#fff',
+    backgroundColor: '#e74c3c',
+    padding: '2px 8px',
+    borderRadius: '4px'
+  },
+  currentActivity: {
+    fontSize: '14px',
+    color: '#2c3e50',
+    marginBottom: '4px'
+  },
+  categoryTag: (category?: string) => ({
+    display: 'inline-block',
+    fontSize: '11px',
+    fontWeight: 600,
+    textTransform: 'uppercase' as const,
+    color: category === 'break_idle' ? '#e74c3c' :
+          category === 'entertainment' ? '#e74c3c' :
+          category === 'core_work' ? '#27ae60' :
+          category === 'communication' ? '#3498db' : '#7f8c8d',
+    backgroundColor: category === 'break_idle' ? '#fdf2f2' :
+                     category === 'entertainment' ? '#fdf2f2' :
+                     category === 'core_work' ? '#f0fff4' :
+                     category === 'communication' ? '#ebf5fb' : '#f8f9fa',
+    padding: '2px 8px',
+    borderRadius: '4px',
+    marginBottom: '8px'
+  }),
+  productivityBar: {
+    position: 'relative',
+    height: '20px',
+    backgroundColor: '#ecf0f1',
+    borderRadius: '10px',
+    overflow: 'hidden',
+    marginBottom: '8px'
+  },
+  productivityFill: (score: number) => ({
+    height: '100%',
+    width: `${score}%`,
+    backgroundColor: score >= 80 ? '#27ae60' : score >= 60 ? '#f39c12' : '#e74c3c',
+    borderRadius: '10px',
+    transition: 'width 0.3s'
+  }),
+  productivityText: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    fontSize: '11px',
+    fontWeight: 600,
+    color: '#2c3e50'
   },
   employeeMeta: {
     fontSize: '12px',
-    color: '#7f8c8d',
-    marginTop: '4px'
+    color: '#7f8c8d'
   },
-  activityList: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px'
-  },
-  activityItem: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-    padding: '12px',
-    backgroundColor: '#f8f9fa',
-    borderRadius: '8px'
-  },
-  activityType: (type: string) => ({
-    fontSize: '16px'
-  }),
-  activityText: {
-    flex: 1,
+  noActivity: {
     fontSize: '14px',
-    color: '#2c3e50'
+    color: '#95a5a6',
+    fontStyle: 'italic'
   },
-  activityTime: {
-    fontSize: '12px',
-    color: '#95a5a6'
+  breakdownGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+    gap: '12px'
   },
-  entriesList: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px'
-  },
-  entryItem: {
+  breakdownItem: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -336,20 +540,113 @@ const styles: { [key: string]: React.CSSProperties | any } = {
     backgroundColor: '#f8f9fa',
     borderRadius: '8px'
   },
-  entryDescription: {
+  breakdownLabel: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
     fontSize: '14px',
-    fontWeight: 500,
     color: '#2c3e50'
   },
-  entryMeta: {
-    fontSize: '12px',
-    color: '#7f8c8d',
-    marginTop: '2px'
+  breakdownDot: {
+    width: '10px',
+    height: '10px',
+    borderRadius: '50%'
   },
-  entryDuration: {
+  breakdownValue: {
     fontSize: '14px',
     fontWeight: 600,
-    color: '#27ae60'
+    color: '#2c3e50'
+  },
+  activityList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px'
+  },
+  activityItem: (isSuspicious: boolean, isIdle: boolean) => ({
+    padding: '12px',
+    backgroundColor: isSuspicious ? '#fdf2f2' : isIdle ? '#f8f9fa' : '#fff',
+    border: `1px solid ${isSuspicious ? '#fee2e2' : isIdle ? '#e0e0e0' : '#ecf0f1'}`,
+    borderRadius: '8px',
+    borderLeft: isSuspicious ? '4px solid #e74c3c' : isIdle ? '4px solid #95a5a6' : '4px solid #27ae60'
+  }),
+  activityHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    marginBottom: '4px'
+  },
+  activityIcon: {
+    fontSize: '14px'
+  },
+  activityApp: {
+    fontWeight: 600,
+    fontSize: '14px',
+    color: '#2c3e50'
+  },
+  activityCategory: (category: string) => ({
+    fontSize: '11px',
+    fontWeight: 500,
+    color: category === 'break_idle' ? '#e74c3c' :
+          category === 'entertainment' ? '#e74c3c' :
+          category === 'core_work' ? '#27ae60' :
+          category === 'communication' ? '#3498db' : '#7f8c8d',
+    backgroundColor: category === 'break_idle' ? '#fdf2f2' :
+                     category === 'entertainment' ? '#fdf2f2' :
+                     category === 'core_work' ? '#f0fff4' :
+                     category === 'communication' ? '#ebf5fb' : '#f8f9fa',
+    padding: '2px 6px',
+    borderRadius: '4px'
+  }),
+  activityTime: {
+    marginLeft: 'auto',
+    fontSize: '12px',
+    color: '#95a5a6'
+  },
+  activityTitle: {
+    fontSize: '13px',
+    color: '#555',
+    marginLeft: '22px'
+  },
+  suspiciousReason: {
+    fontSize: '12px',
+    color: '#e74c3c',
+    marginLeft: '22px',
+    marginTop: '4px',
+    fontWeight: 500
+  },
+  suspiciousList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px'
+  },
+  suspiciousItem: {
+    padding: '12px',
+    backgroundColor: '#fdf2f2',
+    border: '1px solid #fee2e2',
+    borderRadius: '8px'
+  },
+  suspiciousHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: '4px'
+  },
+  suspiciousApp: {
+    fontWeight: 600,
+    color: '#2c3e50'
+  },
+  suspiciousTime: {
+    fontSize: '12px',
+    color: '#95a5a6'
+  },
+  suspiciousTitle: {
+    fontSize: '13px',
+    color: '#555',
+    marginBottom: '4px'
+  },
+  suspiciousReasonText: {
+    fontSize: '12px',
+    color: '#e74c3c',
+    fontWeight: 500
   },
   emptyText: {
     color: '#95a5a6',

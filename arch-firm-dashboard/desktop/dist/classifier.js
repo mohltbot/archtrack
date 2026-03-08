@@ -1,131 +1,305 @@
-"use strict";
-// Activity Classification System
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SUSPICIOUS_THRESHOLDS = void 0;
-exports.classifyActivity = classifyActivity;
-exports.calculateFocusScore = calculateFocusScore;
-exports.calculateTimeBreakdown = calculateTimeBreakdown;
-// App classification rules
-const APP_RULES = {
-    // Productive - Software Development
-    'Cursor': { category: 'software_dev', categoryName: 'Software Development', productivityScore: 95, productivityLevel: 'productive' },
-    'Visual Studio Code': { category: 'software_dev', categoryName: 'Software Development', productivityScore: 95, productivityLevel: 'productive' },
-    'Code': { category: 'software_dev', categoryName: 'Software Development', productivityScore: 95, productivityLevel: 'productive' },
-    'Xcode': { category: 'software_dev', categoryName: 'Software Development', productivityScore: 95, productivityLevel: 'productive' },
-    'IntelliJ': { category: 'software_dev', categoryName: 'Software Development', productivityScore: 95, productivityLevel: 'productive' },
-    'GitHub Desktop': { category: 'software_dev', categoryName: 'Software Development', productivityScore: 90, productivityLevel: 'productive' },
-    // Productive - DevOps/Infrastructure
-    'Terminal': { category: 'devops', categoryName: 'DevOps/Infrastructure', productivityScore: 90, productivityLevel: 'productive' },
-    'iTerm2': { category: 'devops', categoryName: 'DevOps/Infrastructure', productivityScore: 90, productivityLevel: 'productive' },
-    'Docker Desktop': { category: 'devops', categoryName: 'DevOps/Infrastructure', productivityScore: 85, productivityLevel: 'productive' },
-    // Productive - Research & Documentation
-    'Notion': { category: 'research', categoryName: 'Research & Documentation', productivityScore: 85, productivityLevel: 'productive' },
-    'Obsidian': { category: 'research', categoryName: 'Research & Documentation', productivityScore: 85, productivityLevel: 'productive' },
-    'Stack Overflow': { category: 'research', categoryName: 'Research & Documentation', productivityScore: 80, productivityLevel: 'productive' },
-    // Communication - Will be refined by window title
-    'Slack': { category: 'communication_active', categoryName: 'Communication', productivityScore: 70, productivityLevel: 'productive' },
-    'Microsoft Teams': { category: 'communication_active', categoryName: 'Communication', productivityScore: 70, productivityLevel: 'productive' },
-    'Zoom': { category: 'communication_active', categoryName: 'Communication', productivityScore: 75, productivityLevel: 'productive' },
-    'Discord': { category: 'communication_active', categoryName: 'Communication', productivityScore: 60, productivityLevel: 'neutral' },
-    // Internal Tools
-    'Electron': { category: 'internal_tools', categoryName: 'Internal Tools', productivityScore: 85, productivityLevel: 'productive' },
-    // Design
-    'Figma': { category: 'design', categoryName: 'Design', productivityScore: 90, productivityLevel: 'productive' },
-    'Sketch': { category: 'design', categoryName: 'Design', productivityScore: 90, productivityLevel: 'productive' },
-    'Adobe Photoshop': { category: 'design', categoryName: 'Design', productivityScore: 85, productivityLevel: 'productive' },
-    // Unproductive - Social Media
-    'Facebook': { category: 'social_media', categoryName: 'Social Media', productivityScore: 10, productivityLevel: 'unproductive' },
-    'Instagram': { category: 'social_media', categoryName: 'Social Media', productivityScore: 5, productivityLevel: 'unproductive' },
-    'Twitter': { category: 'social_media', categoryName: 'Social Media', productivityScore: 15, productivityLevel: 'unproductive' },
-    'X': { category: 'social_media', categoryName: 'Social Media', productivityScore: 15, productivityLevel: 'unproductive' },
-    'TikTok': { category: 'social_media', categoryName: 'Social Media', productivityScore: 5, productivityLevel: 'unproductive' },
-    'Reddit': { category: 'social_media', categoryName: 'Social Media', productivityScore: 20, productivityLevel: 'unproductive' },
-    // Unproductive - Entertainment
-    'YouTube': { category: 'entertainment', categoryName: 'Entertainment', productivityScore: 10, productivityLevel: 'unproductive' },
-    'Netflix': { category: 'entertainment', categoryName: 'Entertainment', productivityScore: 5, productivityLevel: 'unproductive' },
-    'Spotify': { category: 'entertainment', categoryName: 'Entertainment', productivityScore: 30, productivityLevel: 'unproductive' },
-    // Unproductive - Shopping
-    'Amazon': { category: 'shopping', categoryName: 'Shopping', productivityScore: 10, productivityLevel: 'unproductive' },
-    'eBay': { category: 'shopping', categoryName: 'Shopping', productivityScore: 10, productivityLevel: 'unproductive' },
-    // Unproductive - Gaming
-    'Steam': { category: 'gaming', categoryName: 'Gaming', productivityScore: 5, productivityLevel: 'unproductive' },
+// Activity Classification System for ArchTrack Desktop
+// Universal classification that works for ANY employee type
+// Productivity scores by category (0-100)
+export const PRODUCTIVITY_SCORES = {
+    core_work: 95,
+    communication: 70,
+    research_learning: 85,
+    planning_docs: 80,
+    break_idle: 0,
+    entertainment: 5,
+    social_media: 10,
+    shopping_personal: 5,
+    other: 30
 };
-// Window title patterns for refinement
-const TITLE_PATTERNS = [
-    // Research patterns (override social media if researching)
-    { pattern: /stackoverflow\.com|github\.com\/docs|docs\./i, classification: { category: 'research', categoryName: 'Research & Documentation', productivityScore: 80, productivityLevel: 'productive' } },
-    { pattern: /tutorial|documentation|how to|guide/i, classification: { category: 'research', categoryName: 'Research & Documentation', productivityScore: 75, productivityLevel: 'productive' } },
-    // YouTube exceptions
-    { pattern: /youtube.*(tutorial|course|learn|programming|coding)/i, classification: { category: 'research', categoryName: 'Research & Documentation', productivityScore: 70, productivityLevel: 'productive' } },
-    // Slack/Teams refinement
-    { pattern: /slack.*(unread|new messages|mention)/i, classification: { category: 'communication_active', categoryName: 'Active Communication', productivityScore: 75, productivityLevel: 'productive' } },
-    { pattern: /zoom.*(meeting|call|in progress)/i, classification: { category: 'communication_active', categoryName: 'Active Meeting', productivityScore: 80, productivityLevel: 'productive' } },
-];
-// Suspicious activity detection thresholds
-exports.SUSPICIOUS_THRESHOLDS = {
-    YOUTUBE_IDLE_MINUTES: 30, // YouTube active but no input for 30min
-    SLACK_IDLE_MINUTES: 10, // Slack "active" but no input for 10min
-    RAPID_SWITCH_SECONDS: 5, // Switching windows every <5 seconds
-    DISTRACTED_SWITCH_COUNT: 10, // 10+ rapid switches = distracted
+export const CATEGORY_NAMES = {
+    core_work: 'Core Work',
+    communication: 'Communication',
+    research_learning: 'Research & Learning',
+    planning_docs: 'Planning & Documentation',
+    break_idle: 'Break/Idle',
+    entertainment: 'Entertainment',
+    social_media: 'Social Media',
+    shopping_personal: 'Shopping/Personal',
+    other: 'Other'
 };
-function classifyActivity(appName, windowTitle, idleTimeSeconds, context) {
-    // Start with app-based classification
-    let classification = {
-        category: 'admin_other',
-        categoryName: 'Admin/Other',
-        productivityScore: 50,
-        productivityLevel: 'neutral',
-        isSuspicious: false,
-    };
-    // Find matching app rule
-    const appRule = APP_RULES[appName] || APP_RULES[Object.keys(APP_RULES).find(k => appName.toLowerCase().includes(k.toLowerCase())) || ''];
-    if (appRule) {
-        Object.assign(classification, appRule);
+export const PRODUCTIVITY_LEVELS = {
+    core_work: 'productive',
+    communication: 'productive',
+    research_learning: 'productive',
+    planning_docs: 'productive',
+    break_idle: 'idle',
+    entertainment: 'unproductive',
+    social_media: 'unproductive',
+    shopping_personal: 'unproductive',
+    other: 'neutral'
+};
+export const APP_CLASSIFICATION_RULES = [
+    // Core Work Tools (generic - covers many professions)
+    {
+        patterns: [
+            'microsoft excel', 'excel', 'google sheets', 'spreadsheet',
+            'microsoft word', 'word', 'google docs',
+            'microsoft powerpoint', 'powerpoint', 'google slides',
+            'pdf', 'acrobat', 'preview - pdf',
+            'autocad', 'cad', 'revit', 'sketchup', 'solidworks', 'catia',
+            'figma', 'sketch', 'adobe illustrator', 'adobe photoshop', 'photoshop',
+            'vscode', 'visual studio code', 'code -', 'cursor', 'intellij',
+            'machinery', 'cnc', 'scada', 'plc', 'hmi',
+            'quickbooks', 'sap', 'oracle', 'salesforce',
+            'epic', 'cerner', 'allscripts',
+        ],
+        category: 'core_work'
+    },
+    // Communication (where the "ghost" tricks happen)
+    {
+        patterns: ['slack', 'microsoft teams', 'teams -', 'zoom', 'google meet', 'webex', 'skype', 'discord', 'telegram', 'whatsapp'],
+        category: 'communication'
+    },
+    // Email
+    {
+        patterns: ['outlook', 'gmail', 'mail', 'thunderbird', 'apple mail'],
+        category: 'communication'
+    },
+    // Research & Learning (work-related)
+    {
+        patterns: [
+            'stackoverflow', 'github', 'gitlab', 'documentation', 'docs.',
+            'wikipedia', 'wikis', 'confluence', 'notion', 'obsidian',
+            'udemy', 'coursera', 'linkedin learning', 'pluralsight',
+        ],
+        category: 'research_learning',
+        exceptions: ['facebook', 'instagram', 'twitter', 'reddit']
+    },
+    // Planning & Documentation
+    {
+        patterns: [
+            'jira', 'asana', 'trello', 'monday.com', 'clickup', 'notion',
+            'microsoft project', 'smartsheet', 'airtable',
+        ],
+        category: 'planning_docs'
+    },
+    // Entertainment (the time wasters)
+    {
+        patterns: [
+            'youtube', 'netflix', 'hulu', 'disney+', 'amazon prime video',
+            'spotify', 'apple music', 'pandora', 'tidal',
+            'twitch', 'tiktok',
+        ],
+        category: 'entertainment',
+        exceptions: ['tutorial', 'course', 'lecture', 'how to', 'documentation', 'workshop', 'training']
+    },
+    // Social Media
+    {
+        patterns: [
+            'facebook', 'instagram', 'twitter', 'x.com', 'linkedin', 'reddit',
+            'pinterest', 'snapchat', 'tumblr',
+        ],
+        category: 'social_media'
+    },
+    // Shopping/Personal
+    {
+        patterns: [
+            'amazon', 'ebay', 'etsy', 'walmart', 'target', 'best buy',
+            'bank', 'credit card', 'paypal', 'venmo',
+        ],
+        category: 'shopping_personal'
+    },
+    // System/Browser (neutral)
+    {
+        patterns: [
+            'finder', 'explorer', 'desktop', 'system preferences', 'settings',
+            'chrome', 'safari', 'firefox', 'edge', 'new tab', 'google search',
+        ],
+        category: 'other'
     }
-    // Refine based on window title patterns
-    for (const { pattern, classification: override } of TITLE_PATTERNS) {
-        if (pattern.test(windowTitle)) {
-            Object.assign(classification, override);
+];
+export const SUSPICIOUS_THRESHOLDS = {
+    videoIdleMinutes: 15,
+    communicationGhostMinutes: 10,
+    rapidSwitchSeconds: 3,
+    idleThresholdMinutes: 5,
+    sameWindowMinutes: 30,
+};
+// Main classification function
+export function classifyActivity(appName, windowTitle, context) {
+    const appLower = appName.toLowerCase();
+    const titleLower = windowTitle.toLowerCase();
+    // Default classification
+    let category = 'other';
+    let isIdle = false;
+    // Find matching rule
+    for (const rule of APP_CLASSIFICATION_RULES) {
+        const matchesPattern = rule.patterns.some(pattern => appLower.includes(pattern) || titleLower.includes(pattern));
+        if (matchesPattern) {
+            if (rule.exceptions) {
+                const hasException = rule.exceptions.some(ex => titleLower.includes(ex));
+                if (hasException) {
+                    if (rule.category === 'entertainment') {
+                        category = 'research_learning';
+                    }
+                    continue;
+                }
+            }
+            category = rule.category;
             break;
         }
     }
     // Detect suspicious patterns
-    classification.isSuspicious = false;
-    classification.suspiciousReason = undefined;
-    // YouTube trick detection
-    if (classification.category === 'entertainment' && context?.youtubeDurationMinutes && context.youtubeDurationMinutes > exports.SUSPICIOUS_THRESHOLDS.YOUTUBE_IDLE_MINUTES) {
-        classification.isSuspicious = true;
-        classification.suspiciousReason = `YouTube active for ${context.youtubeDurationMinutes}min with no other activity - likely keeping laptop awake`;
+    let isSuspicious = false;
+    let suspiciousReason;
+    if (context) {
+        // Video Idle Trick
+        if (category === 'entertainment' && context.isVideoPlaying) {
+            if (!context.hasInputActivity || (context.lastInputMinutesAgo && context.lastInputMinutesAgo > 5)) {
+                isSuspicious = true;
+                suspiciousReason = `Video playing (${appName}) with no interaction for ${context.lastInputMinutesAgo || 'unknown'} min - likely AFK trick`;
+                category = 'break_idle';
+                isIdle = true;
+            }
+        }
+        // Communication Ghost
+        if (category === 'communication') {
+            const noInput = !context.hasInputActivity || (context.lastInputMinutesAgo && context.lastInputMinutesAgo > SUSPICIOUS_THRESHOLDS.communicationGhostMinutes);
+            const longDuration = context.durationMinutes && context.durationMinutes > SUSPICIOUS_THRESHOLDS.communicationGhostMinutes;
+            if (noInput && longDuration) {
+                isSuspicious = true;
+                suspiciousReason = `${appName} "active" but no input for ${context.lastInputMinutesAgo || context.durationMinutes} min - ghost presence`;
+                category = 'break_idle';
+                isIdle = true;
+            }
+        }
+        // Long Idle
+        if (context.lastInputMinutesAgo && context.lastInputMinutesAgo > SUSPICIOUS_THRESHOLDS.idleThresholdMinutes) {
+            if (!isSuspicious) {
+                isSuspicious = true;
+                suspiciousReason = `No input activity for ${context.lastInputMinutesAgo} min - likely away from desk`;
+                category = 'break_idle';
+                isIdle = true;
+            }
+        }
+        // Same Window Too Long
+        if (context.durationMinutes && context.durationMinutes > SUSPICIOUS_THRESHOLDS.sameWindowMinutes) {
+            if (!context.hasInputActivity && !isSuspicious) {
+                isSuspicious = true;
+                suspiciousReason = `Same window (${appName}) for ${context.durationMinutes} min with no interaction - possible AFK`;
+                category = 'break_idle';
+                isIdle = true;
+            }
+        }
+        // Rapid Switching
+        if (context.windowChangeCount && context.durationMinutes) {
+            const switchesPerMinute = context.windowChangeCount / context.durationMinutes;
+            if (switchesPerMinute > 10) {
+                isSuspicious = true;
+                suspiciousReason = `Rapid window switching (${switchesPerMinute.toFixed(1)}/min) - distracted, not focused`;
+            }
+        }
     }
-    // Slack ghost detection
-    if (classification.category === 'communication_active' && idleTimeSeconds > exports.SUSPICIOUS_THRESHOLDS.SLACK_IDLE_MINUTES * 60) {
-        classification.isSuspicious = true;
-        classification.suspiciousReason = `Slack "active" but no input for ${Math.floor(idleTimeSeconds / 60)}min - likely idle`;
-    }
-    // Rapid switching = distracted
-    if (context?.rapidSwitchCount && context.rapidSwitchCount > exports.SUSPICIOUS_THRESHOLDS.DISTRACTED_SWITCH_COUNT) {
-        classification.isSuspicious = true;
-        classification.suspiciousReason = `Highly distracted - ${context.rapidSwitchCount} rapid window switches`;
-    }
-    return classification;
+    return {
+        category,
+        categoryName: CATEGORY_NAMES[category],
+        productivityScore: isIdle ? 0 : PRODUCTIVITY_SCORES[category],
+        productivityLevel: isIdle ? 'idle' : PRODUCTIVITY_LEVELS[category],
+        isSuspicious,
+        suspiciousReason,
+        isIdle
+    };
 }
-function calculateFocusScore(activities) {
-    if (activities.length === 0)
-        return 0;
-    const totalDuration = activities.reduce((sum, a) => sum + a.durationSeconds, 0);
-    if (totalDuration === 0)
-        return 0;
-    const weightedScore = activities.reduce((sum, a) => sum + (a.productivityScore * a.durationSeconds), 0);
-    return Math.round(weightedScore / totalDuration);
-}
-function calculateTimeBreakdown(activities) {
-    const breakdown = {};
+// Calculate true productivity (excluding idle time)
+export function calculateTrueProductivity(activities) {
+    let productive = 0;
+    let idle = 0;
+    let unproductive = 0;
     for (const activity of activities) {
-        breakdown[activity.category] = (breakdown[activity.category] || 0) + activity.durationSeconds;
+        const minutes = activity.duration / 60;
+        if (activity.isIdle) {
+            idle += minutes;
+        }
+        else if (PRODUCTIVITY_LEVELS[activity.category] === 'productive') {
+            productive += minutes;
+        }
+        else {
+            unproductive += minutes;
+        }
     }
-    // Convert to hours
-    for (const key of Object.keys(breakdown)) {
-        breakdown[key] = Math.round((breakdown[key] / 3600) * 10) / 10;
-    }
-    return breakdown;
+    const total = productive + idle + unproductive;
+    const productivityPercentage = total > 0
+        ? Math.round((productive / total) * 100)
+        : 0;
+    return {
+        productiveMinutes: Math.round(productive),
+        idleMinutes: Math.round(idle),
+        unproductiveMinutes: Math.round(unproductive),
+        totalMinutes: Math.round(total),
+        productivityPercentage
+    };
 }
+// Detect if employee is trying to game the system
+export function detectGamingAttempts(activities) {
+    const issues = [];
+    const hasYouTube = activities.some(a => a.appName.toLowerCase().includes('youtube') && a.duration > 900);
+    const hasSlackTeams = activities.some(a => (a.appName.toLowerCase().includes('slack') || a.appName.toLowerCase().includes('teams')) &&
+        !a.hasInputActivity);
+    if (hasYouTube && hasSlackTeams) {
+        issues.push({
+            type: 'video_with_communication',
+            description: 'YouTube/Video playing while communication app shows "active" - likely using video to keep status green',
+            severity: 'high'
+        });
+    }
+    const commApps = activities.filter(a => a.appName.toLowerCase().includes('slack') ||
+        a.appName.toLowerCase().includes('teams'));
+    const totalCommTime = commApps.reduce((sum, a) => sum + a.duration, 0);
+    const hasInputInComm = commApps.some(a => a.hasInputActivity);
+    if (totalCommTime > 1800 && !hasInputInComm) {
+        issues.push({
+            type: 'ghost_presence',
+            description: 'Communication app open for extended period with no messages sent - ghost presence detected',
+            severity: 'medium'
+        });
+    }
+    return issues;
+}
+// Generate daily summary
+export function generateDailySummary(employeeId, activities) {
+    const { productiveMinutes, idleMinutes, unproductiveMinutes, totalMinutes, productivityPercentage } = calculateTrueProductivity(activities);
+    const appUsage = new Map();
+    for (const activity of activities) {
+        const existing = appUsage.get(activity.appName);
+        if (existing) {
+            existing.duration += activity.duration;
+        }
+        else {
+            appUsage.set(activity.appName, { duration: activity.duration, category: activity.category });
+        }
+    }
+    const topApps = Array.from(appUsage.entries())
+        .map(([name, data]) => ({
+        name,
+        hours: Math.round((data.duration / 3600) * 10) / 10,
+        category: data.category
+    }))
+        .sort((a, b) => b.hours - a.hours)
+        .slice(0, 5);
+    const suspiciousCount = activities.filter(a => a.isSuspicious).length;
+    const warnings = [];
+    if (idleMinutes > 120)
+        warnings.push('High idle time detected');
+    if (suspiciousCount > 3)
+        warnings.push('Multiple suspicious patterns detected');
+    if (productivityPercentage < 50)
+        warnings.push('Low productivity score');
+    return {
+        employeeId,
+        totalHours: Math.round((totalMinutes / 60) * 10) / 10,
+        productiveHours: Math.round((productiveMinutes / 60) * 10) / 10,
+        idleHours: Math.round((idleMinutes / 60) * 10) / 10,
+        unproductiveHours: Math.round((unproductiveMinutes / 60) * 10) / 10,
+        productivityScore: productivityPercentage,
+        suspiciousActivities: suspiciousCount,
+        topApps,
+        warnings
+    };
+}
+//# sourceMappingURL=classifier.js.map

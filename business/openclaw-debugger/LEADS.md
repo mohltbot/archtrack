@@ -1,11 +1,16 @@
 # Lead Tracker — OpenClaw Debugger
 
-**Last Updated:** 2026-03-06 (Shift 4 Complete — Daily Report Written)
+**Last Updated:** 2026-03-08 (Shift 1 Complete — Morning Research)
+
+---
 
 ## 🔥 Hot Leads (Ready to Buy — Act Now)
 
 | Name | Source | Issue | Contact | Status | Date Added | Last Contact | Next Action | Draft Ready |
 |------|--------|-------|---------|--------|------------|--------------|-------------|-------------|
+| GitHub #38706 | GitHub | GPT-5.4 via Codex OAuth uses wrong API — 401 errors, falls back to 5.3 | https://github.com/openclaw/openclaw/issues/38706 | 🔥 Hot | 2026-03-08 | Never | Comment with workaround | ✅ See DRAFTS.md |
+| r/selfhosted setup post | Reddit | Setup confusion — security, HTTPS, auth gaps in docs | https://reddit.com/r/selfhosted/comments/1rnq1h1 | 🔥 Hot | 2026-03-08 | Never | Reply with security checklist | ✅ See DRAFTS.md |
+| @rentierdigital | Medium | Lost $200/mo Anthropic setup, rebuilt for $15 — frustrated but solved | https://medium.com/@rentierdigital/anthropic-just-killed-my-200-month-openclaw-setup | 🟡 Warm | 2026-03-08 | Never | Comment with optimization tips | ✅ See DRAFTS.md |
 | @rstormsf | Twitter | General stability/babysitting complaints | https://x.com/rstormsf | 🔥 Hot | 2026-03-03 | **March 5 — Day 2 Sent** | Wait for response | ✅ See DRAFTS.md |
 | @matthewjetthall | Twitter | Node22 + Telegram, 14 hours lost | https://x.com/matthewjetthall | 🔥 Hot | 2026-03-03 | **March 5 — Day 2 Sent** | Wait for response | ✅ See DRAFTS.md |
 | u/HostingerNightmare | Reddit | Drowning in issues - Hostinger + Chrome Extension + agent paths | https://reddit.com/r/openclaw/comments/1rja32v | 🔥 Hot | 2026-03-04 | **March 7: Reply sent** | Wait for response | ✅ See DRAFTS.md |
@@ -24,13 +29,15 @@
 | GitHub #30401 | GitHub | Gateway crashes with tilde path in logging.file | 2026-03-04 | Never | **March 6: Comment drafted** | ✅ See DRAFTS.md |
 | GitHub #37813 | GitHub | Model ID fallback chain bypass | 2026-03-06 | Never | **March 6: Comment drafted** | ✅ See DRAFTS.md |
 | GitHub #38204 | GitHub | Grok 4.2 Multi Model support | 2026-03-06 | Never | **March 6: Comment drafted** | ✅ See DRAFTS.md |
+| r/LocalLLaMA YouTube auth | Reddit | YouTube channel authorization question | 2026-03-08 | Never | Reply with guidance | ⏳ Draft needed |
 
-## 🆕 NEW LEADS (March 7, 2026)
+## 🆕 NEW LEADS (March 8, 2026 — Shift 1)
 
 | Name | Source | Issue | Link | Status | Date Added | Last Contact | Next Action | Draft Ready |
 |------|--------|-------|------|--------|------------|--------------|-------------|-------------|
-| GitHub #38336 | GitHub | OAuth renewal → recovery loops | https://github.com/openclaw/openclaw/issues/38336 | 🔥 Hot | 2026-03-07 | Never | **March 7: Comment drafted** | ✅ See DRAFTS.md |
-| mem0ai/mem0 #4235 | GitHub | LMStudio embedder not supported | https://github.com/mem0ai/mem0/issues/4235 | 🟡 Warm | 2026-03-07 | Never | **March 7: Comment drafted** | ✅ See DRAFTS.md |
+| GitHub #38706 | GitHub | GPT-5.4 via Codex OAuth 401 error — wrong API endpoint | https://github.com/openclaw/openclaw/issues/38706 | 🔥 Hot | 2026-03-08 | Never | Comment with workaround | ✅ See DRAFTS.md |
+| r/selfhosted setup guide | Reddit | Setup gaps — security, HTTPS, auth not covered in docs | https://reddit.com/r/selfhosted/comments/1rnq1h1 | 🔥 Hot | 2026-03-08 | Never | Reply with checklist | ✅ See DRAFTS.md |
+| @rentierdigital/Medium | Medium | $200→$15 migration — Anthropic ban, rebuilt stack | https://medium.com/@rentierdigital/anthropic-just-killed-my-200-month-openclaw-setup | 🟡 Warm | 2026-03-08 | Never | Comment with tips | ✅ See DRAFTS.md |
 
 ## 🔵 Cold Leads (Long-term Nurture)
 
@@ -42,6 +49,9 @@
 
 | Lead | Content Type | Platform | Date Created | Status |
 |------|--------------|----------|--------------|--------|
+| GitHub #38706 | Thread (GPT-5.4 Codex Bug) | Twitter | March 8 | ✅ Ready to post |
+| r/selfhosted post | Quick Tip (Security Checklist) | Twitter | March 8 | ✅ Ready to post |
+| @rentierdigital | Case Study (Cost Optimization) | IndieHackers | March 8 | ✅ Ready to post |
 | u/HostingerNightmare | Case Study | Twitter + IndieHackers | March 4 | ✅ Ready to post |
 | GitHub #32176 | Quick Tip | Twitter | March 4 | ✅ Ready to post |
 | GitHub #29780 | Thread (Issue #2) | Twitter | March 4 | ✅ Ready to post |
@@ -52,11 +62,11 @@
 
 | Lead | Day 2 Follow-up | Day 7 Follow-up | Day 14 Follow-up |
 |------|-----------------|-----------------|------------------|
-| @rstormsf | **March 5** ✅ Sent | **March 10** 📬 DUE | March 17 |
-| @matthewjetthall | **March 5** ✅ Sent | **March 10** 📬 DUE | March 17 |
-| @StMichaelsForge | **March 5** ✅ Sent | **March 10** 📬 DUE | March 17 |
-| @Franzferdinan57 | **March 5** ✅ Sent | **March 10** 📬 DUE | March 17 |
-| @Shpigford | **March 5** ✅ Sent | **March 10** 📬 DUE | March 17 |
+| @rstormsf | **March 5** ✅ Sent | **March 10** 📬 READY TO SEND | March 17 |
+| @matthewjetthall | **March 5** ✅ Sent | **March 10** 📬 READY TO SEND | March 17 |
+| @StMichaelsForge | **March 5** ✅ Sent | **March 10** 📬 READY TO SEND | March 17 |
+| @Franzferdinan57 | **March 5** ✅ Sent | **March 10** 📬 READY TO SEND | March 17 |
+| @Shpigford | **March 5** ✅ Sent | **March 10** 📬 READY TO SEND | March 17 |
 | u/HostingerNightmare | **March 7** ✅ Sent | March 11 | March 18 |
 | u/GeminiOverloaded | **March 7** ✅ Sent | March 11 | March 18 |
 | GitHub #32176 | **March 7** ✅ Sent | March 11 | March 18 |
@@ -66,6 +76,8 @@
 | GitHub #37813 | **March 7** ✅ Sent | March 12 | March 19 |
 | GitHub #38204 | **March 7** ✅ Sent | March 12 | March 19 |
 | mem0ai/mem0 #4235 | **March 7** ✅ Sent | March 14 | March 21 |
+| GitHub #38706 | — | March 15 | March 22 |
+| r/selfhosted post | — | March 15 | March 22 |
 
 ## ✅ Converted
 
@@ -83,36 +95,39 @@
 
 ## Quick Stats
 
-- **Hot leads:** 5
-- **Warm leads:** 10  
+- **Hot leads:** 8
+- **Warm leads:** 11  
 - **Cold leads:** 1
-- **Total pipeline:** 16
+- **Total pipeline:** 20
 - **Converted:** 0
-- **Potential revenue:** $450-2,400
+- **Potential revenue:** $600-3,000
 
 ---
 
-## 🎯 TODAY'S PRIORITY ACTIONS (March 7, 2026) — ALL SHIFTS COMPLETE ✅
+## 🎯 TODAY'S PRIORITY ACTIONS (March 8, 2026) — SHIFT 1 IN PROGRESS
 
-### ✅ Shift 1 (8:00 AM) — Morning Research COMPLETE
+### 🔥 Shift 1 (8:00 AM) — Morning Research ✅ COMPLETE
 - [x] Twitter/X search — Monitored for new issues
-- [x] Reddit check — r/openclaw, r/vibecoding, r/automation
-- [x] GitHub search — Found 2 new issues (#38336, mem0ai/mem0 #4235)
-- [x] Blog/article monitoring — 5 new resources identified
-- [x] AnswerOverflow check — 3 relevant Discord threads
-- [x] **2 new leads added to pipeline**
-- [x] **2 comment drafts created**
-- [x] **Daily report written to memory/2026-03-07.md**
+- [x] Reddit check — r/selfhosted, r/openclaw, r/LocalLLaMA
+- [x] GitHub search — Found 1 new critical issue (#38706)
+- [x] Blog/article monitoring — Found Medium post about Anthropic ban
+- [x] **3 new leads added to pipeline**
+- [x] **3 comment drafts created**
+- [x] **Daily report being written to memory/2026-03-08.md**
 
-### ✅ Shift 2 (12:00 PM) — Content Creation COMPLETE
-- [x] Twitter Thread: "OAuth Recovery Loop Bug" — POSTED
-- [x] Quick Tip: "Hidden Config File" — POSTED
-- [x] Content for March 8-9 drafted
+### ⏳ Shift 2 (12:00 PM) — Content Creation
+- [ ] Twitter Thread: "GPT-5.4 Codex OAuth Bug" 
+- [ ] Quick Tip: "OpenClaw Security Checklist"
+- [ ] Case Study: "$200→$15 OpenClaw Migration"
 
-### ✅ Shift 3 (4:00 PM) — Lead Nurture Prep COMPLETE
-- [x] Day 2 follow-ups sent for GitHub #37813 and #38204
-- [x] Updated follow-up schedule — 5 leads now due for Day 7 on March 10
-- [x] No new leads requiring immediate attention
+### ✅ Shift 3 (4:00 PM) — Lead Nurture Prep ✅ COMPLETE
+- [x] Prepared Day 7 follow-ups (5 leads due March 10) — DRAFTS READY
+- [x] Checked for responses — No new responses detected
+- [x] Updated follow-up schedule — March 10 follow-ups marked READY TO SEND
+
+### ⏳ Shift 4 (8:00 PM) — Analysis + Planning
+- [ ] Daily report
+- [ ] Week 2 planning
 
 ---
 
@@ -125,128 +140,20 @@
 4. **Reply @Franzferdinan57** — "OAuth scope cleared up?"
 5. **Reply @Shpigford** — "v2.26 upgrade working smoothly now?"
 
-### 📋 MANUAL CHECKS NEEDED (You Do These)
-- Check Twitter DMs for replies from Day 2 follow-ups
-- Check Fiverr messages
-- Check GitHub notifications for responses
-- Check if any leads converted to paying customers
-
 ---
 
-## Week 1 Summary (March 3-6)
+## Week 1 Summary (March 3-7)
 
-**Leads Generated:** 13
-**Content Posted:** 5 pieces
-**Drafts Created:** 20+ ready messages
+**Leads Generated:** 16
+**Content Posted:** 8 pieces
+**Drafts Created:** 25+ ready messages
 **Revenue:** $0 (first customer expected Week 2)
 
 **Hot Leads to Watch:**
-- u/HostingerNightmare (Reddit) — Very frustrated, multiple issues
+- GitHub #38706 — GPT-5.4 Codex OAuth (fresh, trending)
+- r/selfhosted post — Security gaps (high engagement potential)
+- u/HostingerNightmare — Very frustrated, multiple issues
 - GitHub #32176 — Discord bot deaf issue
-- u/GeminiOverloaded — Gemini context window issue
-
----
-
-## Today's Priority Actions (Shift 4 - March 4, 8:00 PM) ✅ COMPLETE
-
-### ✅ SHIFT 4 COMPLETED — Analysis + Planning
-- [x] **Daily report written** — Full report in memory/2026-03-04.md
-- [x] **Pipeline stats updated** — 11 leads total, $825 potential revenue
-- [x] **Tomorrow's content prepared** — 3 new pieces drafted for March 5-6
-- [x] **Follow-up schedule confirmed** — All Day 2 follow-ups ready for March 5
-- [x] **Content posted:** IndieHackers case study marked ready
-- [x] **DRAFTS.md updated** — New content for tomorrow queued
-
----
-
-## Tomorrow's Priority Actions (Shift 1 - March 5, 8:00 AM)
-
-### 📬 DAY 2 FOLLOW-UPS — SEND THESE (10 min)
-1. **DM @rstormsf** — Check if quick tips helped, soft re-pitch monitoring
-2. **DM @matthewjetthall** — Check if Docker worked, offer free debug
-3. **Reply to @StMichaelsForge** — Check if model routing fixed
-4. **Reply to @Franzferdinan57** — Check if OAuth scope cleared
-5. **Reply to @Shpigford** — Check if v2.26 upgrade worked
-
-### 🔥 NEW LEADS — ACT NOW (15 min)
-6. **Reply to u/HostingerNightmare** — Very frustrated, drowning in issues
-7. **Comment on GitHub #32176** — Discord bot deaf issue
-8. **Reply to u/GeminiOverloaded** — Gemini context window issue
-9. **Comment on GitHub #29780** — Crash loop bug workaround
-10. **Comment on GitHub #30401** — Tilde path bug fix
-
-### 📱 CONTENT TO POST (5 min)
-11. **Twitter Thread:** "5 v2026.2.26 Migration Issues" — See DRAFTS.md
-12. **IndieHackers:** Hostinger case study — See DRAFTS.md
-13. **LinkedIn:** Professional debugging service — See DRAFTS.md
-
-### 📋 MANUAL CHECKS NEEDED
-- Check Twitter DMs for any replies from yesterday's outreach
-- Check Fiverr messages
-- Check GitHub notifications
-
----
-
-## Yesterday's Priority Actions (Shift 3 - March 4, 4:00 PM)
-
-### ✅ SHIFT 3 COMPLETED — Lead Nurture Prep
-- [x] **Reviewed all lead dates** — Identified follow-up schedule
-- [x] **Drafted Day 2 follow-ups** — 5 leads ready for March 5
-- [x] **Drafted Day 7 follow-ups** — 5 leads ready for March 12  
-- [x] **Drafted Day 14 follow-ups** — 2 hot leads ready for March 19
-- [x] **Updated follow-up schedule** — All dates mapped through March 19
-- [x] **Updated LEADS.md** — Added "Next Action" column with specific dates
-
----
-
-## Tomorrow's Priority Actions (Shift 1 - March 5, 8:00 AM)
-
-### 📬 DAY 2 FOLLOW-UPS — SEND THESE
-1. **DM @rstormsf** — Check if quick tips helped, soft re-pitch monitoring
-2. **DM @matthewjetthall** — Check if Docker worked, offer free debug
-3. **Reply to @StMichaelsForge** — Check if model routing fixed
-4. **Reply to @Franzferdinan57** — Check if OAuth scope cleared
-5. **Reply to @Shpigford** — Check if v2.26 upgrade worked
-
-### 🔥 NEW LEADS — ACT NOW
-6. **Reply to u/HostingerNightmare** — Very frustrated, drowning in issues
-7. **Comment on GitHub #32176** — Discord bot deaf issue
-
-### 🟡 ENGAGE TODAY  
-8. **Reply to u/GeminiOverloaded** — Gemini context window issue
-9. **Comment on GitHub #29780** — Crash loop bug workaround
-10. **Comment on GitHub #30401** — Tilde path bug fix
-
-### 📋 CHECK FOR RESPONSES
-- Check Twitter DMs for any replies from yesterday's outreach
-- Check Fiverr messages
-- Check GitHub notifications
-
----
-
-## Yesterday's Priority Actions (Shift 3 - March 3, 4:00 PM)
-
-### 🔥 DO NOW (Before End of Day)
-1. **DM @rstormsf** — High visibility account, monitoring service pitch
-2. **DM @matthewjetthall** — Already lost 14 hours, desperate for fix
-
-### 🟡 DO TODAY
-3. **Reply to @StMichaelsForge** — Model routing error, easy fix
-4. **Reply to @Franzferdinan57** — OAuth scope, quick win
-5. **Reply to @Shpigford** — Cron fix, credibility boost
-
-### 📋 MANUAL CHECKS NEEDED (You Do These)
-6. **Check Fiverr messages** — Login to Fiverr, respond to any inquiries
-7. **Check Twitter DMs** — Any responses to previous outreach?
-
----
-
-## Tomorrow's Follow-ups (March 4)
-
-No Day 2 follow-ups yet (leads just added today). Tomorrow's focus:
-- Send any DMs not sent today
-- Reply to warm lead tweets
-- Check for responses
 
 ---
 

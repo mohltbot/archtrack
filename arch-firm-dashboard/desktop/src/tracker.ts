@@ -1,15 +1,15 @@
-import { powerMonitor } from 'electron';
-import Store from 'electron-store';
+import { powerMonitor, ipcMain } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
 import { app } from 'electron';
-import { 
-  classifyActivity, 
-  calculateFocusScore, 
-  calculateTimeBreakdown,
+import {
+  classifyActivity,
+  calculateTrueProductivity,
+  detectGamingAttempts,
+  generateDailySummary,
   ActivityClassification,
-  SUSPICIOUS_THRESHOLDS,
-  ActivityCategory
+  ActivityCategory,
+  SUSPICIOUS_THRESHOLDS
 } from './classifier';
 
 // Dynamic import for active-win (ESM module)
@@ -19,8 +19,7 @@ interface RawActivity {
   timestamp: string;
   windowTitle: string;
   appName: string;
-  idle: boolean;
-  idleTimeSeconds: number;
+  idleTimeMs: number;
 }
 
 interface TrackedActivity {
@@ -31,12 +30,13 @@ interface TrackedActivity {
   category: ActivityCategory;
   categoryName: string;
   productivityScore: number;
-  productivityLevel: 'productive' | 'neutral' | 'unproductive';
+  productivityLevel: 'productive' | 'neutral' | 'unproductive' | 'idle';
   isSuspicious: boolean;
   suspiciousReason?: string;
   isIdle: boolean;
   idleTimeSeconds: number;
   durationSeconds: number;
+  hasInputActivity: boolean;
 }
 
 interface Config {
@@ -45,45 +45,35 @@ interface Config {
   serverUrl: string;
 }
 
-interface ActivityContext {
-  currentAppStartTime: number;
-  lastInputTime: number;
-  windowChangeCount: number;
-  lastWindowTitle: string;
-  activities: TrackedActivity[];
-}
-
-const store = new Store<Config>({
-  defaults: {
-    employeeId: 'emp-001',
-    employeeName: 'Mohammed',
-    serverUrl: 'http://localhost:3001'
-  }
-});
-
 // Activity tracking state
 const activities: TrackedActivity[] = [];
 const offlineQueue: TrackedActivity[] = [];
 let lastActivity: TrackedActivity | null = null;
-let lastRawActivity: RawActivity | null = null;
 let lastSyncTime = 0;
 let isOnline = true;
 
-// Context for suspicious pattern detection
-const activityContext: ActivityContext = {
-  currentAppStartTime: Date.now(),
-  lastInputTime: Date.now(),
-  windowChangeCount: 0,
-  lastWindowTitle: '',
-  activities: []
-};
-
-// Track last check time for calculating durations
+// Context for pattern detection
+let currentAppStartTime = Date.now();
+let lastInputTime = Date.now();
+let windowChangeCount = 0;
+let lastWindowTitle = '';
+let lastAppName = '';
 let lastCheckTime = Date.now();
+let consecutiveIdleChecks = 0;
+
+// Store config (simple JSON file)
+let config: Config = {
+  employeeId: 'emp-001',
+  employeeName: 'Test Employee',
+  serverUrl: 'http://localhost:3001'
+};
 
 export async function startTracking(): Promise<void> {
   console.log('🚀 Starting ArchTrack smart activity tracking...');
-  
+
+  // Load config
+  loadConfig();
+
   // Load active-win dynamically
   try {
     const activeWinModule = await import('active-win');
@@ -91,24 +81,31 @@ export async function startTracking(): Promise<void> {
     console.log('✓ active-win library loaded');
   } catch (err) {
     console.error('Failed to load active-win:', err);
-    console.log('Falling back to mock window detection for testing');
+    console.log('⚠️ Running in mock mode for testing');
   }
-  
-  // Load any saved offline queue
+
+  // Load offline queue
   loadOfflineQueue();
-  
-  // Check every 5 seconds for activity
-  setInterval(checkActivity, 5000);
-  
-  // Sync to server every 30 seconds
-  setInterval(syncToServer, 30000);
-  
-  // Check online status periodically
-  setInterval(checkOnlineStatus, 10000);
-  
-  console.log('✓ Smart tracking active (checking every 5s, syncing every 30s)');
-  console.log('✓ Productivity classification enabled');
-  console.log('✓ Suspicious pattern detection enabled');
+
+  // Check every 10 seconds for activity
+  setInterval(checkActivity, 10000);
+
+  // Sync to server every 60 seconds
+  setInterval(syncToServer, 60000);
+
+  // Check online status
+  setInterval(checkOnlineStatus, 30000);
+
+  console.log('✓ Smart tracking active');
+  console.log('✓ Employee:', config.employeeName, `(${config.employeeId})`);
+  console.log('✓ Server:', config.serverUrl);
+  console.log('');
+  console.log('📊 Tracking:');
+  console.log('  • Core work activities');
+  console.log('  • Communication (Slack, Teams, Email)');
+  console.log('  • Idle time detection');
+  console.log('  • Suspicious patterns (video idle, ghost presence)');
+  console.log('');
 }
 
 async function checkActivity(): Promise<void> {
@@ -116,70 +113,79 @@ async function checkActivity(): Promise<void> {
     const now = Date.now();
     const timeSinceLastCheck = (now - lastCheckTime) / 1000;
     lastCheckTime = now;
-    
-    // Get idle time in seconds (powerMonitor gives seconds on macOS, ms on Windows)
+
+    // Get system idle time (in milliseconds, convert to seconds)
     const idleTimeMs = powerMonitor.getSystemIdleTime();
     const idleTimeSec = Math.floor(idleTimeMs / 1000);
-    const isIdle = idleTimeSec > 300; // 5 minutes threshold
-    
-    // Get active window info using active-win
+
+    // Detect input activity (no idle for last few seconds = active)
+    const hasInputActivity = idleTimeSec < 3;
+    if (hasInputActivity) {
+      lastInputTime = now;
+      consecutiveIdleChecks = 0;
+    } else {
+      consecutiveIdleChecks++;
+    }
+
+    // Get active window info
     let windowTitle = 'Unknown';
     let appName = 'Unknown';
-    
+
     if (activeWin) {
       try {
         const winInfo = await activeWin();
         if (winInfo) {
           windowTitle = winInfo.title || 'Untitled';
-          appName = winInfo.owner?.name || winInfo.owner?.bundleId || 'Unknown App';
+          appName = winInfo.owner?.name || winInfo.owner?.bundleId || 'Unknown';
         }
       } catch (err) {
-        // Fallback for testing
-        windowTitle = getMockWindowTitle();
-        appName = getMockAppName();
+        // Use mock data for testing
+        const mock = getMockData();
+        windowTitle = mock.title;
+        appName = mock.app;
       }
     } else {
-      // Mock data for testing when active-win isn't available
-      windowTitle = getMockWindowTitle();
-      appName = getMockAppName();
+      // Mock mode
+      const mock = getMockData();
+      windowTitle = mock.title;
+      appName = mock.app;
     }
-    
+
     // Track window changes
-    if (windowTitle !== activityContext.lastWindowTitle) {
-      activityContext.windowChangeCount++;
-      activityContext.lastWindowTitle = windowTitle;
-      
-      // Reset app start time when window changes
-      if (appName !== lastActivity?.appName) {
-        activityContext.currentAppStartTime = now;
-        activityContext.windowChangeCount = 0;
-      }
+    if (windowTitle !== lastWindowTitle) {
+      windowChangeCount++;
+      lastWindowTitle = windowTitle;
     }
-    
-    // Track input activity (approximated by lack of idle time)
-    if (idleTimeSec < 5) {
-      activityContext.lastInputTime = now;
+
+    // Track app changes
+    if (appName !== lastAppName) {
+      currentAppStartTime = now;
+      lastAppName = appName;
+      // Reset window change count when app changes
+      windowChangeCount = 0;
     }
-    
+
     // Calculate context for classification
-    const currentHour = new Date().getHours();
-    const durationInCurrentApp = (now - activityContext.currentAppStartTime) / 60000; // minutes
-    const timeSinceLastInput = (now - activityContext.lastInputTime) / 60000; // minutes
-    const switchFrequency = activityContext.windowChangeCount > 0 
-      ? timeSinceLastCheck / activityContext.windowChangeCount 
-      : undefined;
-    
-    // Classify the activity
-    const classification = classifyActivity(
-      appName, 
-      windowTitle, 
-      idleTimeSec,
-      {
-        youtubeDurationMinutes: appName === 'YouTube' ? durationInCurrentApp : undefined,
-        rapidSwitchCount: switchFrequency && switchFrequency < 5000 ? activityContext.windowChangeCount : undefined
-      }
-    );
-    
+    const durationInCurrentApp = (now - currentAppStartTime) / 60000; // minutes
+    const timeSinceLastInput = (now - lastInputTime) / 60000; // minutes
+
+    // Detect if video is likely playing (YouTube/Netflix with no input)
+    const isVideoPlaying = (
+      appName.toLowerCase().includes('youtube') ||
+      appName.toLowerCase().includes('netflix') ||
+      appName.toLowerCase().includes('hulu')
+    ) && timeSinceLastInput > 2;
+
+    // Classify the activity with full context
+    const classification = classifyActivity(appName, windowTitle, {
+      durationMinutes: durationInCurrentApp,
+      hasInputActivity,
+      windowChangeCount,
+      lastInputMinutesAgo: timeSinceLastInput,
+      isVideoPlaying,
+      isFullscreen: false // Could detect this if needed
+    });
+
     // Create the activity record
     const activity: TrackedActivity = {
       id: generateId(),
@@ -192,65 +198,70 @@ async function checkActivity(): Promise<void> {
       productivityLevel: classification.productivityLevel,
       isSuspicious: classification.isSuspicious,
       suspiciousReason: classification.suspiciousReason,
-      isIdle,
+      isIdle: classification.isIdle,
       idleTimeSeconds: idleTimeSec,
-      durationSeconds: Math.round(timeSinceLastCheck)
+      durationSeconds: Math.round(timeSinceLastCheck),
+      hasInputActivity
     };
-    
-    // Only record if changed significantly or every minute
-    const shouldRecord = !lastActivity || 
+
+    // Record activity if significant change or every minute
+    const shouldRecord = !lastActivity ||
       lastActivity.appName !== activity.appName ||
       lastActivity.windowTitle !== activity.windowTitle ||
       lastActivity.isIdle !== activity.isIdle ||
       classification.isSuspicious ||
       timeSinceLastCheck >= 60;
-    
+
     if (shouldRecord) {
       activities.push(activity);
-      activityContext.activities.push(activity);
-      
-      // Add to offline queue for syncing
       offlineQueue.push(activity);
-      
       lastActivity = activity;
-      
-      // Log with appropriate styling
+
       logActivity(activity);
-      
-      // Alert if suspicious
+
       if (classification.isSuspicious) {
-        console.warn(`⚠️  SUSPICIOUS ACTIVITY: ${classification.suspiciousReason}`);
+        console.warn(`⚠️  SUSPICIOUS: ${classification.suspiciousReason}`);
       }
     }
-    
-    // Keep only last 1000 activities in memory
-    if (activities.length > 1000) {
+
+    // Keep memory bounded
+    if (activities.length > 2000) {
       activities.splice(0, activities.length - 1000);
     }
-    
+
   } catch (err) {
     console.error('Error checking activity:', err);
   }
 }
 
 function logActivity(activity: TrackedActivity): void {
-  const time = new Date().toLocaleTimeString();
+  const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+
+  // Icon based on productivity
+  let icon = '⚪';
+  if (activity.productivityLevel === 'productive') icon = '🟢';
+  else if (activity.productivityLevel === 'idle') icon = '💤';
+  else if (activity.productivityLevel === 'unproductive') icon = '🔴';
+  else if (activity.productivityLevel === 'neutral') icon = '🟡';
+
   const idleStr = activity.isIdle ? ' [IDLE]' : '';
   const suspiciousStr = activity.isSuspicious ? ' ⚠️' : '';
-  
-  // Color code by productivity level
-  let productivityIcon = '⚪';
-  if (activity.productivityLevel === 'productive') productivityIcon = '🟢';
-  else if (activity.productivityLevel === 'unproductive') productivityIcon = '🔴';
-  else if (activity.productivityLevel === 'neutral') productivityIcon = '🟡';
-  
+
   console.log(
-    `[${time}] ${productivityIcon} ${activity.appName} - "${activity.windowTitle}"` +
-    ` → ${activity.categoryName} (score: ${activity.productivityScore})${idleStr}${suspiciousStr}`
+    `[${time}] ${icon} ${activity.appName}` +
+    ` | ${activity.categoryName}` +
+    ` | Score: ${activity.productivityScore}` +
+    `${idleStr}${suspiciousStr}`
   );
-  
+
+  if (activity.windowTitle.length > 50) {
+    console.log(`     "${activity.windowTitle.substring(0, 50)}..."`);
+  } else {
+    console.log(`     "${activity.windowTitle}"`);
+  }
+
   if (activity.suspiciousReason) {
-    console.log(`    ⚠️  ${activity.suspiciousReason}`);
+    console.log(`     ⚠️ ${activity.suspiciousReason}`);
   }
 }
 
@@ -258,102 +269,108 @@ function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
 
-function getMockWindowTitle(): string {
-  // Return realistic mock data for testing classification
-  const mockData = [
-    { title: 'arch-firm-dashboard - main.ts — Cursor', app: 'Cursor' },
-    { title: 'AutoCAD 2024 - Floor Plan.dwg', app: 'AutoCAD' },
-    { title: 'Revit 2024 - Residential Complex.rvt', app: 'Revit' },
-    { title: 'SketchUp Pro - Downtown Office Model', app: 'SketchUp' },
-    { title: 'Adobe Photoshop - Rendering.psd', app: 'Adobe Photoshop' },
-    { title: 'YouTube - Rick Astley - Never Gonna Give You Up', app: 'YouTube' },
-    { title: 'Facebook - News Feed', app: 'Facebook' },
-    { title: 'Slack - #general', app: 'Slack' },
-    { title: 'Terminal - zsh', app: 'Terminal' },
-    { title: 'Docker Desktop', app: 'Docker' },
-    { title: 'Notion - Project Notes', app: 'Notion' },
-    { title: 'Figma - Design System', app: 'Figma' },
-    { title: 'GitHub - Pull Requests', app: 'GitHub' },
-    { title: 'Netflix - Browse', app: 'Netflix' },
-    { title: 'Visual Studio Code - tracker.ts', app: 'Code' }
-  ];
-  
-  const random = mockData[Math.floor(Math.random() * mockData.length)];
-  return random.title;
-}
+// Mock data for testing without active-win
+function getMockData(): { title: string; app: string } {
+  const scenarios = [
+    // Normal work
+    { title: 'Floor Plan v2.dwg - AutoCAD 2024', app: 'AutoCAD' },
+    { title: 'Project Budget Q1.xlsx - Excel', app: 'Microsoft Excel' },
+    { title: 'Downtown Office Complex - Revit', app: 'Revit' },
+    { title: 'Email: Re: Client Meeting Tomorrow', app: 'Microsoft Outlook' },
 
-function getMockAppName(): string {
-  const mockApps = [
-    'Cursor', 'AutoCAD', 'Revit', 'SketchUp', 'Adobe Photoshop',
-    'YouTube', 'Facebook', 'Slack', 'Terminal', 'Docker Desktop',
-    'Notion', 'Figma', 'GitHub', 'Netflix', 'Code'
+    // The "YouTube trick" - video playing to keep Slack active
+    { title: 'Lo-Fi Beats to Study/Relax To - YouTube', app: 'YouTube' },
+
+    // Ghost presence - Slack open but no activity
+    { title: '#general | Slack', app: 'Slack' },
+
+    // Actual work with communication
+    { title: 'Design Review - Zoom Meeting', app: 'zoom.us' },
+    { title: 'Project Proposal.docx - Word', app: 'Microsoft Word' },
+
+    // Time wasters
+    { title: 'Facebook - News Feed', app: 'Facebook' },
+    { title: 'Netflix - Browse', app: 'Netflix' },
+    { title: 'Amazon.com: Online Shopping', app: 'Amazon' },
+
+    // System idle
+    { title: 'Desktop', app: 'Finder' },
   ];
-  return mockApps[Math.floor(Math.random() * mockApps.length)];
+
+  return scenarios[Math.floor(Math.random() * scenarios.length)];
 }
 
 async function syncToServer(): Promise<void> {
   if (offlineQueue.length === 0) return;
-  
-  const serverUrl = store.get('serverUrl');
-  const employeeId = store.get('employeeId');
-  
+
   if (!isOnline) {
-    console.log(`📴 Offline - ${offlineQueue.length} activities queued`);
+    console.log(`📴 Offline - ${offlineQueue.length} activities queued for later`);
     saveOfflineQueue();
     return;
   }
-  
+
   try {
-    // Send batch of activities
     const batch = offlineQueue.splice(0, offlineQueue.length);
-    
+
     const payload = {
-      employeeId,
-      timestamp: new Date().toISOString(),
-      activities: batch
+      employeeId: config.employeeId,
+      activities: batch.map(a => ({
+        id: a.id,
+        timestamp: a.timestamp,
+        appName: a.appName,
+        windowTitle: a.windowTitle,
+        category: a.category,
+        categoryName: a.categoryName,
+        productivityScore: a.productivityScore,
+        productivityLevel: a.productivityLevel,
+        isSuspicious: a.isSuspicious,
+        suspiciousReason: a.suspiciousReason,
+        isIdle: a.isIdle,
+        idleTimeSeconds: a.idleTimeSeconds,
+        durationSeconds: a.durationSeconds
+      }))
     };
-    
-    const response = await fetch(`${serverUrl}/api/activity`, {
+
+    const response = await fetch(`${config.serverUrl}/api/activity`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    
+
     if (response.ok) {
-      const result = await response.json();
-      console.log(`✓ Synced ${batch.length} activities to server`);
-      
+      const result: any = await response.json();
+      console.log(`✓ Synced ${batch.length} activities`);
+
       if (result.data?.suspiciousCount > 0) {
-        console.warn(`⚠️  Server flagged ${result.data.suspiciousCount} suspicious activities`);
+        console.warn(`⚠️ Server flagged ${result.data.suspiciousCount} suspicious activities`);
       }
-      
+
       lastSyncTime = Date.now();
-      saveOfflineQueue(); // Save empty queue
+      saveOfflineQueue();
     } else {
-      // Put back in queue on failure
       offlineQueue.unshift(...batch);
       console.error('Sync failed:', response.statusText);
     }
   } catch (err) {
-    // Put back in queue on error
     const batch = offlineQueue.splice(0, offlineQueue.length);
     offlineQueue.unshift(...batch);
     isOnline = false;
-    console.error('Sync error (offline?):', err);
+    console.error('Sync error:', err);
     saveOfflineQueue();
   }
 }
 
 async function checkOnlineStatus(): Promise<void> {
-  const serverUrl = store.get('serverUrl');
   try {
-    const response = await fetch(`${serverUrl}/api/health`, { 
+    const response = await fetch(`${config.serverUrl}/api/health`, {
       method: 'GET',
       signal: AbortSignal.timeout(5000)
     });
+    const wasOffline = !isOnline;
     isOnline = response.ok;
-    if (isOnline && offlineQueue.length > 0) {
-      console.log('Back online - syncing queued activities...');
+
+    if (wasOffline && isOnline && offlineQueue.length > 0) {
+      console.log('🌐 Back online - syncing queued activities...');
       syncToServer();
     }
   } catch {
@@ -361,58 +378,98 @@ async function checkOnlineStatus(): Promise<void> {
   }
 }
 
-function saveOfflineQueue(): void {
+function loadConfig(): void {
   try {
-    const dataPath = path.join(app.getPath('userData'), 'offline-queue.json');
-    fs.writeFileSync(dataPath, JSON.stringify(offlineQueue, null, 2));
+    const configPath = path.join(app.getPath('userData'), 'config.json');
+    if (fs.existsSync(configPath)) {
+      const saved = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+      config = { ...config, ...saved };
+    }
   } catch (err) {
-    console.error('Failed to save offline queue:', err);
+    console.error('Failed to load config:', err);
+  }
+}
+
+function saveConfig(): void {
+  try {
+    const configPath = path.join(app.getPath('userData'), 'config.json');
+    fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+  } catch (err) {
+    console.error('Failed to save config:', err);
   }
 }
 
 function loadOfflineQueue(): void {
   try {
-    const dataPath = path.join(app.getPath('userData'), 'offline-queue.json');
-    if (fs.existsSync(dataPath)) {
-      const data = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
+    const queuePath = path.join(app.getPath('userData'), 'offline-queue.json');
+    if (fs.existsSync(queuePath)) {
+      const data = JSON.parse(fs.readFileSync(queuePath, 'utf-8'));
       offlineQueue.push(...data);
-      console.log(`Loaded ${data.length} queued activities from disk`);
+      console.log(`📦 Loaded ${data.length} queued activities from disk`);
     }
   } catch (err) {
     console.error('Failed to load offline queue:', err);
   }
 }
 
-// Export for debugging and stats
+function saveOfflineQueue(): void {
+  try {
+    const queuePath = path.join(app.getPath('userData'), 'offline-queue.json');
+    fs.writeFileSync(queuePath, JSON.stringify(offlineQueue, null, 2));
+  } catch (err) {
+    console.error('Failed to save offline queue:', err);
+  }
+}
+
+// IPC handlers for UI
+export function setupIpcHandlers(): void {
+  ipcMain.handle('tracker:getStatus', () => {
+    return {
+      isOnline,
+      activitiesCount: activities.length,
+      queuedCount: offlineQueue.length,
+      lastActivity,
+      config
+    };
+  });
+
+  ipcMain.handle('tracker:getStats', () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const todayActivities = activities.filter(a =>
+      new Date(a.timestamp) >= today
+    ).map(a => ({
+      category: a.category,
+      duration: a.durationSeconds,
+      isIdle: a.isIdle,
+      isSuspicious: a.isSuspicious,
+      appName: a.appName,
+      windowTitle: a.windowTitle
+    }));
+
+    return generateDailySummary(config.employeeId, todayActivities);
+  });
+
+  ipcMain.handle('tracker:getRecentActivities', () => {
+    return activities.slice(-50).reverse();
+  });
+
+  ipcMain.handle('tracker:updateConfig', (_, newConfig: Partial<Config>) => {
+    config = { ...config, ...newConfig };
+    saveConfig();
+    return config;
+  });
+}
+
+// Export for main process
 export function getTrackingStatus() {
-  const recentActivities = activityContext.activities.slice(-50);
-  
   return {
     activitiesCount: activities.length,
     queuedCount: offlineQueue.length,
     isOnline,
     lastSync: lastSyncTime ? new Date(lastSyncTime).toISOString() : null,
     lastActivity,
-    stats: {
-      focusScore: calculateFocusScore(recentActivities),
-      timeBreakdown: calculateTimeBreakdown(recentActivities),
-      suspiciousCount: recentActivities.filter(a => a.isSuspicious).length
-    }
-  };
-}
-
-// Get current productivity stats for the UI
-export function getProductivityStats() {
-  const recentActivities = activityContext.activities.slice(-100);
-  const breakdown = calculateTimeBreakdown(recentActivities);
-  
-  return {
-    currentActivity: lastActivity,
-    focusScore: calculateFocusScore(recentActivities),
-    productiveMinutes: breakdown.productiveMinutes,
-    unproductiveMinutes: breakdown.unproductiveMinutes,
-    neutralMinutes: breakdown.neutralMinutes,
-    totalMinutes: breakdown.totalMinutes,
-    suspiciousActivities: recentActivities.filter(a => a.isSuspicious)
+    config
   };
 }

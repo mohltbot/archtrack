@@ -1,21 +1,20 @@
 // Activity Classification System for ArchTrack
-// Defines categories, productivity scores, and classification rules
+// Universal classification that works for ANY employee type - manufacturing, office, remote, etc.
 
 export type ActivityCategory = 
-  | 'software_dev'
-  | 'devops'
-  | 'research_docs'
-  | 'communication_active'
-  | 'internal_tools'
-  | 'design_work'
-  | 'social_media'
-  | 'entertainment'
-  | 'gaming'
-  | 'shopping'
-  | 'news_blogs'
+  // Core work categories (customizable per employee type)
+  | 'core_work'           // Primary job function (CAD, Excel, machinery control, etc.)
+  | 'communication'       // Slack, Teams, Email, Phone
+  | 'research_learning'   // Documentation, tutorials, research
+  | 'planning_docs'       // Project management, documentation, spreadsheets
+  | 'break_idle'          // Breaks, idle time, away from desk
+  // Non-work categories
+  | 'entertainment'       // YouTube (non-work), Netflix, games
+  | 'social_media'        // Facebook, Instagram, Twitter
+  | 'shopping_personal'   // Amazon, personal browsing
   | 'other';
 
-export type ProductivityLevel = 'productive' | 'neutral' | 'unproductive';
+export type ProductivityLevel = 'productive' | 'neutral' | 'unproductive' | 'idle';
 
 export interface ActivityClassification {
   category: ActivityCategory;
@@ -24,312 +23,435 @@ export interface ActivityClassification {
   productivityLevel: ProductivityLevel;
   isSuspicious: boolean;
   suspiciousReason?: string;
-}
-
-export interface SuspiciousPattern {
-  type: 'youtube_idle' | 'slack_ghost' | 'social_work_hours' | 'rapid_switching' | 'fake_active';
-  description: string;
-  threshold: number; // in minutes or count
+  isIdle: boolean;
 }
 
 // Productivity scores by category (0-100)
 export const PRODUCTIVITY_SCORES: Record<ActivityCategory, number> = {
-  software_dev: 95,
-  devops: 90,
-  research_docs: 85,
-  communication_active: 75,
-  internal_tools: 80,
-  design_work: 90,
-  social_media: 10,
+  core_work: 95,
+  communication: 70,
+  research_learning: 85,
+  planning_docs: 80,
+  break_idle: 0,
   entertainment: 5,
-  gaming: 0,
-  shopping: 5,
-  news_blogs: 20,
-  other: 50
+  social_media: 10,
+  shopping_personal: 5,
+  other: 30
 };
 
 export const CATEGORY_NAMES: Record<ActivityCategory, string> = {
-  software_dev: 'Software Development',
-  devops: 'DevOps/Infrastructure',
-  research_docs: 'Research & Documentation',
-  communication_active: 'Communication (Active)',
-  internal_tools: 'Internal Tools',
-  design_work: 'Design Work',
-  social_media: 'Social Media',
+  core_work: 'Core Work',
+  communication: 'Communication',
+  research_learning: 'Research & Learning',
+  planning_docs: 'Planning & Documentation',
+  break_idle: 'Break/Idle',
   entertainment: 'Entertainment',
-  gaming: 'Gaming',
-  shopping: 'Shopping',
-  news_blogs: 'News/Blogs',
-  other: 'Other/Uncategorized'
+  social_media: 'Social Media',
+  shopping_personal: 'Shopping/Personal',
+  other: 'Other'
 };
 
 export const PRODUCTIVITY_LEVELS: Record<ActivityCategory, ProductivityLevel> = {
-  software_dev: 'productive',
-  devops: 'productive',
-  research_docs: 'productive',
-  communication_active: 'productive',
-  internal_tools: 'productive',
-  design_work: 'productive',
-  social_media: 'unproductive',
+  core_work: 'productive',
+  communication: 'productive',
+  research_learning: 'productive',
+  planning_docs: 'productive',
+  break_idle: 'idle',
   entertainment: 'unproductive',
-  gaming: 'unproductive',
-  shopping: 'unproductive',
-  news_blogs: 'unproductive',
+  social_media: 'unproductive',
+  shopping_personal: 'unproductive',
   other: 'neutral'
 };
 
-// App classification rules - maps app names/window titles to categories
+// Universal app classification - works for ANY employee type
 interface AppRule {
   patterns: string[];
   category: ActivityCategory;
-  exceptions?: string[]; // Window title exceptions (e.g., "tutorial" for YouTube)
+  exceptions?: string[];
 }
 
 export const APP_CLASSIFICATION_RULES: AppRule[] = [
-  // Software Development
+  // Core Work Tools (generic - covers many professions)
   {
-    patterns: ['cursor', 'vscode', 'visual studio code', 'code -', 'intellij', 'idea', 'pycharm', 'webstorm', 'xcode', 'android studio', 'sublime text', 'atom', 'vim', 'neovim', 'nvim', 'emacs'],
-    category: 'software_dev'
+    patterns: [
+      // Office/Productivity
+      'microsoft excel', 'excel', 'google sheets', 'spreadsheet',
+      'microsoft word', 'word', 'google docs',
+      'microsoft powerpoint', 'powerpoint', 'google slides',
+      'pdf', 'acrobat', 'preview - pdf',
+      // Design/Architecture
+      'autocad', 'cad', 'revit', 'sketchup', 'solidworks', 'catia',
+      'figma', 'sketch', 'adobe illustrator', 'adobe photoshop', 'photoshop',
+      // Development
+      'vscode', 'visual studio code', 'code -', 'cursor', 'intellij',
+      // Manufacturing/Industrial
+      'machinery', 'cnc', 'scada', 'plc', 'hmi',
+      // Accounting/Finance
+      'quickbooks', 'sap', 'oracle', 'salesforce',
+      // Medical
+      'epic', 'cerner', 'allscripts',
+    ],
+    category: 'core_work'
   },
+
+  // Communication (where the "ghost" tricks happen)
   {
-    patterns: ['github', 'gitlab', 'bitbucket', 'source tree', 'sourcetree', 'gitkraken', 'fork - git'],
-    category: 'software_dev'
+    patterns: ['slack', 'microsoft teams', 'teams -', 'zoom', 'google meet', 'webex', 'skype', 'discord', 'telegram', 'whatsapp'],
+    category: 'communication'
   },
-  
-  // DevOps/Infrastructure
+
+  // Email
   {
-    patterns: ['terminal', 'iterm', 'hyper', 'alacritty', 'wezterm', 'kitty', 'command prompt', 'powershell', 'windows terminal'],
-    category: 'devops'
+    patterns: ['outlook', 'gmail', 'mail', 'thunderbird', 'apple mail'],
+    category: 'communication'
   },
+
+  // Research & Learning (work-related)
   {
-    patterns: ['docker', 'kubernetes', 'kubectl', 'helm', 'terraform', 'ansible', 'jenkins', 'circleci', 'travis', 'github actions', 'aws console', 'gcp console', 'azure portal'],
-    category: 'devops'
+    patterns: [
+      'stackoverflow', 'github', 'gitlab', 'documentation', 'docs.',
+      'wikipedia', 'wikis', 'confluence', 'notion', 'obsidian',
+      'udemy', 'coursera', 'linkedin learning', 'pluralsight',
+    ],
+    category: 'research_learning',
+    exceptions: ['facebook', 'instagram', 'twitter', 'reddit'] // Exclude social
   },
-  
-  // Research & Documentation
+
+  // Planning & Documentation
   {
-    patterns: ['notion', 'confluence', 'obsidian', 'evernote', 'onenote', 'bear', 'roam research'],
-    category: 'research_docs'
+    patterns: [
+      'jira', 'asana', 'trello', 'monday.com', 'clickup', 'notion',
+      'microsoft project', 'smartsheet', 'airtable',
+    ],
+    category: 'planning_docs'
   },
+
+  // Entertainment (the time wasters)
   {
-    patterns: ['google docs', 'google sheets', 'google slides', 'microsoft word', 'microsoft excel', 'powerpoint'],
-    category: 'research_docs'
+    patterns: [
+      'youtube', 'netflix', 'hulu', 'disney+', 'amazon prime video',
+      'spotify', 'apple music', 'pandora', 'tidal',
+      'twitch', 'tiktok',
+    ],
+    category: 'entertainment',
+    exceptions: ['tutorial', 'course', 'lecture', 'how to', 'documentation', 'workshop', 'training']
   },
-  {
-    patterns: ['stackoverflow', 'stack overflow', 'github docs', 'docs.github', 'developer.mozilla', 'mdn'],
-    category: 'research_docs'
-  },
-  
-  // Communication (Active)
-  {
-    patterns: ['slack', 'microsoft teams', 'teams -', 'zoom', 'google meet', 'webex', 'skype', 'discord', 'telegram'],
-    category: 'communication_active'
-  },
-  
-  // Internal Tools
-  {
-    patterns: ['mission control', 'archtrack', 'admin panel', 'dashboard - internal', 'intranet'],
-    category: 'internal_tools'
-  },
-  
-  // Design Work
-  {
-    patterns: ['figma', 'sketch', 'adobe photoshop', 'adobe illustrator', 'adobe xd', 'invision', 'canva', 'gimp', 'inkscape', 'blender', 'autocad', 'revit', 'sketchup'],
-    category: 'design_work'
-  },
-  
+
   // Social Media
   {
-    patterns: ['facebook', 'instagram', 'twitter', 'x.com', 'tiktok', 'reddit', 'linkedin', 'pinterest', 'snapchat', 'whatsapp web'],
+    patterns: [
+      'facebook', 'instagram', 'twitter', 'x.com', 'linkedin', 'reddit',
+      'pinterest', 'snapchat', 'tumblr',
+    ],
     category: 'social_media'
   },
-  
-  // Entertainment
+
+  // Shopping/Personal
   {
-    patterns: ['youtube', 'netflix', 'hulu', 'disney+', 'amazon prime video', 'spotify', 'apple music', 'tidal', 'pandora'],
-    category: 'entertainment',
-    exceptions: ['tutorial', 'course', 'lecture', 'how to', 'documentation', 'docs']
+    patterns: [
+      'amazon', 'ebay', 'etsy', 'walmart', 'target', 'best buy',
+      'bank', 'credit card', 'paypal', 'venmo',
+    ],
+    category: 'shopping_personal'
   },
-  
-  // Gaming
+
+  // System/Browser (neutral)
   {
-    patterns: ['steam', 'epic games', 'origin', 'battle.net', 'gog galaxy', 'xbox', 'playstation', 'twitch', 'discord - playing'],
-    category: 'gaming'
-  },
-  
-  // Shopping
-  {
-    patterns: ['amazon', 'ebay', 'etsy', 'shopify', 'walmart', 'target', 'best buy', 'aliexpress', 'taobao'],
-    category: 'shopping'
-  },
-  
-  // News/Blogs
-  {
-    patterns: ['cnn', 'bbc', 'buzzfeed', 'medium', 'huffpost', 'fox news', 'msnbc', 'reuters', 'associated press', 'news.ycombinator', 'hackernews'],
-    category: 'news_blogs'
+    patterns: [
+      'finder', 'explorer', 'desktop', 'system preferences', 'settings',
+      'chrome', 'safari', 'firefox', 'edge', 'new tab', 'google search',
+    ],
+    category: 'other'
   }
 ];
 
-// Suspicious pattern thresholds (in minutes)
+// Suspicious pattern detection
+export interface SuspiciousPattern {
+  type: 'video_idle' | 'communication_ghost' | 'rapid_switching' | 'fake_active' | 'long_idle';
+  description: string;
+  threshold: number;
+}
+
 export const SUSPICIOUS_THRESHOLDS = {
-  youtubeIdle: 30, // YouTube active with no other window changes for 30 min
-  slackGhost: 10,  // Slack "active" but no input for 10 min
-  rapidSwitching: 5, // Switching windows every <5 seconds
-  workHoursStart: 9, // 9 AM
-  workHoursEnd: 17   // 5 PM
+  videoIdleMinutes: 15,           // Video playing with no interaction
+  communicationGhostMinutes: 10,  // Slack/Teams "active" but no input
+  rapidSwitchSeconds: 3,          // Switching windows too fast
+  idleThresholdMinutes: 5,        // No activity at all
+  sameWindowMinutes: 30,          // Same window for 30+ min (possible AFK)
 };
 
-// Classify an activity based on app name and window title
+// Main classification function
 export function classifyActivity(
-  appName: string, 
+  appName: string,
   windowTitle: string,
   context?: {
     durationMinutes?: number;
-    hasInputActivity?: boolean;
-    switchFrequencySeconds?: number;
-    windowChangeCount?: number;
-    currentHour?: number;
+    hasInputActivity?: boolean;      // Mouse/keyboard activity
+    windowChangeCount?: number;      // How many times switched windows
+    lastInputMinutesAgo?: number;    // Time since last input
+    isVideoPlaying?: boolean;        // Is a video currently playing
+    isFullscreen?: boolean;
   }
 ): ActivityClassification {
-  const text = `${appName} ${windowTitle}`.toLowerCase();
-  
+  const appLower = appName.toLowerCase();
+  const titleLower = windowTitle.toLowerCase();
+  const combined = `${appLower} ${titleLower}`;
+
+  // Default classification
+  let category: ActivityCategory = 'other';
+  let isIdle = false;
+
   // Find matching rule
-  let matchedCategory: ActivityCategory = 'other';
-  
   for (const rule of APP_CLASSIFICATION_RULES) {
-    const matchesPattern = rule.patterns.some(pattern => 
-      appName.toLowerCase().includes(pattern) || 
-      windowTitle.toLowerCase().includes(pattern)
+    const matchesPattern = rule.patterns.some(pattern =>
+      appLower.includes(pattern) || titleLower.includes(pattern)
     );
-    
+
     if (matchesPattern) {
       // Check exceptions
       if (rule.exceptions) {
-        const hasException = rule.exceptions.some(ex => 
-          windowTitle.toLowerCase().includes(ex)
+        const hasException = rule.exceptions.some(ex =>
+          titleLower.includes(ex)
         );
         if (hasException) {
-          // If it's YouTube with tutorial, treat as research
+          // YouTube with "tutorial" = research, not entertainment
           if (rule.category === 'entertainment') {
-            matchedCategory = 'research_docs';
-            break;
+            category = 'research_learning';
           }
           continue;
         }
       }
-      matchedCategory = rule.category;
+      category = rule.category;
       break;
     }
   }
-  
-  // Check for suspicious patterns
+
+  // Detect suspicious patterns
   let isSuspicious = false;
   let suspiciousReason: string | undefined;
-  
+
   if (context) {
-    // YouTube trick: YouTube active for >30 min with no other window changes
-    if (matchedCategory === 'entertainment' && appName.toLowerCase().includes('youtube')) {
-      if (context.durationMinutes && context.durationMinutes > SUSPICIOUS_THRESHOLDS.youtubeIdle) {
-        if (!context.windowChangeCount || context.windowChangeCount === 0) {
-          isSuspicious = true;
-          suspiciousReason = `YouTube active ${context.durationMinutes}min with no other activity - likely keeping laptop awake`;
-        }
-      }
-    }
-    
-    // Slack ghost: Slack "active" but no input for >10 min
-    if (matchedCategory === 'communication_active' && appName.toLowerCase().includes('slack')) {
-      if (!context.hasInputActivity && context.durationMinutes && context.durationMinutes > SUSPICIOUS_THRESHOLDS.slackGhost) {
+    // 1. Video Idle Trick: YouTube/Netflix playing with no input = NOT working
+    if (category === 'entertainment' && context.isVideoPlaying) {
+      if (!context.hasInputActivity || (context.lastInputMinutesAgo && context.lastInputMinutesAgo > 5)) {
         isSuspicious = true;
-        suspiciousReason = `Slack "active" but no input for ${context.durationMinutes}min - likely idle`;
+        suspiciousReason = `Video playing (${appName}) with no interaction for ${context.lastInputMinutesAgo || 'unknown'} min - likely AFK trick`;
+        category = 'break_idle'; // Reclassify as idle
+        isIdle = true;
       }
     }
-    
-    // Social during work hours
-    if (PRODUCTIVITY_LEVELS[matchedCategory] === 'unproductive') {
-      const hour = context.currentHour ?? new Date().getHours();
-      if (hour >= SUSPICIOUS_THRESHOLDS.workHoursStart && hour < SUSPICIOUS_THRESHOLDS.workHoursEnd) {
-        // Flag it but don't mark as suspicious - just unproductive
-        // We could add additional scoring logic here
+
+    // 2. Communication Ghost: Slack/Teams "active" but no actual work
+    if (category === 'communication') {
+      const noInput = !context.hasInputActivity || (context.lastInputMinutesAgo && context.lastInputMinutesAgo > SUSPICIOUS_THRESHOLDS.communicationGhostMinutes);
+      const longDuration = context.durationMinutes && context.durationMinutes > SUSPICIOUS_THRESHOLDS.communicationGhostMinutes;
+
+      if (noInput && longDuration) {
+        isSuspicious = true;
+        suspiciousReason = `${appName} "active" but no input for ${context.lastInputMinutesAgo || context.durationMinutes} min - ghost presence`;
+        category = 'break_idle';
+        isIdle = true;
       }
     }
-    
-    // Rapid switching
-    if (context.switchFrequencySeconds && context.switchFrequencySeconds < 5) {
-      isSuspicious = true;
-      suspiciousReason = `Rapid window switching (${context.switchFrequencySeconds.toFixed(1)}s avg) - distracted, not focused`;
+
+    // 3. Long Idle: Any app with no input for extended period
+    if (context.lastInputMinutesAgo && context.lastInputMinutesAgo > SUSPICIOUS_THRESHOLDS.idleThresholdMinutes) {
+      if (!isSuspicious) { // Don't double-flag
+        isSuspicious = true;
+        suspiciousReason = `No input activity for ${context.lastInputMinutesAgo} min - likely away from desk`;
+        category = 'break_idle';
+        isIdle = true;
+      }
+    }
+
+    // 4. Same Window Too Long: Possible AFK with video/screen on
+    if (context.durationMinutes && context.durationMinutes > SUSPICIOUS_THRESHOLDS.sameWindowMinutes) {
+      if (!context.hasInputActivity && !isSuspicious) {
+        isSuspicious = true;
+        suspiciousReason = `Same window (${appName}) for ${context.durationMinutes} min with no interaction - possible AFK`;
+        category = 'break_idle';
+        isIdle = true;
+      }
+    }
+
+    // 5. Rapid Switching: Alt-tabbing constantly = distracted, not working
+    if (context.windowChangeCount && context.durationMinutes) {
+      const switchesPerMinute = context.windowChangeCount / context.durationMinutes;
+      if (switchesPerMinute > 10) { // More than 10 switches per minute
+        isSuspicious = true;
+        suspiciousReason = `Rapid window switching (${switchesPerMinute.toFixed(1)}/min) - distracted, not focused`;
+      }
     }
   }
-  
+
   return {
-    category: matchedCategory,
-    categoryName: CATEGORY_NAMES[matchedCategory],
-    productivityScore: PRODUCTIVITY_SCORES[matchedCategory],
-    productivityLevel: PRODUCTIVITY_LEVELS[matchedCategory],
+    category,
+    categoryName: CATEGORY_NAMES[category],
+    productivityScore: isIdle ? 0 : PRODUCTIVITY_SCORES[category],
+    productivityLevel: isIdle ? 'idle' : PRODUCTIVITY_LEVELS[category],
     isSuspicious,
-    suspiciousReason
+    suspiciousReason,
+    isIdle
   };
 }
 
-// Calculate focus score based on activity patterns
-export function calculateFocusScore(
+// Calculate true productivity (excluding idle time)
+export function calculateTrueProductivity(
   activities: Array<{
     category: ActivityCategory;
     duration: number;
+    isIdle: boolean;
     isSuspicious: boolean;
-  }>
-): number {
-  if (activities.length === 0) return 0;
-  
-  let totalDuration = 0;
-  let weightedScore = 0;
-  
-  for (const activity of activities) {
-    const weight = activity.duration;
-    totalDuration += weight;
-    
-    let score = PRODUCTIVITY_SCORES[activity.category];
-    
-    // Penalize suspicious activities
-    if (activity.isSuspicious) {
-      score = Math.max(0, score - 30);
-    }
-    
-    weightedScore += score * weight;
-  }
-  
-  return totalDuration > 0 ? Math.round(weightedScore / totalDuration) : 0;
-}
-
-// Calculate productive vs unproductive time breakdown
-export function calculateTimeBreakdown(
-  activities: Array<{
-    category: ActivityCategory;
-    duration: number;
   }>
 ): {
   productiveMinutes: number;
-  neutralMinutes: number;
+  idleMinutes: number;
   unproductiveMinutes: number;
   totalMinutes: number;
+  productivityPercentage: number;
 } {
   let productive = 0;
-  let neutral = 0;
+  let idle = 0;
   let unproductive = 0;
-  
+
   for (const activity of activities) {
     const minutes = activity.duration / 60;
-    const level = PRODUCTIVITY_LEVELS[activity.category];
-    
-    if (level === 'productive') productive += minutes;
-    else if (level === 'neutral') neutral += minutes;
-    else unproductive += minutes;
+
+    if (activity.isIdle) {
+      idle += minutes;
+    } else if (PRODUCTIVITY_LEVELS[activity.category] === 'productive') {
+      productive += minutes;
+    } else {
+      unproductive += minutes;
+    }
   }
-  
+
+  const total = productive + idle + unproductive;
+  const productivityPercentage = total > 0
+    ? Math.round((productive / total) * 100)
+    : 0;
+
   return {
     productiveMinutes: Math.round(productive),
-    neutralMinutes: Math.round(neutral),
+    idleMinutes: Math.round(idle),
     unproductiveMinutes: Math.round(unproductive),
-    totalMinutes: Math.round(productive + neutral + unproductive)
+    totalMinutes: Math.round(total),
+    productivityPercentage
+  };
+}
+
+// Detect if employee is trying to game the system
+export function detectGamingAttempts(
+  activities: Array<{
+    appName: string;
+    windowTitle: string;
+    duration: number;
+    hasInputActivity?: boolean;
+  }>
+): Array<{
+  type: string;
+  description: string;
+  severity: 'low' | 'medium' | 'high';
+}> {
+  const issues: Array<{ type: string; description: string; severity: 'low' | 'medium' | 'high' }> = [];
+
+  // Check for YouTube + Slack combo (the classic trick)
+  const hasYouTube = activities.some(a =>
+    a.appName.toLowerCase().includes('youtube') && a.duration > 900 // 15 min
+  );
+  const hasSlackTeams = activities.some(a =>
+    (a.appName.toLowerCase().includes('slack') || a.appName.toLowerCase().includes('teams')) &&
+    !a.hasInputActivity
+  );
+
+  if (hasYouTube && hasSlackTeams) {
+    issues.push({
+      type: 'video_with_communication',
+      description: 'YouTube/Video playing while communication app shows "active" - likely using video to keep status green',
+      severity: 'high'
+    });
+  }
+
+  // Check for always-on communication apps with no real work
+  const commApps = activities.filter(a =>
+    a.appName.toLowerCase().includes('slack') ||
+    a.appName.toLowerCase().includes('teams')
+  );
+  const totalCommTime = commApps.reduce((sum, a) => sum + a.duration, 0);
+  const hasInputInComm = commApps.some(a => a.hasInputActivity);
+
+  if (totalCommTime > 1800 && !hasInputInComm) { // 30 min+ in comm with no input
+    issues.push({
+      type: 'ghost_presence',
+      description: 'Communication app open for extended period with no messages sent - ghost presence detected',
+      severity: 'medium'
+    });
+  }
+
+  return issues;
+}
+
+// Generate daily summary for admin dashboard
+export function generateDailySummary(
+  employeeId: string,
+  activities: Array<{
+    category: ActivityCategory;
+    duration: number;
+    isIdle: boolean;
+    isSuspicious: boolean;
+    appName: string;
+    windowTitle: string;
+  }>
+): {
+  employeeId: string;
+  totalHours: number;
+  productiveHours: number;
+  idleHours: number;
+  unproductiveHours: number;
+  productivityScore: number;
+  suspiciousActivities: number;
+  topApps: Array<{ name: string; hours: number; category: ActivityCategory }>;
+  warnings: string[];
+} {
+  const { productiveMinutes, idleMinutes, unproductiveMinutes, totalMinutes, productivityPercentage } =
+    calculateTrueProductivity(activities);
+
+  // Aggregate app usage
+  const appUsage = new Map<string, { duration: number; category: ActivityCategory }>();
+  for (const activity of activities) {
+    const existing = appUsage.get(activity.appName);
+    if (existing) {
+      existing.duration += activity.duration;
+    } else {
+      appUsage.set(activity.appName, { duration: activity.duration, category: activity.category });
+    }
+  }
+
+  const topApps = Array.from(appUsage.entries())
+    .map(([name, data]) => ({
+      name,
+      hours: Math.round((data.duration / 3600) * 10) / 10,
+      category: data.category
+    }))
+    .sort((a, b) => b.hours - a.hours)
+    .slice(0, 5);
+
+  const suspiciousCount = activities.filter(a => a.isSuspicious).length;
+
+  const warnings: string[] = [];
+  if (idleMinutes > 120) warnings.push('High idle time detected');
+  if (suspiciousCount > 3) warnings.push('Multiple suspicious patterns detected');
+  if (productivityPercentage < 50) warnings.push('Low productivity score');
+
+  return {
+    employeeId,
+    totalHours: Math.round((totalMinutes / 60) * 10) / 10,
+    productiveHours: Math.round((productiveMinutes / 60) * 10) / 10,
+    idleHours: Math.round((idleMinutes / 60) * 10) / 10,
+    unproductiveHours: Math.round((unproductiveMinutes / 60) * 10) / 10,
+    productivityScore: productivityPercentage,
+    suspiciousActivities: suspiciousCount,
+    topApps,
+    warnings
   };
 }
