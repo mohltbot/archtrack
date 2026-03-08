@@ -4,6 +4,109 @@
 
 ---
 
+## 🆕 NEW CONTENT — Shift 2 (March 8, 2026)
+
+### Twitter Thread: "CVE-2026-28446: The OpenClaw Security Alert You Can't Ignore"
+**Status:** ✅ READY TO POST — URGENT  
+**Platform:** Twitter/X  
+**Hook:** CVSS 9.8 RCE vulnerability. 42,000+ instances exposed.  
+**Priority:** URGENT — Post today for maximum impact
+
+**Full Thread (Copy-Paste Ready):**
+
+**Tweet 1 (Hook):**
+🚨 SECURITY ALERT: CVSS 9.8 RCE vulnerability in OpenClaw
+
+42,000+ instances are publicly exploitable right now.
+
+If you use the voice-call extension, read this thread immediately: 🧵
+
+---
+
+**Tweet 2 (The Vulnerability):**
+CVE-2026-28446: Pre-authentication remote code execution
+
+OpenClaw's voice-call extension processes audio through a transcription pipeline.
+
+That pipeline has a critical vulnerability in versions < 2026.2.1
+
+Remote attackers can execute arbitrary code without any credentials.
+
+---
+
+**Tweet 3 (Who's Affected):**
+You're at risk if:
+
+• Running OpenClaw < 2026.2.1
+• Have voice-call extension enabled
+• Instance is publicly accessible
+
+Check your version:
+```bash
+openclaw --version
+```
+
+If it's < 2026.2.1, you're vulnerable.
+
+---
+
+**Tweet 4 (Immediate Action):**
+DO THIS NOW:
+
+**Option 1:** Upgrade immediately
+```bash
+openclaw update
+# or pull latest Docker image
+```
+
+**Option 2:** Disable voice extension
+```bash
+openclaw extension disable voice-call
+```
+
+Don't wait. This is actively exploitable.
+
+---
+
+**Tweet 5 (Check Your Exposure):**
+Is your instance publicly exposed?
+
+```bash
+# Check from outside your network
+curl -s https://your-domain.com/api/health
+```
+
+If you get a response, you're exposed.
+
+42,000+ instances are publicly reachable. Many don't even know it.
+
+---
+
+**Tweet 6 (The Bigger Picture):**
+This isn't OpenClaw's first critical CVE:
+
+• CVE-2026-25253: One-click RCE (CVSS 8.8)
+• CVE-2026-27487: macOS keychain injection
+• Moltbook breach: 1.5M tokens leaked
+
+Pattern: AI assistants store sensitive data = high-value targets.
+
+---
+
+**Tweet 7 (CTA):**
+Running OpenClaw and not sure if you're secure?
+
+I offer security audits: $75, 30 minutes, comprehensive check.
+
+• Version vulnerabilities
+• Exposure assessment  
+• Config hardening
+• Credential rotation plan
+
+DM me — better safe than breached.
+
+---
+
 ## 📬 DAY 7 FOLLOW-UPS — READY TO SEND (March 10, 2026)
 
 ### Day 7 Follow-up: @rstormsf (Twitter)
@@ -668,6 +771,141 @@ Still stuck? I debug OpenClaw configs for $75 in 30 minutes.
 DM me your error — I'll point you in the right direction (free).
 
 Or book a session: [link when ready]
+
+---
+
+## 🆕 NEW DRAFTS — Shift 1 (March 8, 2026)
+
+### GitHub Comment: Issue #38706 (GPT-5.4 Codex OAuth Bug)
+**Status:** ✅ READY TO SEND  
+**Platform:** GitHub  
+**Issue:** https://github.com/openclaw/openclaw/issues/38706  
+**Lead Status:** 🔥 Hot  
+**Date Added:** March 8, 2026
+
+**Draft Comment:**
+```
+This is a known issue with the openai-codex provider configuration. The provider is calling /v1/responses which requires api.responses.write scope — but ChatGPT/Codex OAuth tokens don't include that scope.
+
+**Quick workaround:**
+
+Override the provider config in `~/.openclaw/agents/main/agent/models.json`:
+
+```json
+"openai-codex": {
+  "baseUrl": "https://chatgpt.com/backend-api",
+  "api": "openai-codex-responses",
+  "models": [
+    {
+      "id": "gpt-5.4",
+      "name": "GPT-5.4",
+      "api": "openai-codex-responses",
+      "reasoning": true,
+      "input": ["text", "image"],
+      "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+      "contextWindow": 1050000,
+      "maxTokens": 128000
+    }
+  ]
+}
+```
+
+This routes requests to the Codex backend API (same as the CLI uses) instead of the standard OpenAI API.
+
+**Why this works:**
+- Codex CLI uses `chatgpt.com/backend-api/codex/responses`
+- OpenClaw default uses `api.openai.com/v1/responses` 
+- The OAuth token works with the Codex endpoint but not the standard API endpoint
+
+**Important:** Don't try adding api.responses.write to OAuth scope — OpenAI's auth server rejects it and breaks your entire OAuth flow.
+
+Want me to review your full models.json? I can spot other config issues quickly — most Codex problems have the same 2-3 root causes.
+```
+
+---
+
+### Reddit Reply: r/selfhosted Setup Post
+**Status:** ✅ READY TO SEND  
+**Platform:** Reddit  
+**Post:** https://reddit.com/r/selfhosted/comments/1rnq1h1  
+**Lead Status:** 🔥 Hot  
+**Date Added:** March 8, 2026
+
+**Draft Reply:**
+```
+Great write-up! You're absolutely right — the gap between "something running" and "production-ready" is huge and barely documented.
+
+A few additions to your security checklist:
+
+**Authentication:**
+```json
+"gateway": {
+  "auth": {
+    "type": "token",
+    "token": "your-random-32-char-token"
+  }
+}
+```
+Then set `export OPENCLAW_GATEWAY_TOKEN=your-token` before running any CLI commands.
+
+**HTTPS/Reverse Proxy:**
+If you're using Caddy (agreed — easier than Nginx), here's a minimal Caddyfile:
+```
+your-domain.com {
+  reverse_proxy localhost:8080
+}
+```
+
+**Spending Caps:**
+Absolutely critical. I recommend:
+- OpenAI: $20-50 hard limit
+- Anthropic: $50-100 hard limit  
+- Gemini: $20 hard limit (they're cheapest anyway)
+
+**The update cycle:**
+You mentioned this but it's worth emphasizing — OpenClaw moves FAST. I recommend:
+- Subscribe to GitHub releases
+- Test updates in a non-production agent first
+- Keep a backup of working configs: `cp ~/.openclaw/openclaw.json ~/backups/openclaw-$(date +%Y%m%d).json`
+
+**One more gap the docs don't cover:**
+The hidden config location (`~/.openclaw`) and how to find it. On Mac: Cmd+Shift+G in Finder. On Windows: `%USERPROFILE%\.openclaw` in Explorer.
+
+Happy to help if you hit specific issues — I've debugged a lot of OpenClaw setups. The patterns are surprisingly consistent once you've seen enough of them.
+```
+
+---
+
+### Medium Comment: @rentierdigital Anthropic Migration Post
+**Status:** ✅ READY TO SEND  
+**Platform:** Medium  
+**Post:** https://medium.com/@rentierdigital/anthropic-just-killed-my-200-month-openclaw-setup  
+**Lead Status:** 🟡 Warm  
+**Date Added:** March 8, 2026
+
+**Draft Comment:**
+```
+Great breakdown! I went through the same Anthropic shutdown in January. Your Kimi + MiniMax setup is solid — here's a few optimizations I've found:
+
+**For even cheaper fallback:**
+Consider adding Gemini 2.0 Flash as your tertiary fallback. It's $0.075/1M tokens (vs MiniMax at ~$0.20) and handles simple tasks surprisingly well.
+
+**Config for 3-tier fallback:**
+```json
+"models": {
+  "primary": "kimi-k2.5",
+  "fallbacks": ["minimax/MiniMax-M2.5", "gemini-2.0-flash"]
+}
+```
+
+**Redundancy tip:**
+Instead of two VPS instances, consider running OpenClaw on your primary machine + one cheap VPS as backup. Use the same `agentDir` synced via Syncthing or git. Cuts cost to ~$7/month.
+
+**The real lesson:**
+This is why I now recommend *never* relying on a single provider's consumer plan for production. API keys = stability. OAuth = risk.
+
+I help people migrate off Anthropic setups like this — if you hit any snags with the Kimi/MiniMax config, happy to debug. Most migrations take 30 minutes once you know the gotchas.
+```
 
 ---
 

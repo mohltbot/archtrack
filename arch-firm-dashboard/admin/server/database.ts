@@ -2,7 +2,12 @@ import sqlite3 from 'sqlite3';
 import { open, Database } from 'sqlite';
 import path from 'path';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
 import type { Employee, Project, Task, TimeEntry, Activity, ProductivityReport } from '@archtrack/shared';
+
+// ES module compatibility
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 let db: Database<sqlite3.Database, sqlite3.Statement> | null = null;
 

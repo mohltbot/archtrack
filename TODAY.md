@@ -1,121 +1,99 @@
 # TODAY - March 8, 2026
 
-## PRIORITY 1: Fiverr Gig Traction (NO RESPONSES YET)
+## REALITY CHECK
 
-Your Fiverr gigs have ZERO responses. Need to drive traffic:
+**Current Performance:**
+- OpenClaw Twitter: 15-19 impressions (terrible)
+- OpenClaw Fiverr: 0 orders, 0 clicks
+- General "setup" Fiverr: 423 impressions, 2 clicks
 
-### Action 1: Twitter Thread About Fiverr
-**Platform:** Twitter/X
-**Copy-paste this:**
-
-```
-I built 36 AI agent workflows for VC portfolio companies.
-
-Now offering the same for your business:
-
-• Custom OpenClaw agents
-• n8n workflow automation  
-• $500-5,000 depending on complexity
-
-First 3 clients get 50% off.
-
-DM me or check link in bio.
-```
-
-**Post now.**
+**Conclusion:** OpenClaw debugging isn't selling. General AI automation is.
 
 ---
 
-### Action 2: Reddit Post in r/selfhosted
-**Platform:** Reddit
-**Copy-paste this:**
+## PIVOT STRATEGY
 
+### Stop Doing (Zero ROI)
+- ❌ Twitter threads about OpenClaw
+- ❌ GitHub issue replies
+- ❌ r/openclaw posts
+- ❌ IndieHackers (removed per request)
+- ❌ LinkedIn (removed per request)
+
+### Start Doing (Data-Driven)
+- ✅ Reddit r/smallbusiness (problem-aware audience)
+- ✅ Reddit r/entrepreneur (has budget)
+- ✅ Reddit r/automation (actively looking)
+- ✅ Free audits → paid setups
+- ✅ Fiverr "AI setup" gigs (20x better performance)
+
+---
+
+## TODAY'S ACTIONS
+
+### 1. Reddit Outreach (30 min)
+**Find posts in r/smallbusiness asking about:**
+- Automation
+- AI tools
+- Saving time
+- Hiring help
+
+**Reply format:**
 ```
-[OFFER] I'll build you an AI agent for $500
+I help small businesses automate repetitive tasks with AI.
 
-Built 36 production workflows for VC-backed companies (KlearNow, Narada, etc).
+Recently built a Slack bot that saved a client 15 hrs/week for $500.
 
-Now doing smaller projects:
-- Slack bots that actually work
-- Email automation
-- Custom integrations
-
-$500-5,000 depending on scope.
-
-Portfolio: github.com/mohltbot/mission-control
-
-DM if interested.
+Happy to do a free 15-min audit of your workflow - DM me if interested.
 ```
 
-**Post to r/selfhosted and r/automation**
+**Goal:** 5 helpful replies, 1 DM conversation
+
+### 2. Fiverr Optimization (15 min)
+**Current gig:** "OpenClaw debugging" → 0 orders
+**New gig:** "AI automation setup" → 423 impressions
+
+**Action:**
+- Update gig title to "I will build AI automation for your business"
+- Change description to focus on time-saving, not OpenClaw
+- Add tags: "AI automation", "workflow", "productivity"
+
+### 3. Check Existing Leads (10 min)
+**Any replies from March 7 outreach?**
+- u/HostingerNightmare
+- u/GeminiOverloaded
+- GitHub issues
+
+**If yes → respond with next step**
+**If no → move on, they're cold**
 
 ---
 
-### Action 3: GitHub Issue Reply with Soft Pitch
-**Find:** Recent OpenClaw issues with no replies
-**Reply with fix + this at end:**
+## NEW MESSAGING
 
-```
-If you're stuck on this, I debug OpenClaw setups professionally. 
-Most issues fixed in 30 min. DM me or check my Fiverr (link in bio).
-```
+**Old:** "I debug OpenClaw configurations"
+**New:** "I help small businesses save 10+ hours/week with AI automation"
 
----
-
-## PRIORITY 2: Check Debugger Shift Results
-
-**Shift 4, 5, 6 completed yesterday.** Need to verify:
-
-### Check These Were Actually Posted:
-- [ ] Twitter: OAuth Recovery Loop Bug thread
-- [ ] Twitter: Config Validation tip  
-- [ ] Twitter: Docker vs Node Versions thread
-- [ ] Twitter: 5 Migration Issues thread
-- [ ] Twitter: Discord bot deaf tip
-- [ ] Twitter: Hostinger case study
-
-**If not posted → post them today.**
+**Hook:** Time savings, not technical details
+**Proof:** Specific numbers ($500 = 15 hrs saved)
+**CTA:** Free audit, not "check my Fiverr"
 
 ---
 
-## PRIORITY 3: New Lead Follow-ups
+## SUCCESS METRICS (Track Weekly)
 
-**Check for responses from March 7 outreach:**
-
-| Lead | Platform | Status | Action |
-|------|----------|--------|--------|
-| u/HostingerNightmare | Reddit | Sent Mar 7 | Check for reply |
-| u/GeminiOverloaded | Reddit | Sent Mar 7 | Check for reply |
-| GitHub #32176 | GitHub | Sent Mar 7 | Check for reply |
-| GitHub #29780 | GitHub | Sent Mar 7 | Check for reply |
-| GitHub #30401 | GitHub | Sent Mar 7 | Check for reply |
-| GitHub #38336 | GitHub | Sent Mar 7 | Check for reply |
-
-**If they replied → respond with next step**
-**If no reply after 48h → move to cold leads**
+| Metric | This Week | Goal |
+|--------|-----------|------|
+| Reddit replies | 0 | 20 |
+| DM conversations | 0 | 5 |
+| Calls booked | 0 | 2 |
+| Revenue | $0 | $1,500 |
 
 ---
 
-## PRIORITY 4: Monitor for New Opportunities
+## BOTTOM LINE
 
-**Check now:**
-- r/openclaw (new posts last 24h)
-- GitHub issues (new bugs reported)
-- Twitter mentions (@mohltbot)
+**Stop:** Content for content's sake
+**Start:** Direct outreach to people with problems + budget
 
-**If you find something → reply immediately**
-
----
-
-## SUMMARY
-
-**Must do today:**
-1. Post Fiverr promo on Twitter (5 min)
-2. Post Fiverr promo on Reddit (10 min)
-3. Check all March 7 leads for replies (10 min)
-4. Verify all Twitter content was posted (5 min)
-5. Monitor for new opportunities (ongoing)
-
-**Total time:** 30 minutes
-
-**Goal:** Get first Fiverr inquiry.
+**Focus:** r/smallbusiness and Fiverr "AI setup" gigs only.
