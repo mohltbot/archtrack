@@ -15,9 +15,15 @@
 - [x] Twitter Quick Tip: "Hidden Config File"
 - [x] Twitter Thread: "OAuth Recovery Loop Bug"
 
-### Other Platforms — REMAINING
-- [ ] IndieHackers Post: "5 Issues I See Daily"
-- [ ] LinkedIn Post: "Hidden Cost of Open-Source AI Tools"
+### Other Platforms — READY TO POST
+- [x] IndieHackers Post: "5 Issues I See Daily" — READY (see DRAFTS.md)
+- [x] LinkedIn Post: "Hidden Cost of Open-Source AI Tools" — READY (see DRAFTS.md)
+- **ACTION REQUIRED:** Mohammed to copy-paste from DRAFTS.md and post
+
+### Tomorrow's Content (March 8) — DRAFTED
+- [ ] Twitter Thread: "Week 1 Lessons Learned"
+- [ ] LinkedIn: "Week 1 Building in Public"
+- [ ] IndieHackers: "Week 1 Retrospective"
 
 ---
 

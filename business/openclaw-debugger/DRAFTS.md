@@ -4,6 +4,103 @@
 
 ---
 
+## 📬 DAY 7 FOLLOW-UPS — READY TO SEND (March 10, 2026)
+
+### Day 7 Follow-up: @rstormsf (Twitter)
+**Status:** ✅ READY TO SEND  
+**Platform:** Twitter DM  
+**Date Added:** March 3 → Day 7: March 10  
+**Previous Contact:** Day 2 sent March 5
+
+**Draft Message:**
+```
+Hey! Checking in — still dealing with OpenClaw stability issues?
+
+It's been a week since my last message. If you're still babysitting the gateway, I can help.
+
+I offer a monitoring setup that catches crashes and auto-restarts — saves you from the 3 AM pages.
+
+$150 one-time setup, then it runs itself.
+
+Worth a conversation?
+```
+
+---
+
+### Day 7 Follow-up: @matthewjetthall (Twitter)
+**Status:** ✅ READY TO SEND  
+**Platform:** Twitter DM  
+**Date Added:** March 3 → Day 7: March 10  
+**Previous Contact:** Day 2 sent March 5
+
+**Draft Message:**
+```
+Hey! Did the Docker approach work for your Node22 + Telegram setup?
+
+Haven't heard back — want to make sure you got unblocked.
+
+If you're still stuck, happy to jump on a quick screen share. Most Node version issues resolve in 20 minutes once we pinpoint the conflict.
+
+No charge for the diagnosis — just want to save you from more lost hours.
+```
+
+---
+
+### Day 7 Follow-up: @StMichaelsForge (Twitter)
+**Status:** ✅ READY TO SEND  
+**Platform:** Twitter Reply  
+**Date Added:** March 3 → Day 7: March 10  
+**Previous Contact:** Day 2 sent March 5
+
+**Draft Message:**
+```
+Hey! Following up — did the model routing fix work for you?
+
+If you're still seeing "all models failed" errors, there's usually a deeper config issue at play.
+
+Happy to debug it with you — takes about 30 minutes to trace the full routing chain.
+
+DM me if you want to knock this out.
+```
+
+---
+
+### Day 7 Follow-up: @Franzferdinan57 (Twitter)
+**Status:** ✅ READY TO SEND  
+**Platform:** Twitter Reply  
+**Date Added:** March 3 → Day 7: March 10  
+**Previous Contact:** Day 2 sent March 5
+
+**Draft Message:**
+```
+Hey! Checking in — did the OAuth scope adjustment clear up the Duckbot error?
+
+If you're still stuck on the OAuth flow, I can walk you through it. These scope issues usually have 2-3 possible causes.
+
+Happy to help — DM me if you need a hand.
+```
+
+---
+
+### Day 7 Follow-up: @Shpigford (Twitter)
+**Status:** ✅ READY TO SEND  
+**Platform:** Twitter Reply  
+**Date Added:** March 3 → Day 7: March 10  
+**Previous Contact:** Day 2 sent March 5
+
+**Draft Message:**
+```
+Hey! Following up — did the v2.26 upgrade resolve your cron + hooks issues?
+
+If you're still seeing problems, there might be a config migration step we missed.
+
+Happy to take a look — these version upgrades sometimes have hidden gotchas.
+
+DM me if you want a second set of eyes on it.
+```
+
+---
+
 ## 🆕 NEW CONTENT — Shift 2 (March 7, 2026)
 
 ### Twitter Thread: "The OAuth Recovery Loop Bug Nobody Talks About"
@@ -574,7 +671,7 @@ Or book a session: [link when ready]
 
 ---
 
-## 📋 TOMORROW'S CONTENT PREP (March 7, 2026)
+## 📋 TOMORROW'S CONTENT PREP (March 8, 2026)
 
 ### Twitter Thread: "5 Lessons from My First Week Debugging OpenClaw"
 **Status:** ✅ DRAFTED for tomorrow

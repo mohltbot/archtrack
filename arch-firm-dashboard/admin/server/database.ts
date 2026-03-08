@@ -2,7 +2,7 @@ import sqlite3 from 'sqlite3';
 import { open, Database } from 'sqlite';
 import path from 'path';
 import fs from 'fs';
-import type { Employee, Project, Task, TimeEntry } from '@archtrack/shared';
+import type { Employee, Project, Task, TimeEntry, Activity, ProductivityReport } from '@archtrack/shared';
 
 let db: Database<sqlite3.Database, sqlite3.Statement> | null = null;
 
@@ -78,6 +78,27 @@ async function createTables(): Promise<void> {
       FOREIGN KEY (assigned_to) REFERENCES employees(id)
     );
 
+    -- NEW: Activities table for smart tracking
+    CREATE TABLE IF NOT EXISTS activities (
+      id TEXT PRIMARY KEY,
+      employee_id TEXT NOT NULL,
+      timestamp TEXT NOT NULL,
+      app_name TEXT NOT NULL,
+      window_title TEXT NOT NULL,
+      category TEXT NOT NULL,
+      category_name TEXT NOT NULL,
+      productivity_score INTEGER NOT NULL,
+      productivity_level TEXT NOT NULL,
+      is_suspicious INTEGER DEFAULT 0,
+      suspicious_reason TEXT,
+      is_idle INTEGER DEFAULT 0,
+      idle_time_seconds INTEGER DEFAULT 0,
+      duration_seconds INTEGER DEFAULT 0,
+      created_at TEXT NOT NULL,
+      FOREIGN KEY (employee_id) REFERENCES employees(id)
+    );
+
+    -- Legacy time_entries table (kept for compatibility)
     CREATE TABLE IF NOT EXISTS time_entries (
       id TEXT PRIMARY KEY,
       employee_id TEXT NOT NULL,
@@ -97,6 +118,9 @@ async function createTables(): Promise<void> {
       FOREIGN KEY (project_id) REFERENCES projects(id)
     );
 
+    CREATE INDEX IF NOT EXISTS idx_activities_employee ON activities(employee_id);
+    CREATE INDEX IF NOT EXISTS idx_activities_timestamp ON activities(timestamp);
+    CREATE INDEX IF NOT EXISTS idx_activities_category ON activities(category);
     CREATE INDEX IF NOT EXISTS idx_time_entries_employee ON time_entries(employee_id);
     CREATE INDEX IF NOT EXISTS idx_time_entries_start ON time_entries(start_time);
     CREATE INDEX IF NOT EXISTS idx_tasks_assigned ON tasks(assigned_to);
@@ -164,7 +188,7 @@ async function seedTestData(): Promise<void> {
 // Employee operations
 export async function getAllEmployees(): Promise<Employee[]> {
   const db = getDatabase();
-  const rows = await db.all('SELECT * FROM employees ORDER BY name');
+  const rows = await db.all('SELECT * FROM employees WHERE is_active = 1 ORDER BY name');
   return rows.map(mapEmployee);
 }
 
@@ -332,7 +356,173 @@ function mapTask(row: any): Task {
   };
 }
 
-// Time entry operations
+// NEW: Activity operations
+export async function createActivity(activity: Activity): Promise<void> {
+  const db = getDatabase();
+  await db.run(
+    `INSERT INTO activities (
+      id, employee_id, timestamp, app_name, window_title, 
+      category, category_name, productivity_score, productivity_level,
+      is_suspicious, suspicious_reason, is_idle, idle_time_seconds, duration_seconds, created_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      activity.id,
+      activity.employeeId,
+      activity.timestamp,
+      activity.appName,
+      activity.windowTitle,
+      activity.category,
+      activity.categoryName,
+      activity.productivityScore,
+      activity.productivityLevel,
+      activity.isSuspicious ? 1 : 0,
+      activity.suspiciousReason,
+      activity.isIdle ? 1 : 0,
+      activity.idleTimeSeconds,
+      activity.durationSeconds,
+      activity.createdAt
+    ]
+  );
+}
+
+export async function getActivitiesByEmployee(
+  employeeId: string, 
+  startDate?: string, 
+  endDate?: string
+): Promise<Activity[]> {
+  const db = getDatabase();
+  let query = 'SELECT * FROM activities WHERE employee_id = ?';
+  const params: any[] = [employeeId];
+  
+  if (startDate) {
+    query += ' AND timestamp >= ?';
+    params.push(startDate);
+  }
+  if (endDate) {
+    query += ' AND timestamp <= ?';
+    params.push(endDate);
+  }
+  
+  query += ' ORDER BY timestamp DESC';
+  
+  const rows = await db.all(query, params);
+  return rows.map(mapActivity);
+}
+
+export async function getAllActivities(startDate?: string, endDate?: string): Promise<Activity[]> {
+  const db = getDatabase();
+  let query = 'SELECT * FROM activities';
+  const params: any[] = [];
+  
+  if (startDate || endDate) {
+    query += ' WHERE';
+    if (startDate) {
+      query += ' timestamp >= ?';
+      params.push(startDate);
+    }
+    if (endDate) {
+      query += startDate ? ' AND timestamp <= ?' : ' timestamp <= ?';
+      params.push(endDate);
+    }
+  }
+  
+  query += ' ORDER BY timestamp DESC';
+  
+  const rows = await db.all(query, params);
+  return rows.map(mapActivity);
+}
+
+export async function getSuspiciousActivities(employeeId?: string, limit: number = 50): Promise<Activity[]> {
+  const db = getDatabase();
+  let query = 'SELECT * FROM activities WHERE is_suspicious = 1';
+  const params: any[] = [];
+  
+  if (employeeId) {
+    query += ' AND employee_id = ?';
+    params.push(employeeId);
+  }
+  
+  query += ' ORDER BY timestamp DESC LIMIT ?';
+  params.push(limit);
+  
+  const rows = await db.all(query, params);
+  return rows.map(mapActivity);
+}
+
+export async function getActivityStats(employeeId?: string, startDate?: string, endDate?: string): Promise<any> {
+  const db = getDatabase();
+  
+  let whereClause = '';
+  const params: any[] = [];
+  
+  if (employeeId || startDate || endDate) {
+    const conditions: string[] = [];
+    if (employeeId) {
+      conditions.push('employee_id = ?');
+      params.push(employeeId);
+    }
+    if (startDate) {
+      conditions.push('timestamp >= ?');
+      params.push(startDate);
+    }
+    if (endDate) {
+      conditions.push('timestamp <= ?');
+      params.push(endDate);
+    }
+    whereClause = 'WHERE ' + conditions.join(' AND ');
+  }
+  
+  // Category breakdown
+  const categoryStats = await db.all(
+    `SELECT category, category_name, 
+            COUNT(*) as count, 
+            SUM(duration_seconds) as total_seconds,
+            AVG(productivity_score) as avg_productivity
+     FROM activities ${whereClause}
+     GROUP BY category`,
+    params
+  );
+  
+  // Suspicious count
+  const suspiciousCount = await db.get(
+    `SELECT COUNT(*) as count FROM activities ${whereClause} AND is_suspicious = 1`,
+    params
+  );
+  
+  // Average productivity score
+  const avgProductivity = await db.get(
+    `SELECT AVG(productivity_score) as score FROM activities ${whereClause}`,
+    params
+  );
+  
+  return {
+    categoryBreakdown: categoryStats,
+    suspiciousCount: suspiciousCount.count,
+    averageProductivityScore: Math.round(avgProductivity.score || 0)
+  };
+}
+
+function mapActivity(row: any): Activity {
+  return {
+    id: row.id,
+    employeeId: row.employee_id,
+    timestamp: row.timestamp,
+    appName: row.app_name,
+    windowTitle: row.window_title,
+    category: row.category,
+    categoryName: row.category_name,
+    productivityScore: row.productivity_score,
+    productivityLevel: row.productivity_level,
+    isSuspicious: row.is_suspicious === 1,
+    suspiciousReason: row.suspicious_reason,
+    isIdle: row.is_idle === 1,
+    idleTimeSeconds: row.idle_time_seconds,
+    durationSeconds: row.duration_seconds,
+    createdAt: row.created_at
+  };
+}
+
+// Legacy Time Entry operations (kept for compatibility)
 export async function getAllTimeEntries(startDate?: string, endDate?: string): Promise<TimeEntry[]> {
   const db = getDatabase();
   let query = 'SELECT * FROM time_entries';
@@ -408,6 +598,12 @@ export async function getActiveTimeEntries(): Promise<TimeEntry[]> {
   return rows.map(mapTimeEntry);
 }
 
+export async function getTimeEntryById(id: string): Promise<TimeEntry | null> {
+  const db = getDatabase();
+  const row = await db.get('SELECT * FROM time_entries WHERE id = ?', id);
+  return row ? mapTimeEntry(row) : null;
+}
+
 function mapTimeEntry(row: any): TimeEntry {
   return {
     id: row.id,
@@ -441,14 +637,79 @@ export async function getDashboardStats(): Promise<any> {
   monthAgo.setMonth(monthAgo.getMonth() - 1);
   const monthAgoStr = monthAgo.toISOString();
 
-  const [totalEmployees, activeProjects, todayHours, weekHours, monthHours, recentEntries] = await Promise.all([
+  const [totalEmployees, activeProjects, todayHours, weekHours, monthHours, recentActivities, suspiciousCount, productivityStats] = await Promise.all([
     db.get('SELECT COUNT(*) as count FROM employees WHERE is_active = 1'),
     db.get('SELECT COUNT(*) as count FROM projects WHERE status = "active"'),
     db.get('SELECT COALESCE(SUM(duration), 0) as total FROM time_entries WHERE start_time >= ?', todayStr),
     db.get('SELECT COALESCE(SUM(duration), 0) as total FROM time_entries WHERE start_time >= ?', weekAgoStr),
     db.get('SELECT COALESCE(SUM(duration), 0) as total FROM time_entries WHERE start_time >= ?', monthAgoStr),
-    db.all('SELECT * FROM time_entries ORDER BY start_time DESC LIMIT 10')
+    db.all('SELECT * FROM activities ORDER BY timestamp DESC LIMIT 20'),
+    db.get('SELECT COUNT(*) as count FROM activities WHERE timestamp >= ? AND is_suspicious = 1', todayStr),
+    db.all(`
+      SELECT category, SUM(duration_seconds) as total_seconds 
+      FROM activities 
+      WHERE timestamp >= ? 
+      GROUP BY category
+    `, todayStr)
   ]);
+
+  // Build productivity breakdown
+  const productivityBreakdown: Record<string, number> = {
+    softwareDev: 0,
+    devops: 0,
+    researchDocs: 0,
+    communication: 0,
+    internalTools: 0,
+    designWork: 0,
+    unproductive: 0
+  };
+
+  for (const stat of productivityStats) {
+    const minutes = Math.round(stat.total_seconds / 60);
+    switch (stat.category) {
+      case 'software_dev':
+        productivityBreakdown.softwareDev += minutes;
+        break;
+      case 'devops':
+        productivityBreakdown.devops += minutes;
+        break;
+      case 'research_docs':
+        productivityBreakdown.researchDocs += minutes;
+        break;
+      case 'communication_active':
+        productivityBreakdown.communication += minutes;
+        break;
+      case 'internal_tools':
+        productivityBreakdown.internalTools += minutes;
+        break;
+      case 'design_work':
+        productivityBreakdown.designWork += minutes;
+        break;
+      default:
+        productivityBreakdown.unproductive += minutes;
+    }
+  }
+
+  // Calculate average productivity score
+  const avgScore = await db.get(
+    'SELECT AVG(productivity_score) as score FROM activities WHERE timestamp >= ?',
+    todayStr
+  );
+
+  // Calculate focus vs distracted time
+  const focusTime = await db.get(
+    `SELECT COALESCE(SUM(duration_seconds), 0) as total 
+     FROM activities 
+     WHERE timestamp >= ? AND productivity_level = 'productive' AND is_suspicious = 0`,
+    todayStr
+  );
+
+  const distractedTime = await db.get(
+    `SELECT COALESCE(SUM(duration_seconds), 0) as total 
+     FROM activities 
+     WHERE timestamp >= ? AND (productivity_level = 'unproductive' OR is_suspicious = 1)`,
+    todayStr
+  );
 
   return {
     totalEmployees: totalEmployees.count,
@@ -456,6 +717,56 @@ export async function getDashboardStats(): Promise<any> {
     totalHoursToday: Math.round(todayHours.total / 3600 * 10) / 10,
     totalHoursThisWeek: Math.round(weekHours.total / 3600 * 10) / 10,
     totalHoursThisMonth: Math.round(monthHours.total / 3600 * 10) / 10,
-    recentTimeEntries: recentEntries.map(mapTimeEntry)
+    productivityBreakdown,
+    averageProductivityScore: Math.round(avgScore?.score || 0),
+    suspiciousActivityCount: suspiciousCount.count,
+    focusTimeMinutes: Math.round(focusTime.total / 60),
+    distractedTimeMinutes: Math.round(distractedTime.total / 60),
+    recentActivities: recentActivities.map(mapActivity)
   };
+}
+
+// Get employee activity with productivity metrics
+export async function getEmployeeActivityStats(): Promise<any[]> {
+  const db = getDatabase();
+  
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const todayStr = today.toISOString();
+  
+  const employees = await db.all('SELECT id, name FROM employees WHERE is_active = 1');
+  
+  const results = [];
+  for (const emp of employees) {
+    const [latestActivity, todayStats, suspiciousCount] = await Promise.all([
+      db.get(
+        'SELECT * FROM activities WHERE employee_id = ? ORDER BY timestamp DESC LIMIT 1',
+        emp.id
+      ),
+      db.get(
+        `SELECT 
+          COALESCE(SUM(duration_seconds), 0) as total_seconds,
+          AVG(productivity_score) as avg_score
+         FROM activities 
+         WHERE employee_id = ? AND timestamp >= ?`,
+        [emp.id, todayStr]
+      ),
+      db.get(
+        'SELECT COUNT(*) as count FROM activities WHERE employee_id = ? AND timestamp >= ? AND is_suspicious = 1',
+        [emp.id, todayStr]
+      )
+    ]);
+    
+    results.push({
+      employeeId: emp.id,
+      employeeName: emp.name,
+      currentActivity: latestActivity?.window_title,
+      currentCategory: latestActivity?.category_name,
+      productivityScore: Math.round(todayStats?.avg_score || 0),
+      hoursToday: Math.round((todayStats?.total_seconds || 0) / 3600 * 10) / 10,
+      suspiciousActivityCount: suspiciousCount?.count || 0
+    });
+  }
+  
+  return results;
 }
