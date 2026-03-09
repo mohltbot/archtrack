@@ -4,7 +4,7 @@
 
 ### Posted Today:
 - 8 Twitter posts
-- 2 Reddit/GitHub replies
+- 2 Reddit/GitHub replies (GitHub #38706, r/selfhosted)
 
 ### Previous:
 - 6 Reddit/GitHub follow-ups (Mar 7)

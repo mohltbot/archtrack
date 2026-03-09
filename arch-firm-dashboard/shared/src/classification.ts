@@ -161,24 +161,26 @@ export const APP_CLASSIFICATION_RULES: AppRule[] = [
     category: 'shopping_personal'
   },
 
-  // Development work in browsers (when window title indicates coding/debugging)
+  // Browser-based development work (check window titles for work indicators)
+  // This must come BEFORE generic browser rule
   {
     patterns: [
-      'openclaw', 'mission-control', 'debug', 'debugger', 'codex', 'cursor',
-      'vscode', 'visual studio code', 'github', 'gitlab', 'bitbucket',
-      'stackoverflow', 'docker', 'kubernetes', 'terminal', 'console',
-      'logs', 'error', 'bug', 'fix', 'deploy', 'build', 'compile',
-      'api', 'endpoint', 'webhook', 'integration', 'testing',
+      'openclaw', 'mission-control', 'debug', 'debugger', 'codex',
+      'github', 'gitlab', 'bitbucket', 'stackoverflow',
+      'docker', 'kubernetes', 'terminal', 'console',
+      'api', 'endpoint', 'webhook', 'integration',
       'architecture', 'system design', 'workflow', 'automation',
+      'vscode', 'cursor', 'intellij', 'sublime', 'atom',
+      'mohltbot', 'selfhosted', 'r/selfhosted',
     ],
     category: 'core_work'
   },
 
-  // System/Browser (neutral - but check for work patterns)
+  // System/Browser (neutral)
   {
     patterns: [
       'finder', 'explorer', 'desktop', 'system preferences', 'settings',
-      'new tab', 'google search', 'chrome', 'safari', 'firefox', 'edge',
+      'new tab', 'google search', 'chrome', 'safari', 'firefox', 'edge', 'brave', 'opera',
     ],
     category: 'other'
   }
@@ -219,28 +221,71 @@ export function classifyActivity(
   let category: ActivityCategory = 'other';
   let isIdle = false;
 
-  // Find matching rule
-  for (const rule of APP_CLASSIFICATION_RULES) {
-    const matchesPattern = rule.patterns.some(pattern =>
-      appLower.includes(pattern) || titleLower.includes(pattern)
+  // SPECIAL CASE: Check window title FIRST for work indicators in browsers
+  // This ensures "mission-control" in a Chrome tab gets classified as Core Work
+  const browserApps = ['chrome', 'safari', 'firefox', 'edge', 'brave', 'opera'];
+  const isBrowser = browserApps.some(b => appLower.includes(b));
+
+  if (isBrowser) {
+    const workIndicators = [
+      'openclaw', 'mission-control', 'debug', 'debugger', 'codex',
+      'github', 'gitlab', 'bitbucket', 'stackoverflow',
+      'docker', 'kubernetes', 'terminal', 'console',
+      'api', 'endpoint', 'webhook', 'integration',
+      'architecture', 'system design', 'workflow', 'automation',
+      'vscode', 'cursor', 'intellij', 'sublime', 'atom',
+      'pull request', 'issues', 'bug', 'fix', 'deploy', 'build'
+    ];
+
+    const hasWorkIndicator = workIndicators.some(indicator =>
+      titleLower.includes(indicator)
     );
 
-    if (matchesPattern) {
-      // Check exceptions
-      if (rule.exceptions) {
-        const hasException = rule.exceptions.some(ex =>
-          titleLower.includes(ex)
-        );
-        if (hasException) {
-          // YouTube with "tutorial" = research, not entertainment
-          if (rule.category === 'entertainment') {
-            category = 'research_learning';
-          }
-          continue;
-        }
+    if (hasWorkIndicator) {
+      category = 'core_work';
+    } else {
+      // Check for research/learning indicators
+      const researchIndicators = [
+        'documentation', 'docs.', 'readme', 'tutorial', 'how to',
+        'wikipedia', 'confluence', 'notion', 'obsidian',
+        'stackoverflow', 'github.com', 'gitlab.com'
+      ];
+
+      const hasResearchIndicator = researchIndicators.some(indicator =>
+        titleLower.includes(indicator)
+      );
+
+      if (hasResearchIndicator) {
+        category = 'research_learning';
       }
-      category = rule.category;
-      break;
+    }
+  }
+
+  // If not a browser or no work indicator found, use normal rules
+  if (category === 'other') {
+    // Find matching rule
+    for (const rule of APP_CLASSIFICATION_RULES) {
+      const matchesPattern = rule.patterns.some(pattern =>
+        appLower.includes(pattern) || titleLower.includes(pattern)
+      );
+
+      if (matchesPattern) {
+        // Check exceptions
+        if (rule.exceptions) {
+          const hasException = rule.exceptions.some(ex =>
+            titleLower.includes(ex)
+          );
+          if (hasException) {
+            // YouTube with "tutorial" = research, not entertainment
+            if (rule.category === 'entertainment') {
+              category = 'research_learning';
+            }
+            continue;
+          }
+        }
+        category = rule.category;
+        break;
+      }
     }
   }
 
