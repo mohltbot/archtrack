@@ -3,9 +3,9 @@ import cors from 'cors';
 import path from 'path';
 import { createServer } from 'http';
 import { WebSocketServer } from 'ws';
-import { initDatabase } from './database';
-import { setupRoutes } from './routes';
-import { setupWebSocket } from './websocket';
+import { initDatabase } from './database.js';
+import { setupRoutes } from './routes.js';
+import { setupWebSocket } from './websocket.js';
 
 const app = express();
 const server = createServer(app);
@@ -23,16 +23,18 @@ initDatabase();
 // Setup WebSocket
 setupWebSocket(wss);
 
-// API routes
+// API routes (must come before static files)
 setupRoutes(app);
 
-// Serve static files in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../client')));
-  app.get('*', (req, res) => {
+// Serve static files
+app.use(express.static(path.join(__dirname, '../client')));
+
+// Serve index.html for all non-API routes (SPA support)
+app.get('*', (req, res) => {
+  if (!req.path.startsWith('/api')) {
     res.sendFile(path.join(__dirname, '../client/index.html'));
-  });
-}
+  }
+});
 
 server.listen(PORT, () => {
   console.log(`🚀 ArchTrack Admin Server running on port ${PORT}`);

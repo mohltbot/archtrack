@@ -195,7 +195,6 @@ export function classifyActivity(
 ): ActivityClassification {
   const appLower = appName.toLowerCase();
   const titleLower = windowTitle.toLowerCase();
-  const combined = `${appLower} ${titleLower}`;
 
   // Default classification
   let category: ActivityCategory = 'other';

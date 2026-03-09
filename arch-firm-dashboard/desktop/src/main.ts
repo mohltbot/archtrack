@@ -1,6 +1,6 @@
 import { app, Tray, Menu, nativeImage, ipcMain } from 'electron';
 import Store from 'electron-store';
-import { startTracking, getTrackingStatus } from './tracker';
+import { startTracking, getTrackingStatus, setupIpcHandlers } from './tracker.js';
 
 const store = new Store({
   defaults: { 
@@ -18,10 +18,11 @@ app.whenReady().then(async () => {
   console.log('║  Automatic Activity Tracking System    ║');
   console.log('╚════════════════════════════════════════╝');
   console.log('');
-  
+
   createTray();
+  setupIpcHandlers();
   await startTracking();
-  
+
   console.log('');
   console.log('✓ Tracker running in background');
   console.log('✓ Detecting active windows every 5 seconds');

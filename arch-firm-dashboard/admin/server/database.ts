@@ -658,40 +658,48 @@ export async function getDashboardStats(): Promise<any> {
     `, todayStr)
   ]);
 
-  // Build productivity breakdown
+  // Build productivity breakdown with new universal categories
   const productivityBreakdown: Record<string, number> = {
-    softwareDev: 0,
-    devops: 0,
-    researchDocs: 0,
+    coreWork: 0,
     communication: 0,
-    internalTools: 0,
-    designWork: 0,
-    unproductive: 0
+    researchLearning: 0,
+    planningDocs: 0,
+    breakIdle: 0,
+    entertainment: 0,
+    socialMedia: 0,
+    shoppingPersonal: 0,
+    other: 0
   };
 
   for (const stat of productivityStats) {
     const minutes = Math.round(stat.total_seconds / 60);
     switch (stat.category) {
-      case 'software_dev':
-        productivityBreakdown.softwareDev += minutes;
+      case 'core_work':
+        productivityBreakdown.coreWork += minutes;
         break;
-      case 'devops':
-        productivityBreakdown.devops += minutes;
-        break;
-      case 'research_docs':
-        productivityBreakdown.researchDocs += minutes;
-        break;
-      case 'communication_active':
+      case 'communication':
         productivityBreakdown.communication += minutes;
         break;
-      case 'internal_tools':
-        productivityBreakdown.internalTools += minutes;
+      case 'research_learning':
+        productivityBreakdown.researchLearning += minutes;
         break;
-      case 'design_work':
-        productivityBreakdown.designWork += minutes;
+      case 'planning_docs':
+        productivityBreakdown.planningDocs += minutes;
+        break;
+      case 'break_idle':
+        productivityBreakdown.breakIdle += minutes;
+        break;
+      case 'entertainment':
+        productivityBreakdown.entertainment += minutes;
+        break;
+      case 'social_media':
+        productivityBreakdown.socialMedia += minutes;
+        break;
+      case 'shopping_personal':
+        productivityBreakdown.shoppingPersonal += minutes;
         break;
       default:
-        productivityBreakdown.unproductive += minutes;
+        productivityBreakdown.other += minutes;
     }
   }
 

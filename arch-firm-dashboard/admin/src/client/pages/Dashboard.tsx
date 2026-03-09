@@ -25,6 +25,7 @@ interface EmployeeActivity {
   productivityScore: number;
   hoursToday: number;
   suspiciousActivityCount: number;
+  isIdle?: boolean;
 }
 
 interface DashboardStats {
@@ -55,7 +56,7 @@ export const Dashboard: React.FC = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
-  const { onlineEmployees, recentActivity } = useWebSocket();
+  const { onlineEmployees, recentActivity: _recentActivity } = useWebSocket();
 
   useEffect(() => {
     loadData();

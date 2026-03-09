@@ -10,7 +10,7 @@ import {
   ActivityClassification,
   ActivityCategory,
   SUSPICIOUS_THRESHOLDS
-} from './classifier';
+} from './classifier.js';
 
 // Dynamic import for active-win (ESM module)
 let activeWin: any = null;
@@ -161,29 +161,28 @@ async function checkActivity(): Promise<void> {
     if (appName !== lastAppName) {
       currentAppStartTime = now;
       lastAppName = appName;
-      // Reset window change count when app changes
       windowChangeCount = 0;
     }
 
     // Calculate context for classification
-    const durationInCurrentApp = (now - currentAppStartTime) / 60000; // minutes
-    const timeSinceLastInput = (now - lastInputTime) / 60000; // minutes
+    const durationInCurrentApp = (now - currentAppStartTime) / 60000;
+    const timeSinceLastInput = (now - lastInputTime) / 60000;
 
-    // Detect if video is likely playing (YouTube/Netflix with no input)
+    // Detect if video is likely playing
     const isVideoPlaying = (
       appName.toLowerCase().includes('youtube') ||
       appName.toLowerCase().includes('netflix') ||
       appName.toLowerCase().includes('hulu')
     ) && timeSinceLastInput > 2;
 
-    // Classify the activity with full context
+    // Classify the activity
     const classification = classifyActivity(appName, windowTitle, {
       durationMinutes: durationInCurrentApp,
       hasInputActivity,
       windowChangeCount,
       lastInputMinutesAgo: timeSinceLastInput,
       isVideoPlaying,
-      isFullscreen: false // Could detect this if needed
+      isFullscreen: false
     });
 
     // Create the activity record
@@ -224,7 +223,6 @@ async function checkActivity(): Promise<void> {
       }
     }
 
-    // Keep memory bounded
     if (activities.length > 2000) {
       activities.splice(0, activities.length - 1000);
     }
@@ -237,7 +235,6 @@ async function checkActivity(): Promise<void> {
 function logActivity(activity: TrackedActivity): void {
   const time = new Date().toLocaleTimeString('en-US', { hour12: false });
 
-  // Icon based on productivity
   let icon = '⚪';
   if (activity.productivityLevel === 'productive') icon = '🟢';
   else if (activity.productivityLevel === 'idle') icon = '💤';
@@ -269,31 +266,19 @@ function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
 
-// Mock data for testing without active-win
 function getMockData(): { title: string; app: string } {
   const scenarios = [
-    // Normal work
     { title: 'Floor Plan v2.dwg - AutoCAD 2024', app: 'AutoCAD' },
     { title: 'Project Budget Q1.xlsx - Excel', app: 'Microsoft Excel' },
     { title: 'Downtown Office Complex - Revit', app: 'Revit' },
     { title: 'Email: Re: Client Meeting Tomorrow', app: 'Microsoft Outlook' },
-
-    // The "YouTube trick" - video playing to keep Slack active
     { title: 'Lo-Fi Beats to Study/Relax To - YouTube', app: 'YouTube' },
-
-    // Ghost presence - Slack open but no activity
     { title: '#general | Slack', app: 'Slack' },
-
-    // Actual work with communication
     { title: 'Design Review - Zoom Meeting', app: 'zoom.us' },
     { title: 'Project Proposal.docx - Word', app: 'Microsoft Word' },
-
-    // Time wasters
     { title: 'Facebook - News Feed', app: 'Facebook' },
     { title: 'Netflix - Browse', app: 'Netflix' },
     { title: 'Amazon.com: Online Shopping', app: 'Amazon' },
-
-    // System idle
     { title: 'Desktop', app: 'Finder' },
   ];
 
@@ -309,53 +294,64 @@ async function syncToServer(): Promise<void> {
     return;
   }
 
-  try {
-    const batch = offlineQueue.splice(0, offlineQueue.length);
+  // Process in batches of 50 to avoid payload too large
+  const BATCH_SIZE = 50;
+  let totalSynced = 0;
+  let totalSuspicious = 0;
 
-    const payload = {
-      employeeId: config.employeeId,
-      activities: batch.map(a => ({
-        id: a.id,
-        timestamp: a.timestamp,
-        appName: a.appName,
-        windowTitle: a.windowTitle,
-        category: a.category,
-        categoryName: a.categoryName,
-        productivityScore: a.productivityScore,
-        productivityLevel: a.productivityLevel,
-        isSuspicious: a.isSuspicious,
-        suspiciousReason: a.suspiciousReason,
-        isIdle: a.isIdle,
-        idleTimeSeconds: a.idleTimeSeconds,
-        durationSeconds: a.durationSeconds
-      }))
-    };
+  while (offlineQueue.length > 0) {
+    const batchSize = Math.min(BATCH_SIZE, offlineQueue.length);
+    const batch = offlineQueue.splice(0, batchSize);
 
-    const response = await fetch(`${config.serverUrl}/api/activity`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+    try {
+      const payload = {
+        employeeId: config.employeeId,
+        activities: batch.map(a => ({
+          id: a.id,
+          timestamp: a.timestamp,
+          appName: a.appName,
+          windowTitle: a.windowTitle,
+          category: a.category,
+          categoryName: a.categoryName,
+          productivityScore: a.productivityScore,
+          productivityLevel: a.productivityLevel,
+          isSuspicious: a.isSuspicious,
+          suspiciousReason: a.suspiciousReason,
+          isIdle: a.isIdle,
+          idleTimeSeconds: a.idleTimeSeconds,
+          durationSeconds: a.durationSeconds
+        }))
+      };
 
-    if (response.ok) {
-      const result: any = await response.json();
-      console.log(`✓ Synced ${batch.length} activities`);
+      const response = await fetch(`${config.serverUrl}/api/activity`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
 
-      if (result.data?.suspiciousCount > 0) {
-        console.warn(`⚠️ Server flagged ${result.data.suspiciousCount} suspicious activities`);
+      if (response.ok) {
+        const result: any = await response.json();
+        totalSynced += batch.length;
+        totalSuspicious += result.data?.suspiciousCount || 0;
+      } else {
+        offlineQueue.unshift(...batch);
+        console.error(`Sync failed for batch: ${response.statusText}`);
+        break;
       }
-
-      lastSyncTime = Date.now();
-      saveOfflineQueue();
-    } else {
+    } catch (err) {
       offlineQueue.unshift(...batch);
-      console.error('Sync failed:', response.statusText);
+      isOnline = false;
+      console.error('Sync error:', err);
+      break;
     }
-  } catch (err) {
-    const batch = offlineQueue.splice(0, offlineQueue.length);
-    offlineQueue.unshift(...batch);
-    isOnline = false;
-    console.error('Sync error:', err);
+  }
+
+  if (totalSynced > 0) {
+    console.log(`✓ Synced ${totalSynced} activities`);
+    if (totalSuspicious > 0) {
+      console.warn(`⚠️ Server flagged ${totalSuspicious} suspicious activities`);
+    }
+    lastSyncTime = Date.now();
     saveOfflineQueue();
   }
 }
@@ -404,8 +400,10 @@ function loadOfflineQueue(): void {
     const queuePath = path.join(app.getPath('userData'), 'offline-queue.json');
     if (fs.existsSync(queuePath)) {
       const data = JSON.parse(fs.readFileSync(queuePath, 'utf-8'));
-      offlineQueue.push(...data);
-      console.log(`📦 Loaded ${data.length} queued activities from disk`);
+      if (Array.isArray(data)) {
+        offlineQueue.push(...data);
+        console.log(`📦 Loaded ${data.length} queued activities from disk`);
+      }
     }
   } catch (err) {
     console.error('Failed to load offline queue:', err);
@@ -421,7 +419,6 @@ function saveOfflineQueue(): void {
   }
 }
 
-// IPC handlers for UI
 export function setupIpcHandlers(): void {
   ipcMain.handle('tracker:getStatus', () => {
     return {
@@ -462,7 +459,6 @@ export function setupIpcHandlers(): void {
   });
 }
 
-// Export for main process
 export function getTrackingStatus() {
   return {
     activitiesCount: activities.length,

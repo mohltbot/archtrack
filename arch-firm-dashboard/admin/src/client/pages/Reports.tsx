@@ -8,7 +8,7 @@ export const Reports: React.FC = () => {
   const [endDate, setEndDate] = useState<string>('');
   const [report, setReport] = useState<any>(null);
   const [loading, setLoading] = useState(false);
-  const [activities, setActivities] = useState<Activity[]>([]);
+  const [_activities, setActivities] = useState<Activity[]>([]);
 
   useEffect(() => {
     loadEmployees();
@@ -51,7 +51,7 @@ export const Reports: React.FC = () => {
     }
   };
 
-  const loadActivities = async () => {
+  const _loadActivities = async () => {
     try {
       const url = selectedEmployee 
         ? `/api/activities?employeeId=${selectedEmployee}&startDate=${startDate}&endDate=${endDate}`
@@ -119,19 +119,19 @@ export const Reports: React.FC = () => {
             </div>
             <div style={styles.card}>
               <h3 style={styles.cardTitle}>Productive Hours</h3>
-              <p style={styles.cardValue} style={{ color: '#27ae60' }}>
+              <p style={{...styles.cardValue, color: '#27ae60'}}>
                 {report.summary.productiveHours}
               </p>
             </div>
             <div style={styles.card}>
               <h3 style={styles.cardTitle}>Unproductive Hours</h3>
-              <p style={styles.cardValue} style={{ color: '#e74c3c' }}>
+              <p style={{...styles.cardValue, color: '#e74c3c'}}>
                 {report.summary.unproductiveHours}
               </p>
             </div>
             <div style={styles.card}>
               <h3 style={styles.cardTitle}>Productivity Score</h3>
-              <p style={styles.cardValue} style={{ color: '#3498db' }}>
+              <p style={{...styles.cardValue, color: '#3498db'}}>
                 {report.summary.averageProductivityScore}%
               </p>
             </div>
