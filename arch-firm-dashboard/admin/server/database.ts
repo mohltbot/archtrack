@@ -718,11 +718,14 @@ export async function getDashboardStats(): Promise<any> {
   );
 
   const distractedTime = await db.get(
-    `SELECT COALESCE(SUM(duration_seconds), 0) as total 
-     FROM activities 
+    `SELECT COALESCE(SUM(duration_seconds), 0) as total
+     FROM activities
      WHERE timestamp >= ? AND (productivity_level = 'unproductive' OR is_suspicious = 1)`,
     todayStr
   );
+
+  // Get employee activity stats
+  const employeeActivity = await getEmployeeActivityStats();
 
   return {
     totalEmployees: totalEmployees.count,
@@ -735,7 +738,8 @@ export async function getDashboardStats(): Promise<any> {
     suspiciousActivityCount: suspiciousCount.count,
     focusTimeMinutes: Math.round(focusTime.total / 60),
     distractedTimeMinutes: Math.round(distractedTime.total / 60),
-    recentActivities: recentActivities.map(mapActivity)
+    recentActivities: recentActivities.map(mapActivity),
+    employeeActivity
   };
 }
 

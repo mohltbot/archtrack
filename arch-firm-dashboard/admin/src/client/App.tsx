@@ -158,9 +158,10 @@ const styles: { [key: string]: React.CSSProperties | any } = {
     transition: 'all 0.2s'
   },
   navItemActive: {
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: 'rgba(52, 152, 219, 0.2)',
     color: '#fff',
-    borderLeft: '3px solid #3498db'
+    borderLeft: '4px solid #3498db',
+    fontWeight: 600
   },
   navIcon: {
     fontSize: '18px'

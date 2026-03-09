@@ -112,9 +112,15 @@ export const APP_CLASSIFICATION_RULES: AppRule[] = [
       'stackoverflow', 'github', 'gitlab', 'documentation', 'docs.',
       'wikipedia', 'wikis', 'confluence', 'notion', 'obsidian',
       'udemy', 'coursera', 'linkedin learning', 'pluralsight',
+      // GitHub page indicators in window titles
+      'mohltbot/mission-control', 'at main', 'pull request', 'issues',
+      // Development/tech sites
+      'selfhosted', 'reddit', 'hackernews', 'ycombinator',
+      // Documentation
+      'readme', 'md at', '.md',
     ],
     category: 'research_learning',
-    exceptions: ['facebook', 'instagram', 'twitter', 'reddit'] // Exclude social
+    exceptions: ['facebook', 'instagram', 'twitter'] // Exclude social (keep reddit for tech)
   },
 
   // Planning & Documentation
@@ -155,11 +161,11 @@ export const APP_CLASSIFICATION_RULES: AppRule[] = [
     category: 'shopping_personal'
   },
 
-  // System/Browser (neutral)
+  // System/Browser (neutral - but check for work patterns)
   {
     patterns: [
       'finder', 'explorer', 'desktop', 'system preferences', 'settings',
-      'chrome', 'safari', 'firefox', 'edge', 'new tab', 'google search',
+      'new tab', 'google search', 'chrome', 'safari', 'firefox', 'edge',
     ],
     category: 'other'
   }
