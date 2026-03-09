@@ -37,15 +37,15 @@
 
 ---
 
-## ⏳ READY TO SEND
+## ✅ SENT (March 8, 2026)
 
 ### GitHub #38706 (GPT-5.4 Codex OAuth)
 **Link:** https://github.com/openclaw/openclaw/issues/38706
-**Fix:** Override provider config to use chatgpt.com/backend-api
+**Status:** ✅ SENT
 
 ### Reddit r/selfhosted (Setup Post)
 **Link:** https://reddit.com/r/selfhosted/comments/1rnq1h1
-**Reply:** Security checklist + Caddy config + spending caps
+**Status:** ✅ SENT
 
 ---
 

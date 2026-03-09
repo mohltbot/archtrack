@@ -161,6 +161,19 @@ export const APP_CLASSIFICATION_RULES: AppRule[] = [
     category: 'shopping_personal'
   },
 
+  // Development work in browsers (when window title indicates coding/debugging)
+  {
+    patterns: [
+      'openclaw', 'mission-control', 'debug', 'debugger', 'codex', 'cursor',
+      'vscode', 'visual studio code', 'github', 'gitlab', 'bitbucket',
+      'stackoverflow', 'docker', 'kubernetes', 'terminal', 'console',
+      'logs', 'error', 'bug', 'fix', 'deploy', 'build', 'compile',
+      'api', 'endpoint', 'webhook', 'integration', 'testing',
+      'architecture', 'system design', 'workflow', 'automation',
+    ],
+    category: 'core_work'
+  },
+
   // System/Browser (neutral - but check for work patterns)
   {
     patterns: [

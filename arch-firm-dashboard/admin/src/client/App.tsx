@@ -151,6 +151,7 @@ const styles: { [key: string]: React.CSSProperties | any } = {
     padding: '12px 24px',
     background: 'none',
     border: 'none',
+    borderLeft: '4px solid transparent',
     color: '#bdc3c7',
     fontSize: '15px',
     cursor: 'pointer',
@@ -164,7 +165,10 @@ const styles: { [key: string]: React.CSSProperties | any } = {
     fontWeight: 600
   },
   navIcon: {
-    fontSize: '18px'
+    fontSize: '18px',
+    width: '24px',
+    textAlign: 'center',
+    flexShrink: 0
   },
   connectionStatus: {
     padding: '16px 24px',
