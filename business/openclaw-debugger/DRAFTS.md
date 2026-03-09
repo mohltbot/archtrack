@@ -206,8 +206,8 @@ DM me if you want a second set of eyes on it.
 
 ## 🆕 NEW CONTENT — Shift 2 (March 7, 2026)
 
-### Twitter Thread: "The OAuth Recovery Loop Bug Nobody Talks About"
-**Status:** ✅ POSTED March 7, 2026
+### ✅ POSTED: Twitter Thread - OAuth Recovery Loop Bug
+**Date:** March 8, 2026
 **Platform:** Twitter/X
 **Hook:** "Your OpenClaw keeps entering safe mode after OAuth renewal? Here's why (and the 30-second fix)"
 **Source:** GitHub issue #38336, trending issue affecting many users
