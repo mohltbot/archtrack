@@ -139,16 +139,45 @@ async function checkActivity(): Promise<void> {
           appName = winInfo.owner?.name || winInfo.owner?.bundleId || 'Unknown';
         }
       } catch (err) {
-        // Use mock data for testing
-        const mock = getMockData();
-        windowTitle = mock.title;
-        appName = mock.app;
+        // No mock data - just log error and skip this check
+        console.error('Failed to get active window:', err);
+        return; // Skip recording this cycle
       }
     } else {
-      // Mock mode
-      const mock = getMockData();
-      windowTitle = mock.title;
-      appName = mock.app;
+      // No active-win library - skip recording
+      console.log('active-win not available, skipping tracking');
+      return; // Skip recording this cycle
+    }
+
+    // FIX: Skip recording if user has been idle for more than 2 minutes
+    // This prevents tracking background apps when user is away
+    if (idleTimeSec > 120) {
+      // Only record an idle entry if we haven't already
+      if (!lastActivity || !lastActivity.isIdle) {
+        const idleActivity: TrackedActivity = {
+          id: generateId(),
+          timestamp: new Date().toISOString(),
+          appName: 'Idle',
+          windowTitle: 'User away from computer',
+          category: 'break_idle',
+          categoryName: 'Break/Idle',
+          productivityScore: 0,
+          productivityLevel: 'idle',
+          isSuspicious: false,
+          suspiciousReason: undefined,
+          isIdle: true,
+          idleTimeSeconds: idleTimeSec,
+          durationSeconds: Math.round(timeSinceLastCheck),
+          hasInputActivity: false
+        };
+        
+        activities.push(idleActivity);
+        offlineQueue.push(idleActivity);
+        lastActivity = idleActivity;
+        
+        console.log(`[${new Date().toLocaleTimeString('en-US', { hour12: false })}] 💤 IDLE | User away for ${Math.round(idleTimeSec / 60)} minutes`);
+      }
+      return; // Skip the rest of the tracking
     }
 
     // Track window changes
@@ -203,15 +232,22 @@ async function checkActivity(): Promise<void> {
       hasInputActivity
     };
 
-    // Record activity if significant change or every minute
-    const shouldRecord = !lastActivity ||
-      lastActivity.appName !== activity.appName ||
-      lastActivity.windowTitle !== activity.windowTitle ||
-      lastActivity.isIdle !== activity.isIdle ||
-      classification.isSuspicious ||
-      timeSinceLastCheck >= 60;
+    // FIX: Only record activity if:
+    // 1. User has had input activity in the last 3 seconds (actively using the app)
+    // 2. OR the window/app has actually changed
+    // 3. OR it's been 60 seconds since last check
+    // This prevents tracking background apps that happen to be "active" but user isn't interacting with
+    const hasRecentInput = idleTimeSec < 3;
+    const windowChanged = !lastActivity || 
+      lastActivity.appName !== activity.appName || 
+      lastActivity.windowTitle !== activity.windowTitle;
+    const significantTimePassed = timeSinceLastCheck >= 60;
+    
+    const shouldRecord = windowChanged && hasRecentInput || 
+                         classification.isSuspicious || 
+                         significantTimePassed;
 
-    if (shouldRecord) {
+    if (shouldRecord && hasRecentInput) {
       activities.push(activity);
       offlineQueue.push(activity);
       lastActivity = activity;
@@ -264,25 +300,6 @@ function logActivity(activity: TrackedActivity): void {
 
 function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-}
-
-function getMockData(): { title: string; app: string } {
-  const scenarios = [
-    { title: 'Floor Plan v2.dwg - AutoCAD 2024', app: 'AutoCAD' },
-    { title: 'Project Budget Q1.xlsx - Excel', app: 'Microsoft Excel' },
-    { title: 'Downtown Office Complex - Revit', app: 'Revit' },
-    { title: 'Email: Re: Client Meeting Tomorrow', app: 'Microsoft Outlook' },
-    { title: 'Lo-Fi Beats to Study/Relax To - YouTube', app: 'YouTube' },
-    { title: '#general | Slack', app: 'Slack' },
-    { title: 'Design Review - Zoom Meeting', app: 'zoom.us' },
-    { title: 'Project Proposal.docx - Word', app: 'Microsoft Word' },
-    { title: 'Facebook - News Feed', app: 'Facebook' },
-    { title: 'Netflix - Browse', app: 'Netflix' },
-    { title: 'Amazon.com: Online Shopping', app: 'Amazon' },
-    { title: 'Desktop', app: 'Finder' },
-  ];
-
-  return scenarios[Math.floor(Math.random() * scenarios.length)];
 }
 
 async function syncToServer(): Promise<void> {

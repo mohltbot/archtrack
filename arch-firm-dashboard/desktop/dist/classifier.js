@@ -71,6 +71,13 @@ export const APP_CLASSIFICATION_RULES = [
         category: 'research_learning',
         exceptions: ['facebook', 'instagram', 'twitter', 'reddit']
     },
+    // OpenClaw - Core Work (employee-specific context)
+    {
+        patterns: [
+            'openclaw', 'claw', 'mohltbot', 'mission-control', 'archtrack', 'arch-track',
+        ],
+        category: 'core_work'
+    },
     // Planning & Documentation
     {
         patterns: [
@@ -133,29 +140,37 @@ export function classifyActivity(appName, windowTitle, context) {
     const browserApps = ['chrome', 'safari', 'firefox', 'edge', 'brave', 'opera'];
     const isBrowser = browserApps.some(b => appLower.includes(b));
     if (isBrowser) {
-        const workIndicators = [
-            'openclaw', 'mission-control', 'debug', 'debugger', 'codex',
-            'github', 'gitlab', 'bitbucket', 'stackoverflow',
-            'docker', 'kubernetes', 'terminal', 'console',
-            'api', 'endpoint', 'webhook', 'integration',
-            'architecture', 'system design', 'workflow', 'automation',
-            'vscode', 'cursor', 'intellij', 'sublime', 'atom',
-            'pull request', 'issues', 'bug', 'fix', 'deploy', 'build'
-        ];
-        const hasWorkIndicator = workIndicators.some(indicator => titleLower.includes(indicator));
-        if (hasWorkIndicator) {
+        // EMPLOYEE-SPECIFIC CONTEXT: Safari on this Mac mini is dedicated OpenClaw work
+        // Since Safari window titles show as "Untitled" due to macOS permissions,
+        // we classify all Safari as Core Work for this employee
+        if (appLower.includes('safari')) {
             category = 'core_work';
         }
         else {
-            // Check for research/learning indicators
-            const researchIndicators = [
-                'documentation', 'docs.', 'readme', 'tutorial', 'how to',
-                'wikipedia', 'confluence', 'notion', 'obsidian',
-                'stackoverflow', 'github.com', 'gitlab.com'
+            const workIndicators = [
+                'openclaw', 'mission-control', 'debug', 'debugger', 'codex',
+                'github', 'gitlab', 'bitbucket', 'stackoverflow',
+                'docker', 'kubernetes', 'terminal', 'console',
+                'api', 'endpoint', 'webhook', 'integration',
+                'architecture', 'system design', 'workflow', 'automation',
+                'vscode', 'cursor', 'intellij', 'sublime', 'atom',
+                'pull request', 'issues', 'bug', 'fix', 'deploy', 'build'
             ];
-            const hasResearchIndicator = researchIndicators.some(indicator => titleLower.includes(indicator));
-            if (hasResearchIndicator) {
-                category = 'research_learning';
+            const hasWorkIndicator = workIndicators.some(indicator => titleLower.includes(indicator));
+            if (hasWorkIndicator) {
+                category = 'core_work';
+            }
+            else {
+                // Check for research/learning indicators
+                const researchIndicators = [
+                    'documentation', 'docs.', 'readme', 'tutorial', 'how to',
+                    'wikipedia', 'confluence', 'notion', 'obsidian',
+                    'stackoverflow', 'github.com', 'gitlab.com'
+                ];
+                const hasResearchIndicator = researchIndicators.some(indicator => titleLower.includes(indicator));
+                if (hasResearchIndicator) {
+                    category = 'research_learning';
+                }
             }
         }
     }

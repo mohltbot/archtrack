@@ -99,18 +99,25 @@ interface NavItemProps {
   onClick: () => void;
 }
 
-const NavItem: React.FC<NavItemProps> = ({ label, icon, active, onClick }) => (
-  <button
-    onClick={onClick}
-    style={{
-      ...styles.navItem,
-      ...(active ? styles.navItemActive : {})
-    }}
-  >
-    <span style={styles.navIcon}>{icon}</span>
-    <span style={styles.navLabel}>{label}</span>
-  </button>
-);
+const NavItem: React.FC<NavItemProps> = ({ label, icon, active, onClick }) => {
+  const [isHovered, setIsHovered] = React.useState(false);
+  
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      style={{
+        ...styles.navItem,
+        ...(isHovered ? styles.navItemHover : {}),
+        ...(active ? styles.navItemActive : {})
+      }}
+    >
+      <span style={styles.navIcon}>{icon}</span>
+      <span style={styles.navLabel}>{label}</span>
+    </button>
+  );
+};
 
 const styles: { [key: string]: React.CSSProperties | any } = {
   container: {
@@ -141,7 +148,8 @@ const styles: { [key: string]: React.CSSProperties | any } = {
   },
   nav: {
     flex: 1,
-    padding: '16px 0'
+    padding: '16px 0',
+    backgroundColor: 'transparent'
   },
   navItem: {
     display: 'flex',
@@ -149,17 +157,22 @@ const styles: { [key: string]: React.CSSProperties | any } = {
     gap: '12px',
     width: '100%',
     padding: '12px 24px',
-    background: 'none',
+    backgroundColor: 'transparent',
     border: 'none',
     borderLeft: '4px solid transparent',
-    color: '#bdc3c7',
+    color: '#ffffff',
     fontSize: '15px',
+    fontWeight: 500,
     cursor: 'pointer',
     textAlign: 'left',
     transition: 'all 0.2s'
   },
+  navItemHover: {
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    color: '#ffffff'
+  },
   navItemActive: {
-    backgroundColor: 'rgba(52, 152, 219, 0.2)',
+    backgroundColor: '#34495e',
     color: '#fff',
     borderLeft: '4px solid #3498db',
     fontWeight: 600

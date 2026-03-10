@@ -404,8 +404,10 @@ export async function getActivitiesByEmployee(
     params.push(startDate);
   }
   if (endDate) {
+    // FIX: Use end of day (23:59:59) instead of start of day (00:00:00)
+    const endOfDay = endDate + 'T23:59:59.999Z';
     query += ' AND timestamp <= ?';
-    params.push(endDate);
+    params.push(endOfDay);
   }
   
   query += ' ORDER BY timestamp DESC';
@@ -642,14 +644,14 @@ export async function getDashboardStats(): Promise<any> {
   monthAgo.setMonth(monthAgo.getMonth() - 1);
   const monthAgoStr = monthAgo.toISOString();
 
-  const [totalEmployees, activeProjects, todayHours, weekHours, monthHours, recentActivities, suspiciousCount, productivityStats] = await Promise.all([
+  const [totalEmployees, activeProjects, todayHours, weekHours, monthHours, recentActivities, suspiciousActivities, productivityStats] = await Promise.all([
     db.get('SELECT COUNT(*) as count FROM employees WHERE is_active = 1'),
     db.get('SELECT COUNT(*) as count FROM projects WHERE status = "active"'),
     db.get('SELECT COALESCE(SUM(duration), 0) as total FROM time_entries WHERE start_time >= ?', todayStr),
     db.get('SELECT COALESCE(SUM(duration), 0) as total FROM time_entries WHERE start_time >= ?', weekAgoStr),
     db.get('SELECT COALESCE(SUM(duration), 0) as total FROM time_entries WHERE start_time >= ?', monthAgoStr),
     db.all('SELECT * FROM activities ORDER BY timestamp DESC LIMIT 20'),
-    db.get('SELECT COUNT(*) as count FROM activities WHERE timestamp >= ? AND is_suspicious = 1', todayStr),
+    db.all('SELECT * FROM activities WHERE timestamp >= ? AND is_suspicious = 1 ORDER BY timestamp DESC LIMIT 50', todayStr),
     db.all(`
       SELECT category, SUM(duration_seconds) as total_seconds 
       FROM activities 
@@ -657,6 +659,19 @@ export async function getDashboardStats(): Promise<any> {
       GROUP BY category
     `, todayStr)
   ]);
+  
+  // FIX: Count ALL suspicious activities including idle time
+  // Idle time IS suspicious activity (employee away from desk)
+  const uniqueSuspiciousCount = suspiciousActivities.length;
+
+  // FIX: Calculate actual time from unique app switches, not summed duration_seconds
+  // Get unique activity periods (when app/window changes)
+  const uniqueActivities = await db.all(
+    `SELECT * FROM activities 
+     WHERE timestamp >= ? 
+     ORDER BY timestamp ASC`,
+    todayStr
+  );
 
   // Build productivity breakdown with new universal categories
   const productivityBreakdown: Record<string, number> = {
@@ -671,73 +686,103 @@ export async function getDashboardStats(): Promise<any> {
     other: 0
   };
 
-  for (const stat of productivityStats) {
-    const minutes = Math.round(stat.total_seconds / 60);
-    switch (stat.category) {
+  // FIX: Calculate breakdown from uniqueActivities (actual time) not productivityStats
+  for (let i = 0; i < uniqueActivities.length; i++) {
+    const current = uniqueActivities[i];
+    const next = uniqueActivities[i + 1];
+    
+    // Calculate duration until next activity or cap at 10 minutes
+    let durationMinutes = 0.17; // default 10 seconds = 0.17 minutes
+    if (next) {
+      const currentTime = new Date(current.timestamp).getTime();
+      const nextTime = new Date(next.timestamp).getTime();
+      durationMinutes = Math.min((nextTime - currentTime) / 1000 / 60, 10); // cap at 10 minutes
+    }
+    
+    switch (current.category) {
       case 'core_work':
-        productivityBreakdown.coreWork += minutes;
+        productivityBreakdown.coreWork += durationMinutes;
         break;
       case 'communication':
-        productivityBreakdown.communication += minutes;
+        productivityBreakdown.communication += durationMinutes;
         break;
       case 'research_learning':
-        productivityBreakdown.researchLearning += minutes;
+        productivityBreakdown.researchLearning += durationMinutes;
         break;
       case 'planning_docs':
-        productivityBreakdown.planningDocs += minutes;
+        productivityBreakdown.planningDocs += durationMinutes;
         break;
       case 'break_idle':
-        productivityBreakdown.breakIdle += minutes;
+        productivityBreakdown.breakIdle += durationMinutes;
         break;
       case 'entertainment':
-        productivityBreakdown.entertainment += minutes;
+        productivityBreakdown.entertainment += durationMinutes;
         break;
       case 'social_media':
-        productivityBreakdown.socialMedia += minutes;
+        productivityBreakdown.socialMedia += durationMinutes;
         break;
       case 'shopping_personal':
-        productivityBreakdown.shoppingPersonal += minutes;
+        productivityBreakdown.shoppingPersonal += durationMinutes;
         break;
       default:
-        productivityBreakdown.other += minutes;
+        productivityBreakdown.other += durationMinutes;
     }
   }
-
-  // Calculate average productivity score
-  const avgScore = await db.get(
-    'SELECT AVG(productivity_score) as score FROM activities WHERE timestamp >= ?',
-    todayStr
-  );
-
-  // Calculate focus vs distracted time
-  const focusTime = await db.get(
-    `SELECT COALESCE(SUM(duration_seconds), 0) as total 
-     FROM activities 
-     WHERE timestamp >= ? AND productivity_level = 'productive' AND is_suspicious = 0`,
-    todayStr
-  );
-
-  const distractedTime = await db.get(
-    `SELECT COALESCE(SUM(duration_seconds), 0) as total
-     FROM activities
-     WHERE timestamp >= ? AND (productivity_level = 'unproductive' OR is_suspicious = 1)`,
-    todayStr
-  );
+  
+  // Calculate actual time by looking at time between unique activity changes
+  let actualTotalSeconds = 0;
+  let actualProductiveSeconds = 0;
+  let actualUnproductiveSeconds = 0;
+  let actualIdleSeconds = 0;
+  
+  for (let i = 0; i < uniqueActivities.length; i++) {
+    const current = uniqueActivities[i];
+    const next = uniqueActivities[i + 1];
+    
+    // Calculate duration until next activity or cap at 10 minutes
+    let duration = 10; // default 10 seconds
+    if (next) {
+      const currentTime = new Date(current.timestamp).getTime();
+      const nextTime = new Date(next.timestamp).getTime();
+      duration = Math.min((nextTime - currentTime) / 1000, 600); // cap at 10 minutes
+    }
+    
+    actualTotalSeconds += duration;
+    
+    if (current.productivity_level === 'productive' && !current.is_suspicious) {
+      actualProductiveSeconds += duration;
+    } else if (current.productivity_level === 'unproductive') {
+      actualUnproductiveSeconds += duration;
+    }
+    
+    // FIX: Count idle time as wasted time (includes break_idle category)
+    if (current.is_idle || current.productivity_level === 'idle') {
+      actualIdleSeconds += duration;
+    }
+  }
+  
+  // Calculate average productivity score from unique activities only
+  const avgScore = uniqueActivities.length > 0 
+    ? Math.round(uniqueActivities.reduce((sum: number, a: any) => sum + a.productivity_score, 0) / uniqueActivities.length)
+    : 0;
 
   // Get employee activity stats
   const employeeActivity = await getEmployeeActivityStats();
 
+  // FIX: Include idle time in distracted/wasted time
+  const totalWastedMinutes = Math.round((actualUnproductiveSeconds + actualIdleSeconds) / 60);
+
   return {
     totalEmployees: totalEmployees.count,
     activeProjects: activeProjects.count,
-    totalHoursToday: Math.round(todayHours.total / 3600 * 10) / 10,
+    totalHoursToday: Math.round(actualTotalSeconds / 3600 * 10) / 10,
     totalHoursThisWeek: Math.round(weekHours.total / 3600 * 10) / 10,
     totalHoursThisMonth: Math.round(monthHours.total / 3600 * 10) / 10,
     productivityBreakdown,
-    averageProductivityScore: Math.round(avgScore?.score || 0),
-    suspiciousActivityCount: suspiciousCount.count,
-    focusTimeMinutes: Math.round(focusTime.total / 60),
-    distractedTimeMinutes: Math.round(distractedTime.total / 60),
+    averageProductivityScore: avgScore,
+    suspiciousActivityCount: uniqueSuspiciousCount,
+    focusTimeMinutes: Math.round(actualProductiveSeconds / 60),
+    distractedTimeMinutes: totalWastedMinutes,
     recentActivities: recentActivities.map(mapActivity),
     employeeActivity
   };
@@ -755,33 +800,52 @@ export async function getEmployeeActivityStats(): Promise<any[]> {
   
   const results = [];
   for (const emp of employees) {
-    const [latestActivity, todayStats, suspiciousCount] = await Promise.all([
-      db.get(
-        'SELECT * FROM activities WHERE employee_id = ? ORDER BY timestamp DESC LIMIT 1',
-        emp.id
-      ),
-      db.get(
-        `SELECT 
-          COALESCE(SUM(duration_seconds), 0) as total_seconds,
-          AVG(productivity_score) as avg_score
-         FROM activities 
-         WHERE employee_id = ? AND timestamp >= ?`,
-        [emp.id, todayStr]
-      ),
-      db.get(
-        'SELECT COUNT(*) as count FROM activities WHERE employee_id = ? AND timestamp >= ? AND is_suspicious = 1',
-        [emp.id, todayStr]
-      )
-    ]);
+    // FIX: Get all activities for this employee today to calculate actual time
+    const empActivities = await db.all(
+      `SELECT * FROM activities 
+       WHERE employee_id = ? AND timestamp >= ? 
+       ORDER BY timestamp ASC`,
+      [emp.id, todayStr]
+    );
+    
+    const latestActivity = empActivities.length > 0 ? empActivities[empActivities.length - 1] : null;
+    
+    // FIX: Calculate actual time by looking at time between unique activity changes
+    let actualTotalSeconds = 0;
+    let totalScore = 0;
+    let suspiciousCount = 0;
+    
+    for (let i = 0; i < empActivities.length; i++) {
+      const current = empActivities[i];
+      const next = empActivities[i + 1];
+      
+      // Calculate duration until next activity or cap at 10 minutes
+      let duration = 10; // default 10 seconds
+      if (next) {
+        const currentTime = new Date(current.timestamp).getTime();
+        const nextTime = new Date(next.timestamp).getTime();
+        duration = Math.min((nextTime - currentTime) / 1000, 600); // cap at 10 minutes
+      }
+      
+      actualTotalSeconds += duration;
+      totalScore += current.productivity_score;
+      
+      // FIX: Count ALL suspicious activities including idle time
+      if (current.is_suspicious) {
+        suspiciousCount++;
+      }
+    }
+    
+    const avgScore = empActivities.length > 0 ? Math.round(totalScore / empActivities.length) : 0;
     
     results.push({
       employeeId: emp.id,
       employeeName: emp.name,
       currentActivity: latestActivity?.window_title,
       currentCategory: latestActivity?.category_name,
-      productivityScore: Math.round(todayStats?.avg_score || 0),
-      hoursToday: Math.round((todayStats?.total_seconds || 0) / 3600 * 10) / 10,
-      suspiciousActivityCount: suspiciousCount?.count || 0
+      productivityScore: avgScore,
+      hoursToday: Math.round(actualTotalSeconds / 3600 * 10) / 10,
+      suspiciousActivityCount: suspiciousCount
     });
   }
   

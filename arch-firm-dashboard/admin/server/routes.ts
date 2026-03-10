@@ -417,43 +417,69 @@ export function setupRoutes(app: Express): void {
 
       const employee = await getEmployeeById(employeeId as string);
 
-      // Calculate category breakdown
+      // FIX: Sort activities by timestamp ASCENDING (oldest first) for correct duration calculation
+      const sortedActivities = [...activities].sort((a, b) => 
+        new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+      );
+
+      // FIX: Calculate actual time between activities, not summed durationSeconds
       const categoryBreakdown: Record<string, number> = {};
       let productiveSeconds = 0;
       let unproductiveSeconds = 0;
       let neutralSeconds = 0;
       let totalScore = 0;
 
-      for (const activity of activities) {
-        const minutes = activity.durationSeconds / 60;
-        categoryBreakdown[activity.categoryName] = (categoryBreakdown[activity.categoryName] || 0) + minutes;
+      for (let i = 0; i < sortedActivities.length; i++) {
+        const current = sortedActivities[i];
+        const next = sortedActivities[i + 1];
+        
+        // Calculate duration until next activity or cap at 10 minutes
+        let durationSeconds = 10; // default 10 seconds
+        if (next) {
+          const currentTime = new Date(current.timestamp).getTime();
+          const nextTime = new Date(next.timestamp).getTime();
+          durationSeconds = Math.min((nextTime - currentTime) / 1000, 600); // cap at 10 minutes
+        }
+        
+        const minutes = durationSeconds / 60;
+        categoryBreakdown[current.categoryName] = (categoryBreakdown[current.categoryName] || 0) + minutes;
 
-        if (activity.productivityLevel === 'productive') {
-          productiveSeconds += activity.durationSeconds;
-        } else if (activity.productivityLevel === 'unproductive') {
-          unproductiveSeconds += activity.durationSeconds;
+        if (current.productivityLevel === 'productive') {
+          productiveSeconds += durationSeconds;
+        } else if (current.productivityLevel === 'unproductive') {
+          unproductiveSeconds += durationSeconds;
         } else {
-          neutralSeconds += activity.durationSeconds;
+          neutralSeconds += durationSeconds;
         }
 
-        totalScore += activity.productivityScore;
+        totalScore += current.productivityScore;
       }
 
-      const avgScore = activities.length > 0 ? Math.round(totalScore / activities.length) : 0;
+      const avgScore = sortedActivities.length > 0 ? Math.round(totalScore / sortedActivities.length) : 0;
 
       // Group by day for trend
       const dailyMap = new Map<string, { productive: number; unproductive: number; totalScore: number; count: number }>();
       
-      for (const activity of activities) {
-        const date = activity.timestamp.split('T')[0];
+      for (let i = 0; i < sortedActivities.length; i++) {
+        const current = sortedActivities[i];
+        const next = sortedActivities[i + 1];
+        const date = current.timestamp.split('T')[0];
         const existing = dailyMap.get(date) || { productive: 0, unproductive: 0, totalScore: 0, count: 0 };
         
-        if (activity.productivityLevel === 'productive') {
-          existing.productive += activity.durationSeconds;
-        } else if (activity.productivityLevel === 'unproductive') {
-          existing.unproductive += activity.durationSeconds;
+        // Calculate duration until next activity or cap at 10 minutes
+        let durationSeconds = 10; // default 10 seconds
+        if (next) {
+          const currentTime = new Date(current.timestamp).getTime();
+          const nextTime = new Date(next.timestamp).getTime();
+          durationSeconds = Math.min((nextTime - currentTime) / 1000, 600); // cap at 10 minutes
         }
-        existing.totalScore += activity.productivityScore;
+        
+        if (current.productivityLevel === 'productive') {
+          existing.productive += durationSeconds;
+        } else if (current.productivityLevel === 'unproductive') {
+          existing.unproductive += durationSeconds;
+        }
+        existing.totalScore += current.productivityScore;
         existing.count++;
         
         dailyMap.set(date, existing);
@@ -481,7 +507,7 @@ export function setupRoutes(app: Express): void {
             focusScore: avgScore // Alias for consistency
           },
           categoryBreakdown,
-          suspiciousActivities: activities.filter(a => a.isSuspicious),
+          suspiciousActivities: sortedActivities.filter(a => a.isSuspicious),
           dailyTrend
         }
       });

@@ -1,6 +1,7 @@
 {
   "lastChecks": {
     "nightlyWorkSession": 1741512840,
+    "midDayCheck": 1741557240,
     "email": null,
     "calendar": null,
     "bensbitesScan": 1740748440
@@ -15,9 +16,9 @@
       "Review Ben's Bites sub-agent output"
     ],
     "budgetStatus": {
-      "spent": 13.15,
+      "spent": 3.49,
       "budget": 200,
-      "percentUsed": 6.6,
+      "percentUsed": 1.74,
       "status": "ok"
     }
   }

@@ -128,13 +128,21 @@ export const Dashboard: React.FC = () => {
           />
           <StatCard
             title="Focus Time Today"
-            value={`${Math.round((stats?.focusTimeMinutes || 0) / 60)}h`}
+            value={(() => {
+              const minutes = stats?.focusTimeMinutes || 0;
+              if (minutes < 60) return `${minutes}m`;
+              return `${Math.round(minutes / 60 * 10) / 10}h`;
+            })()}
             icon="🎯"
             color="#27ae60"
           />
           <StatCard
             title="Idle/Wasted Time"
-            value={`${Math.round((stats?.distractedTimeMinutes || 0) / 60)}h`}
+            value={(() => {
+              const minutes = stats?.distractedTimeMinutes || 0;
+              if (minutes < 60) return `${minutes}m`;
+              return `${Math.round(minutes / 60 * 10) / 10}h`;
+            })()}
             icon="💤"
             color="#e74c3c"
           />
