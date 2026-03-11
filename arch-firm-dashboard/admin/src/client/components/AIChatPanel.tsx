@@ -31,11 +31,19 @@ export function AIChatPanel() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // Only scroll the chat panel, not the entire page
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   };
 
   useEffect(() => {
-    scrollToBottom();
+    // Only auto-scroll if user is already near the bottom (within 100px)
+    const container = messagesEndRef.current?.parentElement;
+    if (container) {
+      const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 100;
+      if (isNearBottom) {
+        scrollToBottom();
+      }
+    }
   }, [messages]);
 
   const handleSubmit = async (e: React.FormEvent) => {
