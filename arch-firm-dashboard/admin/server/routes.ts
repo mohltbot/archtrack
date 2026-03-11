@@ -27,7 +27,8 @@ import {
   getSuspiciousActivities,
   getActivityStats,
   getEmployeeActivityStats
-} from './database';
+} from './database.js';
+import aiRoutes from './routes/ai-routes.js';
 import type { Activity } from '@archtrack/shared';
 
 export function setupRoutes(app: Express): void {
@@ -515,4 +516,7 @@ export function setupRoutes(app: Express): void {
       res.status(500).json({ success: false, error: String(error) });
     }
   });
+
+  // AI Analytics routes
+  app.use('/api/ai', aiRoutes);
 }

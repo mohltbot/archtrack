@@ -1,4 +1,4 @@
-import { getDatabase } from '../database.js';
+import { getDatabase } from './database.js';
 import type { Activity, Employee } from '@archtrack/shared';
 
 export interface RepetitivePattern {

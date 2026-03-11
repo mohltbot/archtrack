@@ -1,6 +1,6 @@
 # DRAFTS — OpenClaw Debugger
 
-**Last Updated:** March 10, 2026 — 8:00 AM PST
+**Last Updated:** March 10, 2026 — 8:00 PM PST
 
 ---
 
@@ -137,7 +137,7 @@ All content, lead replies, GitHub comments, and follow-ups have been posted. See
 
 ---
 
-## 📅 TOMORROW'S CONTENT (March 10, 2026) — READY TO POST
+## 📅 TOMORROW'S CONTENT (March 11, 2026) — READY TO POST
 
 ### 📝 Twitter Thread: "5 OpenClaw Config Mistakes That Cost You Hours"
 **Status:** ✅ Ready to copy-paste
@@ -720,6 +720,134 @@ Happy to help further if needed!
 
 ---
 
+## 🆕 SHIFT 4 CONTENT (March 10, 2026 — 8:00 PM PST)
+
+### 📝 TOMORROW'S CONTENT (March 11, 2026)
+
+These are ready to post tomorrow. Copy-paste and send.
+
+---
+
+### 📝 Twitter Thread: "Why Your OpenClaw Gateway Keeps Dying on macOS"
+**Status:** ✅ Ready to copy-paste
+**Platform:** Twitter
+**Type:** Educational thread (6 tweets)
+
+**Tweet 1 (Hook):**
+```
+Your OpenClaw gateway on macOS keeps dying?
+
+You start it → It works → 30 seconds later → Dead
+
+It's not your config. It's not your setup.
+
+It's a bug in how macOS handles OpenClaw upgrades.
+
+Here's the 2-minute fix:
+```
+
+**Tweet 2:**
+```
+The culprit: macOS LaunchAgent
+
+When OpenClaw upgrades, it installs to a new path:
+→ /usr/local/lib/node_modules/openclaw/2026.3.8/
+
+But the LaunchAgent still points to the OLD path:
+→ /usr/local/lib/node_modules/openclaw/2026.3.7/
+
+Result: Gateway starts, then immediately crashes.
+```
+
+**Tweet 3:**
+```
+Quick diagnosis:
+
+Run this in Terminal:
+→ launchctl print gui/$UID/ai.openclaw.gateway | grep Program
+
+If you see an old version number, that's your problem.
+
+The LaunchAgent is trying to run a binary that no longer exists.
+```
+
+**Tweet 4:**
+```
+The fix (2 minutes):
+
+1. Stop the broken LaunchAgent:
+→ launchctl bootout gui/$UID/ai.openclaw.gateway
+
+2. Force OpenClaw to reinstall the service:
+→ openclaw gateway install --force
+
+3. Start the new LaunchAgent:
+→ launchctl bootstrap gui/$UID/ai.openclaw.gateway
+
+Done. Gateway stays up.
+```
+
+**Tweet 5:**
+```
+Prevention checklist for macOS users:
+
+Every time you upgrade OpenClaw:
+☑️ Run: openclaw gateway install --force
+☑️ Verify: openclaw gateway status
+☑️ Test: openclaw doctor
+
+Add this to your upgrade routine. Takes 30 seconds.
+```
+
+**Tweet 6 (CTA):**
+```
+This LaunchAgent bug has cost macOS users hours of debugging.
+
+If your gateway keeps dying after upgrades, this is likely why.
+
+Still stuck after trying the fix? I debug OpenClaw issues for $75 in 30 min.
+
+DM me — I've fixed this exact issue for multiple clients.
+```
+
+---
+
+### 📝 GitHub Comment: #41715 (Task-Based Model Routing)
+**Status:** ✅ Ready to copy-paste
+**Target:** https://github.com/openclaw/openclaw/issues/41715
+**Tone:** Technical, constructive
+
+```
+This would be a game-changer for cost optimization.
+
+Currently, I work around this with a manual routing layer:
+
+```yaml
+models:
+  cheap:
+    model: "gemini-2.0-flash"
+  smart:
+    model: "claude-3.7-sonnet"
+  coding:
+    model: "o3-mini"
+```
+
+Then in my agent prompts:
+→ "Use cheap model for simple tasks, smart for complex analysis"
+
+But it's clunky. Native task-based routing would be much cleaner.
+
+**Suggested implementation:**
+- Task classifier (cheap model) categorizes requests
+- Router selects appropriate model
+- Fallback chain for failures
+- Cost tracking per task type
+
+Happy to beta test this if you need feedback!
+```
+
+---
+
 ## 📝 NOTES
 
 **March 9, 2026 — 8:00 PM Update:**
@@ -740,6 +868,12 @@ Happy to help further if needed!
 - Prepared Day 2 follow-ups for March 10 leads (4 drafts ready)
 - Updated lead statuses in LEADS.md
 - All Day 7 follow-ups still waiting for responses (archive deadline: March 16)
+
+**March 10, 2026 — 8:00 PM Update (Shift 4):**
+- Searched for new issues — #41804 still active, #41715 is feature request
+- Created 2 new content pieces for tomorrow
+- Wrote daily report to memory/2026-03-10-openclaw-debugger.md
+- All files updated: LEADS.md, CONTENT-QUEUE.md, DRAFTS.md
 
 **Next Steps:**
 - Send Day 2 follow-ups on March 12 (if no response)
