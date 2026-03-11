@@ -4,11 +4,9 @@
   "description": "Desktop activity tracker for ArchTrack",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "tsc && electron .",
     "build": "tsc && vite build",
-    "preview": "vite preview",
-    "electron": "electron .",
-    "electron:dev": "concurrently \"npm run dev\" \"wait-on http://localhost:5175 && electron .\"",
+    "start": "npm run build && electron .",
     "dist": "npm run build && electron-builder"
   },
   "dependencies": {
