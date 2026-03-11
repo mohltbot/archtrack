@@ -122,6 +122,25 @@ Great post. This should be pinned.
 
 ---
 
+## 🆕 NEW DRAFTS (March 11, 2026) — Shift 3
+
+### 📝 Reddit Reply: u/GoogleAIStudio_banned
+**Status:** Ready to post | **Platform:** Reddit | **Type:** Engagement comment
+**Link:** https://www.reddit.com/r/google_antigravity/comments/1rqoeou/
+
+This is absolutely wild — $3.10 in usage and they nuked your entire GCP account? Google's risk detection is completely broken.
+
+For OpenClaw specifically, I'd recommend:
+1. **Use Anthropic Claude** via API instead — more stable, better rate limits
+2. **OpenRouter** as a fallback — routes to multiple providers automatically
+3. **Local models** via Ollama if you have the hardware
+
+The irony is that using the "official" AI Studio API is somehow riskier than unofficial workarounds. Classic Google.
+
+If you need help migrating your OpenClaw setup to a different provider, happy to walk you through it. Most configs take 10 min to switch over.
+
+---
+
 ## 📅 TOMORROW (March 12, 2026)
 
 **Day 2 follow-ups for March 10 leads**
