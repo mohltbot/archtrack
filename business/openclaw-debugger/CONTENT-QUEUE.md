@@ -38,6 +38,29 @@ All content has been posted to Twitter. Queue is now empty.
 
 ---
 
+## 📋 READY TO POST (March 12, 2026) — SHIFT 4
+
+### 🔥 High Priority (Post Tomorrow)
+
+| Item | Platform | Content Type | Status | Draft Location |
+|------|----------|--------------|--------|----------------|
+| 5 Mistakes From 50 Setups | Twitter | 7-tweet thread | ✅ Ready | DRAFTS.md "Shift 2 Content" |
+| The /new Command | Twitter | Quick tip | ✅ Ready | DRAFTS.md "Shift 2 Content" |
+| u/debugging_veteran reply | Reddit | Engagement | ✅ Ready | DRAFTS.md "Shift 2 Content" |
+| PSA: Tools Disabled | Twitter | 5-tweet thread | ✅ Ready | DRAFTS.md "Shift 4 Content" |
+| u/GoogleAIStudio_banned reply | Reddit | Engagement | ✅ Ready | DRAFTS.md "Shift 3 Content" |
+
+### 📅 Day 2 Follow-ups (March 12)
+
+| Item | Platform | Type | Status | Draft Location |
+|------|----------|------|--------|----------------|
+| u/HostingerNightmare | Reddit | DM | ✅ Ready | DRAFTS.md "Shift 3 Content" |
+| GitHub #41804 | GitHub | Comment | ✅ Ready | DRAFTS.md "Shift 3 Content" |
+| GitHub #40931 | GitHub | Comment | ✅ Ready | DRAFTS.md "Shift 3 Content" |
+| Umbrel Forums | Forum | Reply | ✅ Ready | DRAFTS.md "Shift 3 Content" |
+
+---
+
 ## 📋 READY TO POST (March 11, 2026) — SHIFT 2 (NEW)
 
 ### 🔥 High Priority (Post Today)
