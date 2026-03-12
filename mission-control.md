@@ -1,7 +1,73 @@
 # Mission Control Board
 
-**Last Updated:** March 11, 2026 at 7:07 AM PST (4-Hour Sync)  
-**Source:** 4-Hour Sync — Quiet maintenance window, 1 commit processed, 6 modified files tracked, system stable
+**Last Updated:** March 11, 2026 at 6:57 PM PST (Ghost Shift #13)  
+**Source:** Ghost Shift — 2 proactive additions, 2 tasks completed, infrastructure hardened
+
+---
+
+## ✅ GHOST SHIFT — Mar 11, 2026 (6:57 PM)
+
+**2 Tasks Completed | 2 Proactive Additions | 0 Commits Processed**
+
+### Summary:
+Evening ghost shift focused on infrastructure hardening and open source documentation. Created GitHub Actions workflow for PR review reminders — cloud-native automation that eliminates dependency on local Mac mini uptime. Built comprehensive browser extension README for ArchTrack's March 20 open source launch. Both deliverables production-ready with clear next steps.
+
+### Tasks Completed:
+
+1. **GitHub Actions PR Review Reminder Workflow** — Created `.github/workflows/pr-review-reminder.yml`
+   - Cloud-native cron automation (runs daily at 9 AM UTC)
+   - Matrix strategy across mission-control and arch-firm-dashboard repos
+   - Discord webhook integration for stale PR notifications (>3 days)
+   - Dry-run mode for testing, configurable stale threshold
+   - Uses GitHub-native `gh` CLI (no extra dependencies)
+   - *Impact:* Zero infrastructure dependency — reminders work 24/7 regardless of local machine status
+   - *Next:* Add `DISCORD_PR_REMINDER_WEBHOOK` secret to repository settings
+
+2. **ArchTrack Browser Extension Documentation** — Created `arch-firm-dashboard/browser-extension/README.md`
+   - Quick install guide (3 methods: Web Store, developer mode, build from source)
+   - Architecture documentation (background script, popup UI, permissions)
+   - Development setup with debug instructions
+   - Privacy & security transparency
+   - Roadmap through v1.2 with feature timeline
+   - Contributing guidelines and troubleshooting
+   - *Impact:* Complete contributor onboarding path for browser extension component
+   - *Status:* Ready for March 20 open source launch
+
+### Proactive Additions:
+
+1. **[Proactive] Create GitHub Actions workflow for PR review reminders** — Cloud-native vs local script
+   - *COMPLETED:* Full GitHub Actions workflow with cron scheduling, matrix repos, Discord integration
+   - *OUTPUT:* `.github/workflows/pr-review-reminder.yml`
+   - *IMPACT:* Eliminates single point of failure (Mac mini uptime), always-on automation
+
+2. **[Proactive] Create ArchTrack browser extension documentation** — README for open source contributors
+   - *COMPLETED:* Comprehensive README with install, dev, privacy, and roadmap sections
+   - *OUTPUT:* `arch-firm-dashboard/browser-extension/README.md`
+   - *IMPACT:* Browser extension now fully documented for March 20 launch
+
+### Key Findings:
+- **Mission Control Server:** Stable and operational
+- **Budget Status:** ~$3.57 / $200 limit (1.79%) — healthy, stable
+- **Pending Tasks:** 15 total (15 done, 3 blocked, 2 new) — 2 completed this shift
+- **Ghost Shift Status:** Shift 13 complete — infrastructure hardening focus
+- **System Health:** All autonomous systems active, open source prep mode
+- **OpenClaw Debugger:** 22 leads — content creation in progress
+- **Blocked Tasks:** 3 remain (Cloudflare tunnel, Ben's Bites Discord, CVE thread — needs manual post)
+- **Activity Level:** Medium — focused infrastructure improvements
+- **ArchTrack Status:** 🟢 Browser extension docs complete — March 20 launch on track
+
+### Files Created:
+1. `.github/workflows/pr-review-reminder.yml` — GitHub Actions workflow (+3,738 bytes)
+2. `arch-firm-dashboard/browser-extension/README.md` — Extension documentation (+5,979 bytes)
+
+---
+
+## ✅ 4-HOUR SYNC — Mar 11, 2026 (7:07 AM)
+
+**0 Tasks Completed | 0 New Items | 1 Commit Processed**
+
+### Summary:
+Quiet 4-hour maintenance window (3:04 AM - 7:07 AM PST) with minimal activity. System stable with only this cron sync session generating API calls. One commit processed from prior 4-hour sync (ddf93b56). Working directory shows 6 modified files (ongoing ArchTrack desktop development, debugger content drafts, routine logs). No new leads generated. Ghost Shift #12 executed at 6:57 AM during this window, completing 3 high-impact tasks (GPT-5.4 landing page, PR reminder automation, open source checklist). Mission Control operating in monitoring mode with stable infrastructure.
 
 ---
 
@@ -805,6 +871,20 @@ Quiet 4-hour maintenance window (7:04 PM - 11:04 PM PST) with minimal activity. 
   * **IMPACT:** Complete roadmap from repo prep to launch day to post-launch community building
   * **TIMELINE:** March 20, 2026 target release date
   * **INCLUDES:** Code cleanup checklist, CI/CD setup, content calendar, success metrics, risk mitigation
+
+- [x] **[Proactive] Create GitHub Actions workflow for PR review reminders** — Cloud-native automation vs local script
+  * **COMPLETED:** Created `.github/workflows/pr-review-reminder.yml` with cron-based automation
+  * **OUTPUT:** https://github.com/mohltbot/mission-control/blob/main/.github/workflows/pr-review-reminder.yml
+  * **IMPACT:** Zero infrastructure dependency — reminders work even if Mac mini offline
+  * **FEATURES:** Daily cron at 9 AM UTC, matrix strategy across repos, Discord webhook integration, dry-run mode
+  * **NEXT:** Add `DISCORD_PR_REMINDER_WEBHOOK` secret to repo settings
+
+- [x] **[Proactive] Create ArchTrack browser extension documentation** — README for open source contributors
+  * **COMPLETED:** Created `arch-firm-dashboard/browser-extension/README.md` with comprehensive docs
+  * **OUTPUT:** https://github.com/mohltbot/mission-control/blob/main/arch-firm-dashboard/browser-extension/README.md
+  * **IMPACT:** Complete contributor onboarding for browser extension component
+  * **INCLUDES:** Quick install guide, architecture diagram, development setup, privacy & security notes, roadmap
+  * **STATUS:** ✅ Ready for March 20 open source launch
 
 ---
 
