@@ -1,7 +1,0 @@
-{
-  "name": "cost-tracker",
-  "description": "Track API costs across all providers (Moonshot, Gemini, DeepSeek, Browser Use, etc.)",
-  "version": "1.0.0",
-  "tools": ["file", "log"],
-  "entry": "track.js"
-}
