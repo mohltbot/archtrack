@@ -10,13 +10,13 @@ RUN apk add --no-cache sqlite curl
 WORKDIR /app
 
 # Copy package files
-COPY arch-firm-dashboard/admin/package*.json ./
+COPY admin/package*.json ./
 
 # Install dependencies
 RUN npm install
 
 # Copy application code
-COPY arch-firm-dashboard/admin/ ./
+COPY admin/ ./
 
 # Build the server
 RUN npm run build:server
