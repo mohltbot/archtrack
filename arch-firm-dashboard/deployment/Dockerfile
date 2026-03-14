@@ -18,6 +18,9 @@ RUN npm install
 # Copy application code
 COPY admin/ ./
 
+# Build the server
+RUN npm run build:server
+
 # Create data directory for SQLite
 RUN mkdir -p /data && chmod 777 /data
 
