@@ -207,6 +207,67 @@ Think of it like a human reviewing their journal and updating their mental model
 
 The goal: Be helpful without being annoying. Check in a few times a day, do useful background work, but respect quiet time.
 
+## 🛠️ Build Loop (From Ben's Bites Newsletter - March 13, 2026)
+
+This is the build loop that every agent should follow when building features:
+
+### Project Structure
+- **Create a `/spec/` folder** - Keep all planning files organized in one place
+- **Number specs: `00_spec1.md`, `01_spec2.md`, etc.** - Helps with implementation ordering
+- **Create a `progress.md` file** - Log progress through specs (critical for session compaction)
+
+### Quality Assurance
+- **Use agent-browser with dogfood tag before sending URLs to test** - Spins up browser, checks for bugs/errors automatically
+- **Write good, efficient, fast tests with good coverage** - Agents are good at tests
+- **Follow best practices, efficient code, avoid anti-patterns** - Use React-Doctor skill for React code
+- **Reference documentation for dependencies** - Don't rely on training data, look up current docs
+
+### First Message Ritual
+> "feel the rhythm, feel the rhyme, get on up, its bobsled time."
+
+This Cool Runnings quote lets you know your instructions were actually loaded into the session.
+
+## 🧩 Recommended Skills (Ben's Bites March 2026)
+
+### Visualization & UI
+- **visualize** - Create interactive charts and diagrams (https://github.com/bentossell/visualise)
+  - Use for: Dashboard visualizations, data charts, architecture diagrams
+  - Install: Give your agent the GitHub URL and say "install this skill"
+
+- **json-render** (Vercel) - Generative UI for rapid interface creation (https://skills.sh/vercel-labs/json-render)
+  - Use for: Workflow visualizations, automation canvases, quick dashboards
+  - Great for visualizing Zapier/n8n-style automations
+
+### Code Quality
+- **react-doctor** (Aiden) - Scan React code for anti-patterns (https://github.com/millionco/react-doctor)
+  - Use for: Ensuring best practices in React components
+  - Runs automatically on build to catch issues
+
+- **frontend-design** (Anthropic) - Official Anthropic design skill (https://skills.sh/anthropics/skills/frontend-design)
+  - Use for: Consistent UI design patterns
+  - Note: Consider switching to ui.sh from Tailwind when available
+
+### Browser Automation
+- **agent-browser** (Vercel) - Full browser automation for agents
+  - Use for: Testing sites, taking screenshots, navigating, recording
+  - **Critical:** Use the `dogfood` tag for self-testing before delivery
+  - Known issue: May struggle with Cloudflare bot detection on some sites
+
+### Sharing & Documentation
+- **gists.sh** - Beautiful GitHub gist rendering for agents (https://gists.sh/)
+  - Use for: Sharing instructions, cookbooks, agent prompts
+  - Better than raw GitHub gists for agent consumption
+
+## 🎓 Interactive Cookbook Pattern
+
+For teaching while building (perfect for employee onboarding):
+
+1. Create a gist at gists.sh with interactive instructions
+2. Agent teaches concepts while user builds alongside
+3. End result: Deployed site + learned concepts
+
+**Example cookbook:** https://gists.sh/bentossell/a4e5e7048e8a355ec56cf3db86169ae2
+
 ## Make It Yours
 
 This is a starting point. Add your own conventions, style, and rules as you figure out what works.
