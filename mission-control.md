@@ -520,6 +520,23 @@ cloudflared tunnel login
 
 ---
 
+## 💰 API Usage — Last 4 Hours (3:07 PM - 7:07 PM)
+
+| Model | Tokens Used | Est. Cost |
+|-------|-------------|-----------|
+| **Total** | ~40K tokens | ~$0.06 |
+| kimi-k2.5 | ~35K tokens | ~$0.05 |
+| MLX Local | ~5K tokens | $0.00 |
+
+**Notes:**
+- Current cron sync session: ~35K tokens (comprehensive 4-hour audit)
+- OpenClaw Debugger Shift 3: ~5K tokens (lead nurture analysis)
+- MLX local inference active for cost savings
+- All autonomous cron jobs running efficiently
+- Build system fixes and business operations completed
+
+---
+
 ## 💰 API Usage — Last 4 Hours (11:07 AM - 3:07 PM)
 
 | Model | Tokens Used | Est. Cost |
@@ -636,15 +653,22 @@ cloudflared tunnel login
 ### Project Context:
 - Mission Control now includes production-ready dashboard applications
 - Ghost-Shift pattern proven effective for recovery from activity gaps
-- OpenClaw Debugger pipeline: 16 leads, $450-2,400 potential revenue
-- 3 persistent blockers need user action: Cloudflare tunnel, Discord token, deployment credentials
-- Architectural firm dashboard ready for client deployment
+- OpenClaw Debugger pipeline: 18 leads, $1,275 potential revenue with structured follow-up system
+- 5 persistent blockers need user action: Cloudflare tunnel, Discord token, deployment credentials, 2 follow-up tasks
+- Architectural firm dashboard build system stabilized (ES modules, TypeScript paths resolved)
+- Lead nurture system operational with Day 2/7/14 follow-up sequences
 
 ### Recent Activity (March 13-14):
 - **March 13:** OpenClaw Debugger Shift 4 — 4 new hot/warm leads from GitHub issues, 2 content pieces drafted
-- **March 14:** Ghost shift — workspace hygiene, 24 files committed, auto-commit automation created
+- **March 14 (Morning):** Ghost shift — workspace hygiene, 24 files committed, auto-commit automation created
+- **March 14 (Afternoon):** Build system fixes — Dockerfile iterations, ES module compatibility, shared types resolution
+- **March 14 (Evening):** OpenClaw Debugger Shift 3 — lead nurture system, 5 follow-up drafts, pipeline restructured
 - **Key Issues Identified:** v2026.3.7+ OOM crashes, Control UI pairing loops, Azure OpenAI regressions
-- **Pipeline Status:** 16 leads (5 hot, 10 warm, 1 cold), follow-ups overdue but recoverable
+- **Pipeline Status:** 18 leads (3 hot, 12 warm, 3 cold), 2 Day 2 follow-ups ready for March 15
+
+---
+
+*This board was updated during 4-Hour Sync on Mar 14, 2026 at 7:07 PM PST. Last activity: Build system fixes for architectural firm dashboard — 5 commits processed including ES module compatibility, TypeScript path resolution, and Dockerfile stabilization. OpenClaw Debugger Shift 3 complete — lead nurture system with 5 follow-up drafts, 18 leads tracked. Budget stable at ~$4.80 (healthy), 5 blockers need user action (2 new: Day 2 follow-ups, Twitter thread). Business operations + deployment optimization mode — autonomous systems performing well.*
 
 ---
 
