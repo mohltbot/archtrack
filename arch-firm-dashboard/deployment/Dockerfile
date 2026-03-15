@@ -18,7 +18,10 @@ RUN npm install
 # Copy application code
 COPY admin/ ./
 
-# Build the server
+# Build the client (React app) - outputs to dist/client
+RUN npm run build
+
+# Build the server (TypeScript) - outputs to dist/server
 RUN npm run build:server
 
 # Create data directory for SQLite
