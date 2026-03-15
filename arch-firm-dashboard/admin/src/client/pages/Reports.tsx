@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { Employee, Activity } from '../../shared-types';
+import type { Employee, Activity } from '../../../shared-types';
 
 export const Reports: React.FC = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);

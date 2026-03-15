@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { Project } from '../../shared-types';
+import type { Project } from '../../../shared-types';
 
 export const Projects: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);

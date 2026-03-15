@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { Task, Project, Employee } from '../../shared-types';
+import type { Task, Project, Employee } from '../../../shared-types';
 
 export const Tasks: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
