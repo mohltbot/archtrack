@@ -8,7 +8,7 @@ export const Reports: React.FC = () => {
   const [endDate, setEndDate] = useState<string>('');
   const [report, setReport] = useState<any>(null);
   const [loading, setLoading] = useState(false);
-  const [_activities, setActivities] = useState<Activity[]>([]);
+  const [_activities] = useState<Activity[]>([]);
 
   useEffect(() => {
     loadEmployees();
@@ -48,21 +48,6 @@ export const Reports: React.FC = () => {
       console.error('Error generating report:', error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const _loadActivities = async () => {
-    try {
-      const url = selectedEmployee 
-        ? `/api/activities?employeeId=${selectedEmployee}&startDate=${startDate}&endDate=${endDate}`
-        : `/api/activities?startDate=${startDate}&endDate=${endDate}`;
-      const res = await fetch(url);
-      const data = await res.json();
-      if (data.success) {
-        setActivities(data.data);
-      }
-    } catch (error) {
-      console.error('Error loading activities:', error);
     }
   };
 

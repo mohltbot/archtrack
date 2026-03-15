@@ -1,0 +1,86 @@
+{
+  "type": "workflow-canvas",
+  "title": "ArchTrack Project Workflow",
+  "description": "How projects flow from client request to completion",
+  "nodes": [
+    {
+      "id": "client-request",
+      "type": "start",
+      "label": "Client Request",
+      "description": "New project inquiry received",
+      "status": "completed"
+    },
+    {
+      "id": "project-setup",
+      "type": "process",
+      "label": "Project Setup",
+      "description": "Create project in ArchTrack, assign budget",
+      "status": "completed",
+      "assignee": "Sarah (Manager)"
+    },
+    {
+      "id": "site-analysis",
+      "type": "process", 
+      "label": "Site Analysis",
+      "description": "Ahmed analyzes site conditions",
+      "status": "in-progress",
+      "assignee": "Ahmed",
+      "hours-estimate": 16
+    },
+    {
+      "id": "design-concepts",
+      "type": "process",
+      "label": "Design Concepts",
+      "description": "Mohammed creates initial designs",
+      "status": "todo",
+      "assignee": "Mohammed", 
+      "hours-estimate": 40
+    },
+    {
+      "id": "floor-plans",
+      "type": "process",
+      "label": "Floor Plans",
+      "description": "Detailed floor plan development",
+      "status": "todo",
+      "assignee": "Mohammed",
+      "hours-estimate": 60
+    },
+    {
+      "id": "client-review",
+      "type": "decision",
+      "label": "Client Review",
+      "description": "Present to client for feedback",
+      "status": "pending"
+    },
+    {
+      "id": "revisions",
+      "type": "process",
+      "label": "Revisions",
+      "description": "Make requested changes",
+      "status": "optional"
+    },
+    {
+      "id": "final-delivery",
+      "type": "end",
+      "label": "Final Delivery",
+      "description": "Project complete - handover to client",
+      "status": "pending"
+    }
+  ],
+  "edges": [
+    { "from": "client-request", "to": "project-setup" },
+    { "from": "project-setup", "to": "site-analysis" },
+    { "from": "site-analysis", "to": "design-concepts" },
+    { "from": "design-concepts", "to": "floor-plans" },
+    { "from": "floor-plans", "to": "client-review" },
+    { "from": "client-review", "to": "revisions", "label": "Changes needed" },
+    { "from": "client-review", "to": "final-delivery", "label": "Approved" },
+    { "from": "revisions", "to": "client-review" }
+  ],
+  "metrics": {
+    "total-hours-estimated": 116,
+    "total-budget": "$1.55M",
+    "active-projects": 3,
+    "completion-rate": "25%"
+  }
+}

@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
 
 interface WebSocketContextType {
   isConnected: boolean;
+  connectionStatus: 'connecting' | 'connected' | 'disconnected';
   lastMessage: any;
   onlineEmployees: Map<string, { name: string; lastSeen: string; currentTask?: string }>;
   recentActivity: Array<{
@@ -10,13 +11,16 @@ interface WebSocketContextType {
     message: string;
     timestamp: string;
   }>;
+  reconnect: () => void;
 }
 
 const WebSocketContext = createContext<WebSocketContextType>({
   isConnected: false,
+  connectionStatus: 'disconnected',
   lastMessage: null,
   onlineEmployees: new Map(),
-  recentActivity: []
+  recentActivity: [],
+  reconnect: () => {}
 });
 
 export const useWebSocket = () => useContext(WebSocketContext);
@@ -27,11 +31,15 @@ interface WebSocketProviderProps {
 
 export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }) => {
   const [isConnected, setIsConnected] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'disconnected'>('disconnected');
   const [lastMessage, setLastMessage] = useState<any>(null);
   const [onlineEmployees, setOnlineEmployees] = useState<Map<string, any>>(new Map());
   const [recentActivity, setRecentActivity] = useState<Array<any>>([]);
+  const [reconnectAttempt, setReconnectAttempt] = useState(0);
 
-  useEffect(() => {
+  const connect = useCallback(() => {
+    setConnectionStatus('connecting');
+    
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const wsUrl = `${protocol}//${window.location.host}/ws`;
     
@@ -40,6 +48,8 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }
     ws.onopen = () => {
       console.log('WebSocket connected');
       setIsConnected(true);
+      setConnectionStatus('connected');
+      setReconnectAttempt(0);
       
       // Register as admin
       ws.send(JSON.stringify({
@@ -60,14 +70,26 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }
       }
     };
 
-    ws.onclose = () => {
-      console.log('WebSocket disconnected');
+    ws.onclose = (event) => {
+      console.log('WebSocket disconnected', event.code, event.reason);
       setIsConnected(false);
+      setConnectionStatus('disconnected');
+      
+      // Auto-reconnect with exponential backoff
+      if (reconnectAttempt < 10) {
+        const delay = Math.min(1000 * Math.pow(2, reconnectAttempt), 30000);
+        console.log(`Reconnecting in ${delay}ms (attempt ${reconnectAttempt + 1})`);
+        
+        setTimeout(() => {
+          setReconnectAttempt(prev => prev + 1);
+        }, delay);
+      }
     };
 
     ws.onerror = (error) => {
       console.error('WebSocket error:', error);
       setIsConnected(false);
+      setConnectionStatus('disconnected');
     };
 
     const handleMessage = (message: any) => {
@@ -128,13 +150,30 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }
       ]);
     };
 
+    return ws;
+  }, [reconnectAttempt]);
+
+  useEffect(() => {
+    const ws = connect();
+    
     return () => {
       ws.close();
     };
+  }, [connect]);
+
+  const reconnect = useCallback(() => {
+    setReconnectAttempt(0);
   }, []);
 
   return (
-    <WebSocketContext.Provider value={{ isConnected, lastMessage, onlineEmployees, recentActivity }}>
+    <WebSocketContext.Provider value={{ 
+      isConnected, 
+      connectionStatus,
+      lastMessage, 
+      onlineEmployees, 
+      recentActivity,
+      reconnect 
+    }}>
       {children}
     </WebSocketContext.Provider>
   );

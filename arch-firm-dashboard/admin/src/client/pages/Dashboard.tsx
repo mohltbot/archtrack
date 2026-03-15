@@ -84,7 +84,7 @@ export const Dashboard: React.FC = () => {
   };
 
   if (loading) {
-    return <div style={styles.loading}>Loading...</div>;
+    return <DashboardSkeleton />;
   }
 
   const getProductivityColor = (score: number) => {
@@ -653,5 +653,119 @@ const styles: { [key: string]: React.CSSProperties | any } = {
     color: '#95a5a6',
     textAlign: 'center',
     padding: '20px'
+  }
+};
+
+// Loading Skeleton Component
+const DashboardSkeleton: React.FC = () => (
+  <div style={skeletonStyles.container}>
+    <div style={skeletonStyles.header}>
+      <div style={skeletonStyles.title} />
+      <div style={skeletonStyles.subtitle} />
+    </div>
+    <div style={skeletonStyles.statsGrid}>
+      {[1, 2, 3, 4].map(i => (
+        <div key={i} style={skeletonStyles.statCard}>
+          <div style={skeletonStyles.statIcon} />
+          <div style={skeletonStyles.statValue} />
+          <div style={skeletonStyles.statLabel} />
+        </div>
+      ))}
+    </div>
+    <div style={skeletonStyles.contentGrid}>
+      <div style={skeletonStyles.card}>
+        <div style={skeletonStyles.cardTitle} />
+        <div style={skeletonStyles.cardContent} />
+      </div>
+      <div style={skeletonStyles.card}>
+        <div style={skeletonStyles.cardTitle} />
+        <div style={skeletonStyles.cardContent} />
+      </div>
+    </div>
+  </div>
+);
+
+const skeletonStyles: { [key: string]: React.CSSProperties } = {
+  container: {
+    padding: '24px',
+    animation: 'fadeIn 0.3s ease'
+  },
+  header: {
+    marginBottom: '24px'
+  },
+  title: {
+    height: '32px',
+    width: '200px',
+    backgroundColor: '#e0e0e0',
+    borderRadius: '4px',
+    marginBottom: '8px',
+    animation: 'pulse 1.5s infinite'
+  },
+  subtitle: {
+    height: '16px',
+    width: '300px',
+    backgroundColor: '#e0e0e0',
+    borderRadius: '4px',
+    animation: 'pulse 1.5s infinite'
+  },
+  statsGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+    gap: '16px',
+    marginBottom: '24px'
+  },
+  statCard: {
+    backgroundColor: '#fff',
+    padding: '20px',
+    borderRadius: '8px',
+    boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+  },
+  statIcon: {
+    width: '40px',
+    height: '40px',
+    backgroundColor: '#e0e0e0',
+    borderRadius: '8px',
+    marginBottom: '12px',
+    animation: 'pulse 1.5s infinite'
+  },
+  statValue: {
+    height: '28px',
+    width: '80px',
+    backgroundColor: '#e0e0e0',
+    borderRadius: '4px',
+    marginBottom: '8px',
+    animation: 'pulse 1.5s infinite'
+  },
+  statLabel: {
+    height: '14px',
+    width: '120px',
+    backgroundColor: '#e0e0e0',
+    borderRadius: '4px',
+    animation: 'pulse 1.5s infinite'
+  },
+  contentGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+    gap: '24px'
+  },
+  card: {
+    backgroundColor: '#fff',
+    padding: '20px',
+    borderRadius: '8px',
+    boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+  },
+  cardTitle: {
+    height: '20px',
+    width: '150px',
+    backgroundColor: '#e0e0e0',
+    borderRadius: '4px',
+    marginBottom: '16px',
+    animation: 'pulse 1.5s infinite'
+  },
+  cardContent: {
+    height: '200px',
+    backgroundColor: '#e0e0e0',
+    borderRadius: '4px',
+    animation: 'pulse 1.5s infinite'
   }
 };

@@ -1,37 +1,38 @@
+# Config directory - contains sensitive credentials
+config/
+*.env
+.env.local
+.env.*.local
+
+# Google OAuth tokens and credentials
+**/google-oauth.json
+**/google-tokens.json
+**/google-service-account.json
+**/token.json
+**/credentials.json
+
+# Runtime files
+.server.pid
+ghost-shift-work
+
 # Dependencies
 node_modules/
-*/node_modules/
+.npm-cache/
 
 # Build outputs
 dist/
 build/
-*.tsbuildinfo
-
-# Environment
-.env
-.env.local
-.env.*.local
-
-# Database
-*.db
-*.sqlite
-*.sqlite3
 
 # Logs
-logs/
+logs/*.log
 *.log
-npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Electron
-/dist-electron/
-/out/
