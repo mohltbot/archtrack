@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useWebSocket } from '../contexts/WebSocketContext';
+import { AIChatPanel } from '../components/AIChatPanel';
 import type { Employee } from '../../../shared-types';
 
 interface Activity {
@@ -309,6 +310,11 @@ export const Dashboard: React.FC = () => {
             </div>
           </div>
         )}
+
+        {/* AI Analytics Chat */}
+        <div style={styles.section}>
+          <AIChatPanel />
+        </div>
       </div>
     </div>
   );
