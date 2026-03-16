@@ -1,6 +1,3 @@
-# ArchTrack Admin Dashboard Dockerfile
-# Production-ready container for employee tracking system
-
 # Build stage
 FROM node:20-alpine AS builder
 
@@ -22,6 +19,9 @@ COPY shared/ ../shared/
 # Build the application (client + server)
 RUN npm run build
 
+# Debug: Show what was built
+RUN echo "=== Build output ===" && ls -la dist/ && echo "=== Client ===" && ls -la dist/client/
+
 # Production stage
 FROM node:20-alpine
 
@@ -38,6 +38,9 @@ RUN npm ci --only=production && npm cache clean --force
 
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
+
+# Debug: Verify files are in place
+RUN echo "=== Production dist ===" && ls -la dist/ && echo "=== Server ===" && ls -la dist/server/
 
 # Create data directory for SQLite
 RUN mkdir -p /data && chmod 777 /data
