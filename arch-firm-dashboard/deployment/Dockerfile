@@ -1,22 +1,43 @@
 # ArchTrack Admin Dashboard Dockerfile
 # Production-ready container for employee tracking system
 
+# Build stage
+FROM node:20-alpine AS builder
+
+# Install build dependencies
+RUN apk add --no-cache python3 make g++
+
+WORKDIR /app
+
+# Copy package files first (better caching)
+COPY admin/package*.json ./
+
+# Install ALL dependencies (including devDependencies for build)
+RUN npm ci
+
+# Copy application source
+COPY admin/ ./
+COPY shared/ ../shared/
+
+# Build the application (client + server)
+RUN npm run build
+
+# Production stage
 FROM node:20-alpine
 
-# Install SQLite and other dependencies
+# Install runtime dependencies only
 RUN apk add --no-cache sqlite curl
 
-# Set working directory
 WORKDIR /app
 
 # Copy package files
 COPY admin/package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install ONLY production dependencies
+RUN npm ci --only=production && npm cache clean --force
 
-# Copy application code
-COPY admin/ ./
+# Copy built application from builder stage
+COPY --from=builder /app/dist ./dist
 
 # Create data directory for SQLite
 RUN mkdir -p /data && chmod 777 /data
@@ -34,4 +55,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 EXPOSE 3000
 
 # Start the application
-CMD ["npm", "start"]
+CMD ["node", "dist/server/index.js"]

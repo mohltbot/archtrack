@@ -33,9 +33,14 @@ setupRoutes(app);
 // Serve static files from dist/client
 // Use import.meta.url to get the correct path
 const currentDir = path.dirname(fileURLToPath(import.meta.url));
-// In production (compiled), files are at /app/dist/server/ and client is at /app/dist/client/
-// In dev, files are at /app/server/ and client is at /app/dist/client/
-const staticPath = path.join(currentDir, '../../client');
+
+// Determine the correct static path based on environment
+// In production (compiled): files are at dist/server/ and client is at dist/client/
+// The compiled server is in admin/dist/server/, so client is at admin/dist/client/
+const staticPath = process.env.NODE_ENV === 'production'
+  ? path.join(currentDir, '../client')  // From dist/server/ to dist/client/
+  : path.join(currentDir, '../../dist/client');  // From server/ to dist/client/ (dev)
+
 console.log('Serving static files from:', staticPath);
 app.use(express.static(staticPath));
 
