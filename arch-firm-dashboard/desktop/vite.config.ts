@@ -11,11 +11,16 @@ export default defineConfig({
       fileName: 'main'
     },
     rollupOptions: {
-      external: ['electron', 'electron-store', 'active-win', 'fs', 'path', 'os', 'url', 'http', 'https', 'util'],
+      external: [
+        'electron', 
+        'electron-store', 
+        'active-win'
+      ],
       output: {
         inlineDynamicImports: true,
       },
     },
+    ssr: true,  // This tells Vite this is a Node.js build
   },
   resolve: {
     alias: {

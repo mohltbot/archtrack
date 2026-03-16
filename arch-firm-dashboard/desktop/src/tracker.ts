@@ -65,7 +65,7 @@ let consecutiveIdleChecks = 0;
 let config: Config = {
   employeeId: 'emp-001',
   employeeName: 'Test Employee',
-  serverUrl: 'http://localhost:3001'
+  serverUrl: 'http://165.227.78.107:3001'
 };
 
 export async function startTracking(): Promise<void> {
