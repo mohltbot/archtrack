@@ -105,5 +105,40 @@ http://165.227.78.107
 4. Distribute tracker to employees
 5. Monitor server logs: `pm2 logs archtrack`
 
+### 9. AI Chatbot Deployed (Basic Version)
+
+**Status:** ✅ AIChatPanel restored and deployed
+- **Location:** Bottom of dashboard
+- **Features:** Ask questions about productivity data
+- **Note:** This is the basic analytics chatbot. The "Genesis AI" floating chatbot was a different, more advanced version that was also deleted March 12 and not fully recovered.
+
+**Files restored:**
+- `admin/src/client/components/AIChatPanel.tsx`
+- Updated `admin/src/client/pages/Dashboard.tsx` to include AIChatPanel
+- Added `lucide-react` dependency
+
+**Server Deploy Commands Used:**
+```bash
+cd /opt/archtrack
+rm -rf arch-firm-dashboard/admin/data
+git checkout -- .
+git clean -fd
+git pull origin main
+cd arch-firm-dashboard/admin
+rm -rf node_modules package-lock.json
+npm install
+npm install @rollup/rollup-linux-x64-gnu --save-dev
+npm run build
+pm2 restart archtrack
+```
+
+### 10. Outstanding Issues / Future Work
+
+1. **Genesis AI Floating Chatbot** - More advanced version mentioned by user, not recovered
+2. **SSL/HTTPS** - Currently HTTP only
+3. **Employee Onboarding Flow** - Need smoother setup for new employees
+4. **Database Persistence** - Currently SQLite, may need Postgres for scale
+
 ---
 Documented: March 16, 2026
+Last Updated: March 16, 2026 (9:07 AM)
