@@ -11,7 +11,10 @@ export default defineConfig({
       fileName: 'main'
     },
     rollupOptions: {
-      external: ['electron', 'electron-store', 'active-win', 'axios', 'sqlite3'],
+      external: ['electron', 'electron-store', 'active-win', 'fs', 'path', 'os', 'url', 'http', 'https', 'util'],
+      output: {
+        inlineDynamicImports: true,
+      },
     },
   },
   resolve: {
