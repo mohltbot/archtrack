@@ -1,6 +1,6 @@
 # OpenClaw Debugger — Lead Tracking
 
-**Last Updated:** March 16, 2026 (Shift 1)
+**Last Updated:** March 17, 2026
 
 ## Lead Status Legend
 - 🔥 **Hot** — Frustrated, urgent, ready to buy. DM within 24 hours.
@@ -37,6 +37,8 @@
 | GitHub #41871 | GitHub | Ollama models hang in 2026.3.8 | https://github.com/openclaw/openclaw/issues/41871 | 🟡 Warm | Comment with diagnostic | DRAFTS.md "Reply 11" |
 | GitHub #45882 | GitHub | MiniMax streaming not working | https://github.com/openclaw/openclaw/issues/45882 | 🟡 Warm | Monitor for fix | — |
 | GitHub #43909 | GitHub | dangerouslyDisableDeviceAuth not working | https://github.com/openclaw/openclaw/issues/43909 | 🟡 Warm | Monitor for fix | — |
+| u/VenariHunter | Reddit | New user - can't find openclaw.json config file | https://redd.it/1j8k2n2 | 🔵 Cold | New to OpenClaw, basic setup help - nurture long-term | — |
+| u/CooK1e | Reddit | Same issue as OP (21d ago) - may still be stuck | https://redd.it/1j8k2n2 | 🔵 Cold | Follow up to see if resolved - potential lead | — |
 
 ---
 
@@ -44,7 +46,7 @@
 
 - 🔥 Hot leads: 9 (including vmkkumar - pricing discussion active)
 - 🟡 Warm leads: 11
-- 🔵 Cold leads: 5
+- 🔵 Cold leads: 7 (added 2 from Reddit screenshots)
 - **Total potential revenue:** $2,500+ (vmkkumar project TBD + 24 leads × $75 avg)
 
 ---
