@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Loader2, Lightbulb, X, MessageCircle, ChevronLeft, Sparkles } from 'lucide-react';
+import { Send, X, MessageCircle, ChevronLeft, Sparkles } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -23,7 +23,7 @@ export function GenesisAIChat() {
     {
       id: 'welcome',
       role: 'assistant',
-      content: '👋 Hi! I\'m Genesis, your AI analytics assistant. I can help you understand your team\'s productivity data.\n\nWhat would you like to know?',
+      content: "👋 Hi! I'm Genesis, your AI analytics assistant. I can help you understand your team's productivity data.\n\nWhat would you like to know?",
       timestamp: new Date(),
       suggestions: [
         'Who was most productive today?',
@@ -37,14 +37,12 @@ export function GenesisAIChat() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Auto-focus input when chat opens
   useEffect(() => {
     if (isOpen && inputRef.current) {
       setTimeout(() => inputRef.current?.focus(), 100);
     }
   }, [isOpen]);
 
-  // Scroll to bottom when messages change
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -112,7 +110,7 @@ export function GenesisAIChat() {
       {
         id: 'welcome',
         role: 'assistant',
-        content: '👋 Hi! I\'m Genesis, your AI analytics assistant. I can help you understand your team\'s productivity data.\n\nWhat would you like to know?',
+        content: "👋 Hi! I'm Genesis, your AI analytics assistant. I can help you understand your team's productivity data.\n\nWhat would you like to know?",
         timestamp: new Date(),
         suggestions: [
           'Who was most productive today?',
@@ -129,7 +127,7 @@ export function GenesisAIChat() {
       {
         id: 'welcome',
         role: 'assistant',
-        content: '👋 Hi! I\'m Genesis, your AI analytics assistant. I can help you understand your team\'s productivity data.\n\nWhat would you like to know?',
+        content: "👋 Hi! I'm Genesis, your AI analytics assistant. I can help you understand your team's productivity data.\n\nWhat would you like to know?",
         timestamp: new Date(),
         suggestions: [
           'Who was most productive today?',
@@ -147,117 +145,105 @@ export function GenesisAIChat() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 flex items-center justify-center z-50"
+          style={styles.floatingButton}
           aria-label="Open Genesis AI Chat"
         >
-          <MessageCircle className="w-6 h-6" />
+          <MessageCircle style={{ width: 28, height: 28 }} />
         </button>
       )}
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 w-96 h-[500px] bg-white rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden border border-gray-200">
+        <div style={styles.chatWindow}>
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-3 flex items-center justify-between">
-            <div className="flex items-center gap-2">
+          <div style={styles.header}>
+            <div style={styles.headerLeft}>
               {hasStarted && (
-                <button
-                  onClick={handleBackToWelcome}
-                  className="p-1 hover:bg-white/20 rounded-full transition-colors"
-                  aria-label="Back to welcome"
-                >
-                  <ChevronLeft className="w-5 h-5" />
+                <button onClick={handleBackToWelcome} style={styles.iconButton}>
+                  <ChevronLeft style={{ width: 20, height: 20 }} />
                 </button>
               )}
-              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                <Sparkles className="w-4 h-4" />
+              <div style={styles.avatar}>
+                <Sparkles style={{ width: 18, height: 18, color: 'white' }} />
               </div>
               <div>
-                <h3 className="font-semibold text-sm">Genesis AI</h3>
-                <p className="text-xs text-blue-100">Analytics Assistant</p>
+                <div style={styles.headerTitle}>Genesis AI</div>
+                <div style={styles.headerSubtitle}>Analytics Assistant</div>
               </div>
             </div>
-            <div className="flex items-center gap-1">
+            <div style={styles.headerRight}>
               {hasStarted && (
-                <button
-                  onClick={handleNewChat}
-                  className="p-2 hover:bg-white/20 rounded-full transition-colors text-xs"
-                  title="New chat"
-                >
+                <button onClick={handleNewChat} style={styles.newChatButton}>
                   New
                 </button>
               )}
-              <button
-                onClick={() => setIsOpen(false)}
-                className="p-2 hover:bg-white/20 rounded-full transition-colors"
-                aria-label="Close chat"
-              >
-                <X className="w-5 h-5" />
+              <button onClick={() => setIsOpen(false)} style={styles.iconButton}>
+                <X style={{ width: 20, height: 20 }} />
               </button>
             </div>
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
-            {messages.map((message, index) => (
+          <div style={styles.messagesContainer}>
+            {messages.map((message) => (
               <div
                 key={message.id}
-                className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}
+                style={{
+                  ...styles.messageRow,
+                  justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start'
+                }}
               >
                 {message.role === 'assistant' && (
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center flex-shrink-0">
-                    <Sparkles className="w-4 h-4 text-white" />
+                  <div style={styles.avatarSmall}>
+                    <Sparkles style={{ width: 14, height: 14, color: 'white' }} />
                   </div>
                 )}
                 
-                <div className={`max-w-[75%] ${message.role === 'user' ? 'order-1' : ''}`}>
+                <div style={{ maxWidth: '75%' }}>
                   <div
-                    className={`rounded-2xl px-4 py-2.5 ${
-                      message.role === 'user'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white border border-gray-200 text-gray-800 shadow-sm'
-                    }`}
+                    style={{
+                      ...styles.messageBubble,
+                      ...(message.role === 'user' ? styles.userBubble : styles.assistantBubble)
+                    }}
                   >
-                    <p className="whitespace-pre-wrap text-sm leading-relaxed">{message.content}</p>
+                    <pre style={styles.messageText}>{message.content}</pre>
                   </div>
                   
-                  {/* Suggestions */}
                   {message.suggestions && message.suggestions.length > 0 && (
-                    <div className="mt-2 flex flex-wrap gap-2">
+                    <div style={styles.suggestionsContainer}>
                       {message.suggestions.map((suggestion, idx) => (
                         <button
                           key={idx}
                           onClick={() => handleSuggestion(suggestion)}
-                          className="text-xs px-3 py-1.5 bg-white border border-gray-200 text-gray-700 rounded-full hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 transition-colors flex items-center gap-1 shadow-sm"
+                          style={styles.suggestionButton}
                         >
-                          <Lightbulb className="w-3 h-3" />
-                          {suggestion}
+                          💡 {suggestion}
                         </button>
                       ))}
                     </div>
                   )}
                   
-                  <span className="text-[10px] text-gray-400 mt-1 block">
+                  <div style={styles.timestamp}>
                     {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </span>
+                  </div>
                 </div>
 
                 {message.role === 'user' && (
-                  <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center flex-shrink-0 order-2">
-                    <User className="w-4 h-4 text-gray-600" />
+                  <div style={styles.userAvatar}>
+                    <span style={{ fontSize: 14 }}>👤</span>
                   </div>
                 )}
               </div>
             ))}
             
             {isLoading && (
-              <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-white" />
+              <div style={styles.messageRow}>
+                <div style={styles.avatarSmall}>
+                  <Sparkles style={{ width: 14, height: 14, color: 'white' }} />
                 </div>
-                <div className="bg-white border border-gray-200 rounded-2xl px-4 py-2.5 flex items-center gap-2 shadow-sm">
-                  <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
-                  <span className="text-sm text-gray-600">Analyzing your data...</span>
+                <div style={styles.loadingBubble}>
+                  <span style={styles.loadingSpinner}>⏳</span>
+                  <span>Analyzing your data...</span>
                 </div>
               </div>
             )}
@@ -266,28 +252,243 @@ export function GenesisAIChat() {
           </div>
 
           {/* Input */}
-          <form onSubmit={handleSubmit} className="p-4 bg-white border-t border-gray-200">
-            <div className="flex gap-2">
-              <input
-                ref={inputRef}
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask about your team's productivity..."
-                className="flex-1 px-4 py-2.5 bg-gray-100 border-0 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                disabled={isLoading}
-              />
-              <button
-                type="submit"
-                disabled={isLoading || !input.trim()}
-                className="w-10 h-10 bg-blue-600 text-white rounded-full hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
-              >
-                <Send className="w-4 h-4" />
-              </button>
-            </div>
+          <form onSubmit={handleSubmit} style={styles.inputContainer}>
+            <input
+              ref={inputRef}
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Ask about your team's productivity..."
+              style={styles.input}
+              disabled={isLoading}
+            />
+            <button
+              type="submit"
+              disabled={isLoading || !input.trim()}
+              style={{
+                ...styles.sendButton,
+                opacity: isLoading || !input.trim() ? 0.5 : 1
+              }}
+            >
+              <Send style={{ width: 18, height: 18 }} />
+            </button>
           </form>
         </div>
       )}
     </>
   );
 }
+
+const styles: { [key: string]: React.CSSProperties } = {
+  floatingButton: {
+    position: 'fixed',
+    bottom: 24,
+    right: 24,
+    width: 56,
+    height: 56,
+    background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)',
+    color: 'white',
+    borderRadius: '50%',
+    border: 'none',
+    boxShadow: '0 4px 12px rgba(59, 130, 246, 0.4)',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 9999,
+    transition: 'transform 0.2s, box-shadow 0.2s'
+  },
+  chatWindow: {
+    position: 'fixed',
+    bottom: 24,
+    right: 24,
+    width: 384,
+    height: 500,
+    backgroundColor: 'white',
+    borderRadius: 16,
+    boxShadow: '0 20px 50px rgba(0,0,0,0.3)',
+    display: 'flex',
+    flexDirection: 'column',
+    zIndex: 9999,
+    overflow: 'hidden',
+    border: '1px solid #e5e7eb'
+  },
+  header: {
+    background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)',
+    color: 'white',
+    padding: '12px 16px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  headerLeft: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8
+  },
+  headerRight: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 4
+  },
+  avatar: {
+    width: 36,
+    height: 36,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  headerTitle: {
+    fontWeight: 600,
+    fontSize: 14
+  },
+  headerSubtitle: {
+    fontSize: 11,
+    color: 'rgba(255,255,255,0.8)'
+  },
+  iconButton: {
+    background: 'transparent',
+    border: 'none',
+    color: 'white',
+    cursor: 'pointer',
+    padding: 6,
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  newChatButton: {
+    background: 'transparent',
+    border: 'none',
+    color: 'white',
+    cursor: 'pointer',
+    padding: '4px 8px',
+    fontSize: 12,
+    borderRadius: 4
+  },
+  messagesContainer: {
+    flex: 1,
+    overflowY: 'auto',
+    padding: 16,
+    backgroundColor: '#f9fafb',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 12
+  },
+  messageRow: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    gap: 8
+  },
+  avatarSmall: {
+    width: 28,
+    height: 28,
+    background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)',
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0
+  },
+  userAvatar: {
+    width: 28,
+    height: 28,
+    backgroundColor: '#d1d5db',
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0
+  },
+  messageBubble: {
+    padding: '10px 14px',
+    borderRadius: 16,
+    maxWidth: '100%'
+  },
+  userBubble: {
+    backgroundColor: '#3b82f6',
+    color: 'white',
+    borderBottomRightRadius: 4
+  },
+  assistantBubble: {
+    backgroundColor: 'white',
+    color: '#1f2937',
+    border: '1px solid #e5e7eb',
+    borderBottomLeftRadius: 4,
+    boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+  },
+  messageText: {
+    margin: 0,
+    fontSize: 13,
+    lineHeight: 1.5,
+    whiteSpace: 'pre-wrap',
+    fontFamily: 'inherit'
+  },
+  suggestionsContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: 6,
+    marginTop: 8
+  },
+  suggestionButton: {
+    fontSize: 11,
+    padding: '6px 10px',
+    backgroundColor: 'white',
+    border: '1px solid #d1d5db',
+    color: '#374151',
+    borderRadius: 16,
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    gap: 4
+  },
+  timestamp: {
+    fontSize: 10,
+    color: '#9ca3af',
+    marginTop: 4
+  },
+  loadingBubble: {
+    backgroundColor: 'white',
+    border: '1px solid #e5e7eb',
+    borderRadius: 16,
+    padding: '10px 14px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
+    fontSize: 13,
+    color: '#6b7280'
+  },
+  loadingSpinner: {
+    animation: 'spin 1s linear infinite'
+  },
+  inputContainer: {
+    padding: 12,
+    backgroundColor: 'white',
+    borderTop: '1px solid #e5e7eb',
+    display: 'flex',
+    gap: 8
+  },
+  input: {
+    flex: 1,
+    padding: '10px 16px',
+    backgroundColor: '#f3f4f6',
+    border: 'none',
+    borderRadius: 20,
+    fontSize: 13,
+    outline: 'none'
+  },
+  sendButton: {
+    width: 40,
+    height: 40,
+    backgroundColor: '#3b82f6',
+    color: 'white',
+    border: 'none',
+    borderRadius: '50%',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
+};
