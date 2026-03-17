@@ -74,6 +74,7 @@ function FormattedMessage({ content }: { content: string }) {
 export function GenesisAIChat() {
   const [isOpen, setIsOpen] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'welcome',
@@ -200,8 +201,17 @@ export function GenesisAIChat() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          style={styles.floatingButton}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          style={{
+            ...styles.floatingButton,
+            transform: isHovered ? 'scale(1.1)' : 'scale(1)',
+            boxShadow: isHovered 
+              ? '0 6px 20px rgba(59, 130, 246, 0.6)' 
+              : '0 4px 12px rgba(59, 130, 246, 0.4)'
+          }}
           aria-label="Open Genesis AI Chat"
+          title="Open AI Assistant"
         >
           <MessageCircle style={{ width: 28, height: 28 }} />
         </button>
@@ -326,8 +336,11 @@ export function GenesisAIChat() {
               disabled={isLoading || !input.trim()}
               style={{
                 ...styles.sendButton,
-                opacity: isLoading || !input.trim() ? 0.5 : 1
+                opacity: isLoading || !input.trim() ? 0.4 : 1,
+                cursor: isLoading || !input.trim() ? 'not-allowed' : 'pointer',
+                backgroundColor: isLoading || !input.trim() ? '#e5e7eb' : '#3b82f6'
               }}
+              title={!input.trim() ? 'Type a message to send' : 'Send message'}
             >
               <Send style={{ width: 18, height: 18 }} />
             </button>
@@ -355,7 +368,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 9999,
-    transition: 'transform 0.2s, box-shadow 0.2s'
+    transition: 'all 0.2s ease'
   },
   chatWindow: {
     position: 'fixed',
