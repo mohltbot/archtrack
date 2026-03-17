@@ -81,6 +81,16 @@ export async function detectRepetitivePatterns(
   return patterns.sort((a, b) => b.agentifiabilityScore - a.agentifiabilityScore);
 }
 
+// Apps to ignore in pattern detection (system apps, not user workflows)
+const IGNORED_APPS = ['loginwindow', 'WindowServer', 'kernel', 'launchd', 'Dock', 'Finder'];
+
+/**
+ * Check if an app should be ignored in pattern detection
+ */
+function isIgnoredApp(appName: string): boolean {
+  return IGNORED_APPS.some(ignored => appName.toLowerCase().includes(ignored.toLowerCase()));
+}
+
 /**
  * Detect repeated app sequences (e.g., Excel → Email → Excel)
  */
@@ -92,9 +102,25 @@ function detectAppSequences(activities: DbActivity[]): RepetitivePattern[] {
   const byEmployee = groupBy(activities, 'employee_id');
 
   for (const [employeeId, acts] of byEmployee) {
+    // Filter out ignored apps and very short activities (< 5 seconds)
+    const filteredActs = acts.filter(a => 
+      !isIgnoredApp(a.app_name) && 
+      a.duration_seconds > 5
+    );
+
     // Look for 3-app sequences that repeat
-    for (let i = 0; i < acts.length - 3; i++) {
-      const seq = `${acts[i].app_name}→${acts[i + 1].app_name}→${acts[i + 2].app_name}`;
+    for (let i = 0; i < filteredActs.length - 3; i++) {
+      const app1 = filteredActs[i].app_name;
+      const app2 = filteredActs[i + 1].app_name;
+      const app3 = filteredActs[i + 2].app_name;
+
+      // Skip sequences where all apps are the same
+      if (app1 === app2 && app2 === app3) continue;
+
+      // Skip sequences with duplicate consecutive apps (e.g., Chrome → Chrome → Safari)
+      if (app1 === app2 || app2 === app3) continue;
+
+      const seq = `${app1}→${app2}→${app3}`;
       const key = `${employeeId}:${seq}`;
       
       const existing = sequences.get(key) || { count: 0, totalTime: 0 };
