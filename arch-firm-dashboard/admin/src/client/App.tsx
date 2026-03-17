@@ -1,20 +1,30 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { BrowserRouter, Routes, Route, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Dashboard } from './pages/Dashboard';
 import { Employees } from './pages/Employees';
 import { Projects } from './pages/Projects';
 import { Tasks } from './pages/Tasks';
 import { Reports } from './pages/Reports';
 import { WebSocketProvider } from './contexts/WebSocketContext';
-import './App.css'; // Move styles to CSS file
+import './App.css';
 
-type Page = 'dashboard' | 'employees' | 'projects' | 'tasks' | 'reports';
 type ConnectionStatus = 'loading' | 'connected' | 'disconnected';
+type Page = 'dashboard' | 'employees' | 'projects' | 'tasks' | 'reports';
 
-const App: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState<Page>('dashboard');
+const AppContent: React.FC = () => {
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>('loading');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Get current page from URL
+  const getCurrentPage = (): Page => {
+    const path = location.pathname.slice(1) || 'dashboard';
+    return (path as Page) || 'dashboard';
+  };
+
+  const currentPage = getCurrentPage();
 
   // Handle window resize
   useEffect(() => {
@@ -44,115 +54,103 @@ const App: React.FC = () => {
 
   useEffect(() => {
     checkHealth();
-    const interval = setInterval(checkHealth, 30000); // Retry every 30s
+    const interval = setInterval(checkHealth, 30000);
     return () => clearInterval(interval);
   }, [checkHealth]);
 
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'dashboard':
-        return <Dashboard />;
-      case 'employees':
-        return <Employees />;
-      case 'projects':
-        return <Projects />;
-      case 'tasks':
-        return <Tasks />;
-      case 'reports':
-        return <Reports />;
-      default:
-        return <Dashboard />;
-    }
-  };
-
   const handleNavClick = (page: Page) => {
-    setCurrentPage(page);
+    navigate(`/${page === 'dashboard' ? '' : page}`);
     setIsMobileMenuOpen(false);
   };
 
   return (
-    <WebSocketProvider>
-      <div className="app-container">
-        {/* Mobile Header */}
-        {isMobile && (
-          <header className="mobile-header">
-            <div className="mobile-logo">
-              <h1>ArchTrack</h1>
-              <span>Admin</span>
-            </div>
-            <button 
-              className="mobile-menu-btn"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Toggle menu"
-            >
-              {isMobileMenuOpen ? '✕' : '☰'}
-            </button>
-          </header>
-        )}
-
-        {/* Sidebar */}
-        <aside className={`sidebar ${isMobile ? 'mobile' : ''} ${isMobileMenuOpen ? 'open' : ''}`}>
-          {!isMobile && (
-            <div className="logo">
-              <h1>ArchTrack</h1>
-              <span>Admin</span>
-            </div>
-          )}
-          
-          <nav className="nav">
-            <NavItem 
-              label="Dashboard" 
-              icon="📊" 
-              active={currentPage === 'dashboard'}
-              onClick={() => handleNavClick('dashboard')}
-            />
-            <NavItem 
-              label="Employees" 
-              icon="👥" 
-              active={currentPage === 'employees'}
-              onClick={() => handleNavClick('employees')}
-            />
-            <NavItem 
-              label="Projects" 
-              icon="📁" 
-              active={currentPage === 'projects'}
-              onClick={() => handleNavClick('projects')}
-            />
-            <NavItem 
-              label="Tasks" 
-              icon="✓" 
-              active={currentPage === 'tasks'}
-              onClick={() => handleNavClick('tasks')}
-            />
-            <NavItem 
-              label="Reports" 
-              icon="📈" 
-              active={currentPage === 'reports'}
-              onClick={() => handleNavClick('reports')}
-            />
-          </nav>
-          
-          <div className="connection-status">
-            <span className={`status-dot ${connectionStatus}`} />
-            {connectionStatus === 'loading' && 'Connecting...'}
-            {connectionStatus === 'connected' && 'Connected'}
-            {connectionStatus === 'disconnected' && 'Disconnected'}
+    <div className="app-container">
+      {/* Mobile Header */}
+      {isMobile && (
+        <header className="mobile-header">
+          <div className="mobile-logo">
+            <h1>ArchTrack</h1>
+            <span>Admin</span>
           </div>
-        </aside>
+          <button 
+            className="mobile-menu-btn"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? '✕' : '☰'}
+          </button>
+        </header>
+      )}
 
-        {/* Mobile Overlay */}
-        {isMobile && isMobileMenuOpen && (
-          <div 
-            className="mobile-overlay"
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
+      {/* Sidebar */}
+      <aside className={`sidebar ${isMobile ? 'mobile' : ''} ${isMobileMenuOpen ? 'open' : ''}`}>
+        {!isMobile && (
+          <div className="logo">
+            <h1>ArchTrack</h1>
+            <span>Admin</span>
+          </div>
         )}
         
-        <main className="main-content">
-          {renderPage()}
-        </main>
-      </div>
-    </WebSocketProvider>
+        <nav className="nav">
+          <NavItem 
+            label="Dashboard" 
+            icon="📊" 
+            active={currentPage === 'dashboard'}
+            onClick={() => handleNavClick('dashboard')}
+          />
+          <NavItem 
+            label="Employees" 
+            icon="👥" 
+            active={currentPage === 'employees'}
+            onClick={() => handleNavClick('employees')}
+          />
+          <NavItem 
+            label="Projects" 
+            icon="📁" 
+            active={currentPage === 'projects'}
+            onClick={() => handleNavClick('projects')}
+          />
+          <NavItem 
+            label="Tasks" 
+            icon="✓" 
+            active={currentPage === 'tasks'}
+            onClick={() => handleNavClick('tasks')}
+          />
+          <NavItem 
+            label="Reports" 
+            icon="📈" 
+            active={currentPage === 'reports'}
+            onClick={() => handleNavClick('reports')}
+          />
+        </nav>
+        
+        <div className="connection-status">
+          <span className={`status-dot ${connectionStatus}`} />
+          {connectionStatus === 'loading' && 'Connecting...'}
+          {connectionStatus === 'connected' && 'Connected'}
+          {connectionStatus === 'disconnected' && 'Disconnected'}
+        </div>
+      </aside>
+
+      {/* Mobile Overlay */}
+      {isMobile && isMobileMenuOpen && (
+        <div 
+          className="mobile-overlay"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+      
+      <main className="main-content">
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/employees" element={<Employees />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/tasks" element={<Tasks />} />
+          <Route path="/reports" element={<Reports />} />
+          <Route path="*" element={<Dashboard />} />
+        </Routes>
+      </main>
+    </div>
   );
 };
 
@@ -171,6 +169,14 @@ const NavItem: React.FC<NavItemProps> = ({ label, icon, active, onClick }) => (
     <span className="nav-icon">{icon}</span>
     <span className="nav-label">{label}</span>
   </button>
+);
+
+const App: React.FC = () => (
+  <WebSocketProvider>
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
+  </WebSocketProvider>
 );
 
 export default App;
