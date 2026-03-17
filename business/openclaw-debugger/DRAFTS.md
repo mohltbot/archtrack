@@ -8,7 +8,7 @@
 
 ---
 
-### DM 1: u/rocgpq - GPT-5.4 OAuth Issues
+### DM 1: u/rocgpq - GPT-5.4 OAuth Issues [✅ POSTED Mar 17]
 
 **Profile:** https://www.reddit.com/user/rocgpq/
 **Post:** https://redd.it/1rocgpq
@@ -33,7 +33,7 @@ Either way, good luck! This one's a pain.
 
 ---
 
-### DM 2: u/Sudden_Clothes3886 - Exec Tools Issue
+### DM 2: u/Sudden_Clothes3886 - Exec Tools Issue [✅ POSTED Mar 17]
 
 **Profile:** https://www.reddit.com/user/Sudden_Clothes3886/
 **Post:** https://redd.it/1rl13sb
@@ -69,7 +69,7 @@ Hope your agent gets their job back 😄
 
 ---
 
-### DM 3: VPS Device Identity Issue
+### DM 3: VPS Device Identity Issue [✅ POSTED Mar 17]
 
 **Post:** https://redd.it/1rrr3v8
 
@@ -330,7 +330,7 @@ DM me.
 
 ---
 
-### Reply 1: r/openclaw "50 Setups" Post
+### Reply 1: r/openclaw "50 Setups" Post [✅ POSTED Mar 17]
 
 **Link:** https://redd.it/1rp8t9r
 
@@ -353,7 +353,7 @@ Also — if you ever want to collaborate or just compare notes on weird edge cas
 
 ---
 
-### Reply 2: Discord Bot "Super Flaky"
+### Reply 2: Discord Bot "Super Flaky" [✅ POSTED Mar 17]
 
 **COPY AND PASTE THIS:**
 
@@ -397,7 +397,7 @@ DM me if interested.
 
 ---
 
-### Reply 3: GitHub #43735 - Skills Loading
+### Reply 3: GitHub #43735 - Skills Loading [✅ POSTED Mar 17]
 
 **Link:** https://github.com/openclaw/openclaw/issues/43735
 
