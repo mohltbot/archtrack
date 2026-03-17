@@ -132,13 +132,56 @@ npm run build
 pm2 restart archtrack
 ```
 
-### 10. Outstanding Issues / Future Work
+### 10. Genesis AI Floating Chatbot - DEPLOYED ✅
 
-1. **Genesis AI Floating Chatbot** - More advanced version mentioned by user, not recovered
-2. **SSL/HTTPS** - Currently HTTP only
-3. **Employee Onboarding Flow** - Need smoother setup for new employees
-4. **Database Persistence** - Currently SQLite, may need Postgres for scale
+**Status:** Fully deployed and working!
+- **Location:** Floating bubble at bottom-right of dashboard
+- **Features:** 
+  - Beautiful gradient header with sparkle icon
+  - Natural language queries about productivity data
+  - Back button to return to welcome screen
+  - "New" button to start fresh conversations
+  - Suggestion chips for common questions
+  - Smooth animations and proper styling
+
+**Files created/modified:**
+- `admin/src/client/components/GenesisAIChat.tsx` - Main chatbot component with inline CSS
+- `admin/src/client/pages/Dashboard.tsx` - Updated to use GenesisAIChat
+- `admin/server/routes/ai-routes.ts` - RESTORED - AI chat API endpoints
+- `admin/server/ai-analytics.ts` - RESTORED - Pattern detection and analytics
+- `admin/server/index.ts` - Added AI routes
+
+**AI Capabilities:**
+- "Who was most productive today?"
+- "How much time did [employee] spend on [app]?"
+- "Show repetitive tasks" (with automation suggestions)
+- "What are automation opportunities?"
+- "Show time breakdown by app"
+- General productivity summaries
+
+### 11. OpenClaw Debugger Shifts - CONSOLIDATED ✅
+
+**Old:** 4 shifts (8 AM, 12 PM, 4 PM, 8 PM) - 120 min/day
+**New:** 2 shifts (9 AM, 6 PM) - 85 min/day
+
+| Shift | Time | Tasks |
+|-------|------|-------|
+| Shift 1 | 9 AM PST | Research + Content + Lead Gen |
+| Shift 2 | 6 PM PST | Nurture + Follow-ups + Reporting |
+
+**Why better:**
+- Eliminated redundant lead scanning
+- Removed empty "reporting" shift
+- Content only when trending topic found
+- More focused time blocks
+
+### 12. Outstanding Issues / Future Work
+
+1. **SSL/HTTPS** - Currently HTTP only
+2. **Employee Onboarding Flow** - Need smoother setup for new employees
+3. **Database Persistence** - Currently SQLite, may need Postgres for scale
+4. **Genesis AI improvements** - Could add more advanced features later
 
 ---
 Documented: March 16, 2026
-Last Updated: March 16, 2026 (9:07 AM)
+Last Updated: March 16, 2026 (6:58 PM)
