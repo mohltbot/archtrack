@@ -48,6 +48,7 @@
 | GitHub #45882 | GitHub | MiniMax streaming not working | https://github.com/openclaw/openclaw/issues/45882 | 🟡 Warm | Monitor for fix | — |
 | GitHub #43909 | GitHub | dangerouslyDisableDeviceAuth not working | https://github.com/openclaw/openclaw/issues/43909 | 🟡 Warm | Monitor for fix | — |
 | u/VenariHunter | Reddit | New user - can't find openclaw.json config file | https://redd.it/1j8k2n2 | 🔵 Cold | New to OpenClaw, basic setup help - nurture long-term | — |
+| dnu (@DnuLkjkjh) | Twitter/X | Engaged on OpenClaw 2026.3.13 skills thread — technical feedback about SKILL.md paths | https://x.com/DnuLkjkjh | 🟡 Warm | First engaged Twitter lead — technical, verified account. Reply to comment + soft pitch | — |
 | u/CooK1e | Reddit | Same issue as OP (21d ago) - may still be stuck | https://redd.it/1j8k2n2 | 🔵 Cold | Follow up to see if resolved - potential lead | — |
 
 ---
