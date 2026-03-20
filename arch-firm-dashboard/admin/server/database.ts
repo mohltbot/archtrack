@@ -390,6 +390,37 @@ export async function createActivity(activity: Activity): Promise<void> {
   );
 }
 
+export async function getActivityById(id: string): Promise<Activity | null> {
+  const db = getDatabase();
+  const row = await db.get('SELECT * FROM activities WHERE id = ?', id);
+  return row ? mapActivity(row) : null;
+}
+
+export async function updateActivity(id: string, updates: Partial<Activity>): Promise<void> {
+  const db = getDatabase();
+  const now = new Date().toISOString();
+
+  const sets: string[] = [];
+  const values: any[] = [];
+
+  if (updates.appName) { sets.push('app_name = ?'); values.push(updates.appName); }
+  if (updates.windowTitle) { sets.push('window_title = ?'); values.push(updates.windowTitle); }
+  if (updates.category) { sets.push('category = ?'); values.push(updates.category); }
+  if (updates.categoryName) { sets.push('category_name = ?'); values.push(updates.categoryName); }
+  if (updates.productivityScore !== undefined) { sets.push('productivity_score = ?'); values.push(updates.productivityScore); }
+  if (updates.productivityLevel) { sets.push('productivity_level = ?'); values.push(updates.productivityLevel); }
+  if (updates.isSuspicious !== undefined) { sets.push('is_suspicious = ?'); values.push(updates.isSuspicious ? 1 : 0); }
+  if (updates.suspiciousReason) { sets.push('suspicious_reason = ?'); values.push(updates.suspiciousReason); }
+  if (updates.isIdle !== undefined) { sets.push('is_idle = ?'); values.push(updates.isIdle ? 1 : 0); }
+  if (updates.idleTimeSeconds !== undefined) { sets.push('idle_time_seconds = ?'); values.push(updates.idleTimeSeconds); }
+  if (updates.durationSeconds !== undefined) { sets.push('duration_seconds = ?'); values.push(updates.durationSeconds); }
+
+  sets.push('updated_at = ?'); values.push(now);
+  values.push(id);
+
+  await db.run(`UPDATE activities SET ${sets.join(', ')} WHERE id = ?`, values);
+}
+
 export async function getActivitiesByEmployee(
   employeeId: string, 
   startDate?: string, 
