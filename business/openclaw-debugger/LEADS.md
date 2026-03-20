@@ -1,6 +1,6 @@
 # OpenClaw Debugger — Lead Tracking
 
-**Last Updated:** March 19, 2026 (Shift 1)
+**Last Updated:** March 20, 2026 (Shift 1)
 
 ## Lead Status Legend
 - 🔥 **Hot** — Frustrated, urgent, ready to buy. DM within 24 hours.
@@ -43,6 +43,12 @@
 | @hongliang-nemovideo | GitHub | Trashed session's message tool calls re-delivered on every restart | https://github.com/openclaw/openclaw/issues/50496 | 🔥 **HOT — NEW** | Comment — Production issue, message spam | DRAFTS.md "Reply 21" |
 | @wzkinj-git | GitHub | Telegram duplicate message bug | https://github.com/openclaw/openclaw/issues/50450 | 🟡 Warm | Monitor — Has 3 comments, active discussion | — |
 | @aaronho838 | GitHub | WhatsApp "No active listener" error | https://github.com/openclaw/openclaw/issues/50489 | 🔥 **HOT — NEW** | Comment + DM — Baileys regression | DRAFTS.md "DM 9" |
+| @papiofficial | GitHub | Discord WebSocket disconnects every ~10 min, messages lost | https://github.com/openclaw/openclaw/issues/51116 | 🔥 **HOT — FRESH** | Comment + DM — Production reliability issue | DRAFTS.md "DM 10" |
+| @easyvaru-hue | GitHub | WhatsApp relink succeeds then fails with "No active listener" | https://github.com/openclaw/openclaw/issues/51012 | 🔥 **HOT — FRESH** | Comment + DM — Windows/WhatsApp critical | DRAFTS.md "DM 11" |
+| @jasonpsimon | GitHub | OpenRouter 401 Missing Authentication header | https://github.com/openclaw/openclaw/issues/51056 | 🔥 **HOT — FRESH** | Comment + DM — Auth regression | DRAFTS.md "DM 12" |
+| @williamwi617 | GitHub | WhatsApp QR login disconnects immediately (401) | https://github.com/openclaw/openclaw/issues/51111 | 🔥 **HOT — FRESH** | Comment + DM — WSL2/WhatsApp | DRAFTS.md "DM 13" |
+| @guruk | GitHub | Gateway memory leak — sessions.json unbounded growth | https://github.com/openclaw/openclaw/issues/51097 | 🔥 **HOT — FRESH** | Comment + DM — Enterprise-scale issue | DRAFTS.md "DM 14" |
+| @kelvinfleuty | GitHub | Subagent failed to execute or produce output | https://github.com/openclaw/openclaw/issues/51062 | 🔥 **HOT — FRESH** | Comment + DM — WSL2/subagent | DRAFTS.md "DM 15" |
 | GitHub #44611 | GitHub | Gateway not loading model config on restart | https://github.com/openclaw/openclaw/issues/44611 | 🟡 Warm | Comment with workaround | DRAFTS.md "Reply 10" |
 | GitHub #41871 | GitHub | Ollama models hang in 2026.3.8 | https://github.com/openclaw/openclaw/issues/41871 | 🟡 Warm | Comment with diagnostic | DRAFTS.md "Reply 11" |
 | GitHub #45882 | GitHub | MiniMax streaming not working | https://github.com/openclaw/openclaw/issues/45882 | 🟡 Warm | Monitor for fix | — |
@@ -55,10 +61,10 @@
 
 ## Pipeline Stats
 
-- 🔥 Hot leads: 18 (including vmkkumar - pricing discussion active)
+- 🔥 Hot leads: 24 (including vmkkumar - pricing discussion active)
 - 🟡 Warm leads: 12
 - 🔵 Cold leads: 7
-- **Total potential revenue:** $3,650+ (vmkkumar project TBD + 33 leads × $75 avg + 2 complex issues × $150)
+- **Total potential revenue:** $5,100+ (vmkkumar project TBD + 39 leads × $75 avg + 4 complex issues × $150)
 
 ---
 
@@ -79,6 +85,46 @@
 - If they want fixed price first: Quote $2,000-5,000 depending on scope
 
 **Revenue Potential:** $2,000-10,000 (custom build project)
+
+---
+
+## 🔥 FRESH LEADS — March 20, 2026 (Shift 1)
+
+### @papiofficial — Discord WebSocket Disconnects
+**Issue:** Messages lost every ~10 minutes during reconnect window
+**Why Hot:** Production reliability issue, user has detailed logs, very frustrated
+**Link:** https://github.com/openclaw/openclaw/issues/51116
+**Status:** 🔥 Hot — Fresh (posted 10 min ago)
+
+### @easyvaru-hue — WhatsApp "No Active Listener"
+**Issue:** Relink succeeds but send fails immediately, session drops with 401
+**Why Hot:** Critical WhatsApp breakage on Windows, blocking entire workflow
+**Link:** https://github.com/openclaw/openclaw/issues/51012
+**Status:** 🔥 Hot — Fresh (posted 4 hours ago)
+
+### @jasonpsimon — OpenRouter Auth Header Missing
+**Issue:** 401 errors despite valid API key, Authorization header not sent
+**Why Hot:** Provider completely broken, user did thorough debugging
+**Link:** https://github.com/openclaw/openclaw/issues/51056
+**Status:** 🔥 Hot — Fresh (posted 2 hours ago)
+
+### @williamwi617 — WhatsApp QR Login Fails
+**Issue:** QR scan succeeds briefly then disconnects with 401/device_removed
+**Why Hot:** WSL2 environment, different from other WhatsApp issues
+**Link:** https://github.com/openclaw/openclaw/issues/51111
+**Status:** 🔥 Hot — Fresh (posted 19 min ago)
+
+### @guruk — Gateway Memory Leak
+**Issue:** sessions.json grows unbounded (150k lines, 7.4MB), RAM hits 1.3GB+
+**Why Hot:** Enterprise-scale issue, 19-31 day uptime, affects production
+**Link:** https://github.com/openclaw/openclaw/issues/51097
+**Status:** 🔥 Hot — Fresh (posted 1 hour ago)
+
+### @kelvinfleuty — Subagent Execution Failure
+**Issue:** Subagent spawns but produces no output, agent.sh doesn't execute
+**Why Hot:** WSL2 + subagent runtime, blocking custom agent development
+**Link:** https://github.com/openclaw/openclaw/issues/51062
+**Status:** 🔥 Hot — Fresh (posted 2 hours ago)
 
 ---
 

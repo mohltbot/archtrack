@@ -2,6 +2,7 @@ import { powerMonitor, ipcMain } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
 import { app } from 'electron';
+import { getServerUrl, ARCHTRACK_CONFIG } from './config.js';
 import {
   classifyActivity,
   calculateTrueProductivity,
@@ -11,7 +12,6 @@ import {
   ActivityCategory,
   SUSPICIOUS_THRESHOLDS
 } from './classifier.js';
-import { ARCHTRACK_CONFIG, getServerUrl } from './config.js';
 
 // Dynamic import for active-win (ESM module)
 let activeWin: any = null;
