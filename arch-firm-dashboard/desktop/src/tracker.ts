@@ -11,6 +11,7 @@ import {
   ActivityCategory,
   SUSPICIOUS_THRESHOLDS
 } from './classifier.js';
+import { ARCHTRACK_CONFIG, getServerUrl } from './config.js';
 
 // Dynamic import for active-win (ESM module)
 let activeWin: any = null;
@@ -63,9 +64,9 @@ let consecutiveIdleChecks = 0;
 
 // Store config (simple JSON file)
 let config: Config = {
-  employeeId: 'emp-001',
-  employeeName: 'Test Employee',
-  serverUrl: 'http://165.227.78.107:3001'
+  employeeId: ARCHTRACK_CONFIG.defaults.employeeId,
+  employeeName: ARCHTRACK_CONFIG.defaults.employeeName,
+  serverUrl: getServerUrl()
 };
 
 export async function startTracking(): Promise<void> {

@@ -17,11 +17,16 @@ const __dirname = path.dirname(__filename);
 const CONFIG_PATH = path.join(os.homedir(), '.archtrack', 'config.json');
 const QUEUE_PATH = path.join(os.homedir(), '.archtrack', 'queue.json');
 
-// Default config
+// Default config - Update this to your deployed server URL
+// Render: 'https://archtrack-admin.onrender.com'
+// DigitalOcean: 'http://165.227.78.107:3001'
+// Local: 'http://localhost:3001'
+const DEFAULT_SERVER_URL = process.env.ARCHTRACK_SERVER_URL || 'https://archtrack-admin.onrender.com';
+
 let config = {
   employeeId: 'emp-001',
   employeeName: 'Employee',
-  serverUrl: 'http://165.227.78.107:3001'
+  serverUrl: DEFAULT_SERVER_URL
 };
 
 // Activity queue
