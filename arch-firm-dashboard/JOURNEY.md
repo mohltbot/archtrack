@@ -522,349 +522,116 @@ The project has been actively maintained with regular sync updates:
 
 ---
 
-### March 18, 2026 - 5:55 PM PST
+### March 17, 2026 - 5:55 PM PST
 
 **Dashboard Status Review:**
 
 #### Current State
-- **Server Status**: NOT RUNNING (crashed due to syntax error)
+- **Server Status**: NOT RUNNING (stopped/crashed since March 17, 7:52 AM)
 - **Dashboard URL**: http://localhost:3001 (unreachable)
-- **Last Error**: Unterminated string literal in `admin/server/routes/ai-routes.ts` at line 1313
-- **Desktop Tracker**: Running (Electron processes active since Monday 8 AM)
+- **Last Issue**: Process force killed due to previous process not exiting cleanly
 
-#### New Features Implemented (Since March 16)
+#### New Features Implemented (Since Last Update)
 
-1. **Genesis AI Chatbot - Major Enhancement** (`01e8fb45`)
-   - Floating AI chatbot with improved UI restored to dashboard
-   - AI analytics backend fully operational
-   - New query handlers for architecture firm owners:
-     - Slacking detection ("Who's slacking?")
-     - Overtime analysis ("Who's working overtime?")
-     - Burnout risk assessment ("Who's at risk of burnout?")
-     - Capacity planning ("Do we have capacity for a new project?")
-     - Top performers identification ("Who are my top performers?")
+1. **Genesis AI Chatbot Major Enhancement** (`01e8fb45`, `10371ff1`, `4835c5f2`)
+   - Added floating Genesis AI chatbot with improved UI
+   - Architecture firm owner query handlers for common concerns:
+     - Employee slacking detection
+     - Overtime tracking and alerts
+     - Burnout risk assessment
+     - Team capacity analysis
+     - Top performer identification
    - Improved answer formatting with bold text and list support
-   - Personalized advice with smarter pattern detection
-   - React Router integration for proper URL-based navigation (fixed routing bug)
-   - Form labels added to all inputs for accessibility
-   - Genesis AI button hover effects and disabled state feedback improved
+   - Personalized advice based on actual employee data
+   - Smarter pattern detection for productivity insights
 
-2. **Context7 Documentation Tools** (`bf573228`)
-   - Context7 CLI implementation for fetching API documentation
-   - Context Hub (Andrew Ng style) for curated docs with feedback
-   - Autocontext for self-improving agent workflows
-   - Pre-configured for Mohammed's API stack (Moonshot, DeepSeek, etc.)
-   - Daily auto-update cron for keeping documentation current
-   - Source: Ben's Bites - "Nvidia loves OpenClaw" (March 17, 2026)
+2. **React Router Integration** (`a37cc4f1`)
+   - Fixed routing bug where menu clicks didn't update page content
+   - Proper URL-based navigation implemented
+   - SPA navigation now works correctly across all routes
 
-3. **Content Management Updates**
-   - DRAFTS.md restructured: ready-to-post content at top, archived at bottom
-   - All Twitter threads, case studies, and community replies added with clickable links
-   - Posted content marked with [✅ POSTED Mar 17] labels
-   - Quick DM links extracted for easy copy-paste posting
-   - 2 new cold leads added from Reddit: VenariHunter and CooK1e
+3. **Form Accessibility Improvements** (`f3c3b72f`)
+   - Added form labels to all inputs for better accessibility
+   - Improved Genesis AI button hover effects
+   - Better disabled state feedback for buttons
+
+4. **DRAFTS.md Content Management Overhaul**
+   - Restructured with ready-to-post content at top
+   - Posted content archived at bottom
+   - Added all remaining Twitter threads (3-7), case studies, and replies (4-18)
+   - Marked posted content as [✅ POSTED Mar 17]
+   - Added quick DM links and clickable Twitter thread links
+   - Optimized for copy-paste workflow
+
+5. **Lead Generation Updates**
+   - Added 2 new cold leads from Reddit screenshots: VenariHunter and CooK1e
 
 #### Bug Fixes
 
-1. **Genesis AI Improvements** (`10371ff1`, `75c94933`, `f3c3b72f`)
-   - Message formatting with bold text and list support
-   - Better formatting and personalized advice
-   - Smarter pattern detection for employee analytics
-   - Form accessibility improved with labels on all inputs
-   - Button hover effects and disabled state feedback enhanced
+1. **Genesis AI Styling Fixes** (`9e4d9f56`, `75c94933`)
+   - Fixed chatbot styling with inline CSS for proper rendering
+   - Message formatting now supports bold text and lists correctly
 
-2. **Navigation Fix** (`a37cc4f1`)
-   - Added React Router for proper URL-based navigation
-   - Fixed routing bug where menu clicks didn't update page content
+2. **Server Stability Issue (ACTIVE BLOCKER)**
+   - Server was running successfully on March 17 morning (7:23 AM, 7:25 AM restarts)
+   - Last crash at 7:52 AM due to "Previous process hasn't exited yet"
+   - tsx watch mode having issues with clean restarts
+   - **Fix Needed**: Implement cleaner process management or switch to compiled production build
 
 #### UI Improvements
-- Genesis AI chatbot floating button with inline CSS styling
-- Improved chat UI with message formatting support
-- Better visual feedback for button states
-- Accessibility improvements with form labels
+- Genesis AI chatbot button with improved hover states
+- Better form accessibility with proper labels
+- Consistent navigation behavior with React Router
 
 #### Performance Metrics
-- **Server Uptime**: 0 (crashed March 16 ~7:19 PM)
-- **Desktop Tracker**: Running (active since Monday 8 AM, ~3+ days uptime)
-- **Build Status**: ❌ Server fails to start due to syntax error
-- **Error**: Unterminated string literal in `ai-routes.ts` line 1313
+- **Server Uptime**: 0 (crashed at 7:52 AM)
+- **Last Successful Run**: March 17, 2026 ~7:25 AM PST
+- **Desktop Tracker**: ✅ Running (Electron processes active since Monday 8 AM)
+- **Build Status**: ✅ Client and server build successfully
+- **Health Checks**: Cron job configured but server not running to respond
 
 #### Active Blockers/Issues
 
-1. **🚨 CRITICAL: Server Crashed - Syntax Error**
-   - Error: `Unterminated string literal` in `admin/server/routes/ai-routes.ts:1313`
-   - Server was restarting due to file changes and hit this error
-   - **Fix Needed**: Review and fix the unterminated string in ai-routes.ts around line 1313
-   - After fix: Run `./start-production.sh` to restart
+1. **🚨 CRITICAL: Server Not Running**
+   - Server crashed at 7:52 AM due to tsx restart issues
+   - Error: "Previous process hasn't exited yet. Force killing..."
+   - **Fix Options**:
+     - Use `./start-production.sh` to run compiled build instead of tsx dev mode
+     - Or fix tsx watch mode process cleanup
 
 2. **Zero Activity Data (Persistent)**
+   - Desktop tracker processes are running but may not be reporting to server
    - All productivity metrics still show 0% / 0m
-   - Desktop tracker is running but may not be reporting to server
-   - No historical data being collected
+   - Need to verify tracker-server communication
 
-3. **Report Generation Disabled**
-   - Generate Report button requires employee selection
-   - No default employee pre-selected
+3. **Static File Path (Addressed in Code)**
+   - Server code now correctly looks for `dist/client` 
+   - Path logic: `../../dist/client` in dev mode, `../client` in production
 
-#### Recent Commits (Last 20 - March 16-18)
-- `bf573228` - feat(context7): Add documentation tools for AI agents
-- `35e8d5dd` - Restructure DRAFTS.md: Ready-to-post content at top
-- `0508219d` - Restructure DRAFTS.md: Ready-to-post content at top
-- `bcd1ccf8` - Add all remaining content: Twitter threads 3-7, case studies
-- `94226314` - Mark posted content as [✅ POSTED Mar 17] in DRAFTS.md
-- `a77fbd1a` - Mark posted DMs and replies as sent/commented on Mar 17
-- `56dbf576` - Add 2 new cold leads from Reddit screenshots
-- `03a233ae` - Restructure DRAFTS.md: links now right next to copy-paste content
-- `e9b36a0b` - Add all remaining Twitter threads, case studies, community replies
-- `cf07e503` - Add quick DM links and Twitter Thread 4 to DRAFTS.md
-- `4fbb7118` - Update DRAFTS.md: optimized for copy-paste, all links extracted
-- `ed0ff4c8` - docs: finalize March 16 memory with public repo sync
-- `43c8a728` - docs: update memory with deployment success
-- `4214da12` - docs: update daily memory with ArchTrack deep dive results
-- `f3c3b72f` - fix: add form labels, improve Genesis AI button hover effects
+#### Recent Commits (Last 20 - Admin Focus)
+- `f3c3b72f` - fix: add form labels to all inputs, improve Genesis AI button hover effects
 - `a37cc4f1` - fix: add React Router for proper URL-based navigation
 - `4835c5f2` - feat: add architecture firm owner query handlers for Genesis AI
-- `10371ff1` - feat: improve Genesis AI answers with better formatting
+- `10371ff1` - feat: improve Genesis AI answers with better formatting and pattern detection
 - `75c94933` - fix: Genesis AI message formatting with bold text and list support
-- `76a4c896` - docs: add Genesis AI documentation and update deployment log
+- `9e4d9f56` - fix: Genesis AI chatbot styling with inline CSS
+- `01e8fb45` - feat: add Genesis AI floating chatbot with improved UI
+- `b1f01671` - feat: restore AIChatPanel component for dashboard analytics
+- `2961724c` - fix(deployment): fix broken Docker build and server static file paths
 
 #### Data Status
-- **Employees**: 3 configured (Ahmed, Mohammed, Sarah)
-- **Projects**: 3 active (Community Center, Downtown Office Complex, Residential Tower)
-- **Tasks**: 4 tracked with priorities
-- **Activity Data**: None recorded (all zeros) - desktop tracker running but not reporting
-
-#### Next Steps
-1. **URGENT**: Fix unterminated string literal in `admin/server/routes/ai-routes.ts` line 1313
-2. Restart server with `./start-production.sh`
-3. Verify dashboard loads at http://localhost:3001
-4. Test Genesis AI chatbot functionality
-5. Investigate why desktop tracker isn't reporting activity data
-6. Test Context7 documentation tools
-
----
-
-### March 19, 2026 - 5:55 PM PST
-
-**Dashboard Status Review:**
-
-#### Current State
-- **Server Status**: ✅ RUNNING (PID 93400, started March 19, 2026 ~5:57 PM)
-- **Dashboard URL**: http://localhost:3001 (accessible)
-- **WebSocket**: Connected
-- **Desktop Tracker**: Running (Electron processes active since Monday 8 AM, ~4+ days uptime)
-
-#### Major Fix - Server Static Path Issue RESOLVED
-**Problem**: Server was failing to start due to incorrect static file path resolution
-- Error: `ENOENT: no such file or directory, stat '/Users/mohlt/.openclaw/workspace/arch-firm-dashboard/dist/client/index.html'`
-- Root cause: Path in `admin/server/index.ts` was looking for files at `../../dist/client` but actual location was `admin/dist/client/`
-
-**Solution Applied**:
-- Fixed static path logic in `admin/server/index.ts`
-- Changed dev path from `../../dist/client` to `../dist/client`
-- Server now correctly resolves to `admin/dist/client/`
-- Production server starts successfully with `./start-production.sh`
-
-#### New Features Implemented (Since March 18)
-1. **NemoClaw Security Skill** (`fd277fe3`)
-   - Added Nvidia NemoClaw security skill for OpenClaw
-   - Enhanced security monitoring capabilities
-
-2. **Sales Tracking System** (`e0cf0188`)
-   - New SALES.md file for tracking sales activities
-   - Integrated with LEADS.md and DRAFTS.md
-   - Comprehensive sales pipeline tracking
-
-3. **Content Management Updates** (`ddd13f39`, `5afed864`)
-   - DRAFTS.md truncated to only GitHub DMs (all other content posted)
-   - Twitter engagement tracking for leads
-   - Content insights and analytics tracking
-
-#### Bug Fixes
-1. **Critical Server Path Fix** (This Update)
-   - Fixed static file path in `admin/server/index.ts`
-   - Server now serves dashboard correctly at http://localhost:3001
-   - All routes (Dashboard, Employees, Projects, Tasks, Reports) working
-
-#### UI Improvements
-- No new UI changes since March 18
-- All existing features functional:
-  - Dashboard with live activity feed
-  - Employee management (3 employees configured)
-  - Project management (3 active projects)
-  - Task management (4 tasks tracked)
-  - Genesis AI chatbot accessible
-
-#### Performance Metrics
-- **Server Uptime**: Just started (PID 93400)
-- **Desktop Tracker**: Running continuously since Monday 8 AM (~4 days)
-- **Build Status**: ✅ Client and server build successfully
-- **Health Checks**: Configured via cron (every 5 min)
-- **API Health**: `/api/health` responding correctly
-
-#### Data Status (Verified Working)
 - **Employees**: 3 configured (Ahmed $65/hr, Mohammed $75/hr, Sarah $85/hr)
-- **Projects**: 3 active
-  - Community Center (City Council, $300,000)
-  - Downtown Office Complex (ABC Corp, $500,000)
-  - Residential Tower (XYZ Developers, $750,000)
-- **Tasks**: 4 tracked
-  - Initial Design Concepts (High, Mohammed, 40h)
-  - Site Analysis (High, Ahmed, 16h)
-  - Floor Plan Development (Medium, Mohammed, 60h)
-  - Client Meeting Prep (Low, Sarah, 8h)
-- **Activity Data**: Live feed showing activity from desktop tracker
-  - Google Chrome activity tracked as "Core Work"
-  - Terminal activity tracked as "Other"
-  - Timestamps showing recent activity (8:25 AM, 8:24 AM, etc.)
-
-#### Active Blockers/Issues
-1. **Zero Aggregated Metrics (Partial)**
-   - Team Productivity still shows 0%
-   - Focus Time Today shows 0h
-   - Time Breakdown all shows 0h
-   - **However**: Live Activity Feed IS working and showing real-time data
-   - **Root Cause**: Aggregation logic may not be processing live feed data into metrics
-
-2. **Report Generation**
-   - Generate Report button requires employee selection
-   - No default employee pre-selected
-   - Feature functional but needs UX improvement
-
-#### Recent Commits (Last 10 - March 18-19)
-- `5afed864` - Track Twitter engagement: dnu lead, content insights
-- `ddd13f39` - Truncate DRAFTS.md - only GitHub DMs remain (everything else posted)
-- `e0cf0188` - Update tracking: MEMORY, LEADS, DRAFTS, add SALES.md
-- `35e8d5dd` - Restructure DRAFTS.md: Ready-to-post content at top
-- `0508219d` - Restructure DRAFTS.md: Ready-to-post content at top
-- `bcd1ccf8` - Add all remaining content: Twitter threads 3-7, case studies, replies 4-18
-- `94226314` - Mark posted content as [✅ POSTED Mar 17] in DRAFTS.md
-- `a77fbd1a` - Mark DMs and replies as sent/commented on Mar 17
-- `56dbf576` - Add 2 new cold leads from Reddit: VenariHunter and CooK1e
-- `fd277fe3` - feat(nemoclaw): Add Nvidia NemoClaw security skill for OpenClaw
-
-#### Infrastructure Updates
-- **Production Scripts**: All operational
-  - `start-production.sh` - Starts server with PID tracking ✅
-  - `stop-production.sh` - Graceful shutdown
-  - `status.sh` - Check running status ✅
-  - `health-check.sh` - Automated health monitoring
-  - `backup.sh` - Daily backup automation
-- **Server Log**: Available at `logs/server.log`
-- **Cron Health Checks**: Running every 5 minutes
+- **Projects**: 3 active ($1.55M total portfolio)
+- **Tasks**: 4 tracked with priorities
+- **Activity Data**: None recorded (desktop running but not reporting)
 
 #### Next Steps
-1. **Investigate Metric Aggregation**: Why are productivity metrics 0% despite live feed working?
-2. **Test Report Generation**: Verify reports work with employee selection
-3. **Test Genesis AI Chatbot**: Ensure AI analytics are functional
-4. **Monitor Server Stability**: Watch for any crashes over next 24h
-5. **Consider Activity Data Persistence**: Ensure data survives server restarts
+1. **URGENT**: Restart server using `./start-production.sh` (compiled build) to avoid tsx issues
+2. Verify dashboard loads at http://localhost:3001
+3. Test Genesis AI chatbot functionality with new query handlers
+4. Debug desktop tracker data reporting (check API endpoint connectivity)
+5. Verify React Router navigation works across all pages
 
 ---
 
----
-
-### March 20, 2026 - 5:55 PM PST
-
-**Dashboard Status Review:**
-
-#### Current State
-- **Server Status**: ✅ RUNNING (accessible at http://localhost:3001)
-- **WebSocket**: Connected
-- **Desktop Tracker**: Running (tracking activity from local machine)
-- **Cloud Deployment**: Render deployment active (https://archtrack-server.onrender.com)
-
-#### New Features Implemented (Since March 19)
-
-1. **Cloud Deployment Migration - Render** (`117002d9`, `f90b86fb`)
-   - Desktop tracker updated to use Render deployment URL
-   - Server now accessible via cloud for remote tracking
-   - Migration from local-only to hybrid local/cloud architecture
-
-2. **Activity Sync Bug Fix** (`33d831d7`)
-   - Fixed synchronization issues between desktop tracker and server
-   - Activity data now properly flowing from tracker to dashboard
-
-3. **Security & Error Handling Improvements** (`a8bf41a2`, `fe409c44`)
-   - Fixed critical security vulnerabilities identified in audit
-   - Improved error handling throughout the application
-   - Better resilience against edge cases and failures
-
-#### Bug Fixes
-
-1. **Desktop Tracker Server URL** (`117002d9`, `f90b86fb`, `04cda932`)
-   - Updated desktop app to point to Render deployment instead of localhost
-   - Reverted DigitalOcean URL attempt (needs SSH fix)
-   - Final configuration using Render for reliable cloud access
-
-2. **Activity Sync Issues** (`33d831d7`)
-   - Fixed bug preventing activity data from syncing properly
-   - Desktop tracker now correctly reports to server
-
-3. **Security Audit Fixes** (`a8bf41a2`, `fe409c44`)
-   - Addressed critical security issues from comprehensive audit
-   - Enhanced error handling for better stability
-
-#### UI Improvements
-- No new UI changes since March 19
-- All existing dashboard features functional
-- Genesis AI chatbot accessible via floating button
-
-#### Performance Metrics
-- **Server Status**: Running and serving dashboard
-- **WebSocket**: Connected and stable
-- **Live Activity Feed**: ✅ ACTIVE - showing real-time activity
-  - Google Chrome tracked as "Core Work"
-  - Terminal tracked as "Other"
-  - Timestamps from 8:23 AM - 8:25 AM showing active usage
-- **Desktop Tracker**: Reporting activity to server
-
-#### Data Status (Current)
-- **Employees**: 3 configured (Ahmed, Mohammed, Sarah)
-- **Projects**: 3 active (Community Center, Downtown Office Complex, Residential Tower)
-- **Tasks**: 4 tracked
-- **Activity Data**: Live feed working with real-time updates
-  - Metrics still showing 0% / 0h (aggregation layer issue persists)
-  - But live feed IS capturing and displaying activity correctly
-
-#### Active Blockers/Issues
-
-1. **Metric Aggregation Still at 0%**
-   - Team Productivity: 0%
-   - Focus Time Today: 0h
-   - Idle/Wasted Time: 0h
-   - Time Breakdown: All categories show 0h
-   - **Root Cause**: Aggregation logic not processing live feed data into summary metrics
-   - **Note**: Live Activity Feed IS working - data is being captured, just not aggregated
-
-2. **DigitalOcean URL Reverted**
-   - Attempted to switch to DigitalOcean deployment
-   - Reverted due to SSH configuration issues
-   - Currently using Render deployment successfully
-
-#### Recent Commits (March 19-20)
-- `3ada14c6` - docs: Add ArchTrack fix documentation for March 20, 2026
-- `04cda932` - Revert to DigitalOcean URL - needs SSH fix
-- `117002d9` - Fix ArchTrack: Update desktop app to use Render deployment URL
-- `f90b86fb` - fix: Update desktop tracker to use Render deployment URL
-- `33d831d7` - Fix activity sync bug
-- `fe409c44` - Fix remaining bugs from audit
-- `a8bf41a2` - Fix critical security and error handling issues
-- `33e859d5` - chore(sync): comprehensive 4-hour update [March 19, 2026 - 11:07 PM PST]
-
-#### Infrastructure Updates
-- **Render Deployment**: Active and serving traffic
-- **Desktop Tracker**: Configured for cloud connectivity
-- **Local Server**: Still running at localhost:3001 for development
-- **Security**: Audit fixes applied, error handling improved
-
-#### Next Steps
-1. **Fix Metric Aggregation**: Investigate why summary metrics remain at 0% despite live feed working
-2. **DigitalOcean Migration**: Resolve SSH issues for potential DO deployment
-3. **Data Persistence**: Ensure activity history survives server restarts
-4. **Test Genesis AI**: Verify AI analytics work with current data flow
-5. **Monitor Cloud Stability**: Track Render deployment performance
-
----
-
-*Last Updated: March 20, 2026 - 5:55 PM PST*
+*Last Updated: March 17, 2026 - 5:55 PM PST*
