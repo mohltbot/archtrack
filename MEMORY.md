@@ -36,6 +36,7 @@ _This file contains curated long-term memories, lessons learned, and important c
 - **Direct feedback:** Prefers honest "not ready" over false confidence
 - **Mobile-first:** Everything must work on phone
 - **Risk tolerance:** Willing to try deposit model for client projects
+- **Reminders:** When asking me to remind him of something, add it to his calendar (not just files)
 
 ### Recent Context
 
