@@ -755,6 +755,9 @@ export async function getDashboardStats(): Promise<any> {
     todayStr
   );
 
+  // Get employee activity stats
+  const employeeActivity = await getEmployeeActivityStats();
+
   return {
     totalEmployees: totalEmployees.count,
     activeProjects: activeProjects.count,
@@ -766,7 +769,8 @@ export async function getDashboardStats(): Promise<any> {
     suspiciousActivityCount: suspiciousCount.count,
     focusTimeMinutes: Math.round(focusTime.total / 60),
     distractedTimeMinutes: Math.round(distractedTime.total / 60),
-    recentActivities: recentActivities.map(mapActivity)
+    recentActivities: recentActivities.map(mapActivity),
+    employeeActivity
   };
 }
 
