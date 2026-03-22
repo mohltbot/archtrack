@@ -13,7 +13,7 @@
 
 | Name | Source | Issue | Link | Status | Next Action | Draft Location |
 |------|--------|-------|------|--------|-------------|----------------|
-| vmkkumar | Personal/DM | Custom build project - asked for pricing | Screenshot Mar 16 | 🔥 Hot | **PRIORITY** — Follow up on pricing discussion (deposit model offered, awaiting response) | DRAFTS.md "vmkkumar follow-up" |
+| vmkkumar | Personal/DM | Custom build: NEW AI customer service agent to sell to developers on Fiverr. You shared Intercom case study, offered to help. Message pending Discord safety scan. | Screenshot Mar 22 | 🔥 Hot | Wait for him to see message, then follow up if no response in 24h | DRAFTS.md "vmkkumar follow-up" |
 |------|--------|-------|------|--------|-------------|----------------|
 | u/rocgpq (GPT-5.4 OAuth) | Reddit | Can't get OpenClaw 2026.3.7 + GPT-5.4 + OAuth working | https://redd.it/1rocgpq | 🟡 Warm | ✅ DM SENT Mar 17 — Awaiting response | DRAFTS.md "DM 1" |
 | u/Sudden_Clothes3886 | Reddit | Exec tools not working after update, fired an agent | https://redd.it/1rl13sb | 🟡 Warm | ✅ DM SENT Mar 17 — Awaiting response | DRAFTS.md "DM 2" |
