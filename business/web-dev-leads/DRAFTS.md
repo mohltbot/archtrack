@@ -11,6 +11,43 @@
 
 ---
 
+### Option 5: Pre-Built Demo (HIGHEST CONVERSION)
+
+Hey Brandon,
+
+I went ahead and built you a quick demo site — check it out: [LINK]
+
+Right now you're losing bookings because people have to call/text you with questions like:
+- "Do you have cars available March 25-28?"
+- "What's the pickup process?"
+- "How much for a week?"
+
+A website answers all this automatically and lets them book directly.
+
+**What I built:**
+- Clean, professional design (mobile-friendly)
+- Your location + contact info
+- Simple booking form with date picker
+- FAQ section (saves you from answering same questions)
+- Google Maps integration
+
+**The booking form captures:**
+- Pickup/dropoff dates
+- Car type preference
+- Contact info
+- Special requests
+
+Instead of playing phone tag, you get an email with everything you need.
+
+**Pricing:**
+- $200 to activate the site (domain, hosting, go live)
+- $100/month for 4 months (maintenance, updates, support)
+- Or $400 total if you pay upfront (save $100)
+
+The site is already built — just needs your approval to go live. Want to see it?
+
+---
+
 ### Option 1: Payment Plan (Recommended)
 
 Hey Brandon,
@@ -28,6 +65,8 @@ What if we did a payment plan? Gets you online now without the full upfront cost
 
 You get a professional site with:
 - Online booking form (converts way better than phone-only)
+  - Captures dates, car preference, contact info
+  - No more "is it available?" back and forth
 - Google Maps integration
 - Mobile-friendly design
 - Basic SEO so people can actually find you
@@ -47,8 +86,11 @@ Following up! What if we start smaller?
 **$200 Starter Package:**
 - Clean one-page professional site
 - Your contact info + location
-- Simple booking form
+- Simple booking form (captures dates, car type, contact info)
 - Mobile-friendly
+
+**Why the booking form matters:**
+Right now customers have to call/text you to check availability. Most won't bother. A form captures their info while they're interested — you follow up once instead of playing phone tag.
 
 Takes me a day to build. You get online immediately, look more legit to customers checking you out on Google.
 
