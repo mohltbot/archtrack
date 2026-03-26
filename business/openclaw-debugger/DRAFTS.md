@@ -482,10 +482,9 @@ Immediate workarounds to buy yourself time:
 
 **Option 1: Automated session pruning (your cron is good)**
 Consider also truncating sessions.json directly:
-```bash
-tail -n 1000 ~/.openclaw/agents/main/sessions/sessions.json > /tmp/sessions_trimmed.json
-mv /tmp/sessions_trimmed.json ~/.openclaw/agents/main/sessions/sessions.json
-```
+
+    tail -n 1000 ~/.openclaw/agents/main/sessions/sessions.json > /tmp/sessions_trimmed.json
+    mv /tmp/sessions_trimmed.json ~/.openclaw/agents/main/sessions/sessions.json
 
 **Option 2: Separate agents per workload**
 Split your 25+ cron jobs across multiple agents so no single sessions.json grows too large.
@@ -524,11 +523,10 @@ WSL2-specific issues to try:
 3. Check Windows Defender isn't blocking the spawned process
 
 Diagnostic to add to agent.sh:
-```bash
-exec 2>&1
-set -x
-env > /tmp/subagent_env.txt
-```
+
+    exec 2>&1
+    set -x
+    env > /tmp/subagent_env.txt
 
 This will show you exactly what environment the subagent sees.
 
