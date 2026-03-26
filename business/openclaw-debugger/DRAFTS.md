@@ -767,10 +767,13 @@ For anyone blocked right now before the PR lands, the manual asset download work
 **Status:** ✅ Ready to post
 **Platform:** Twitter/X
 **Topic:** Control UI assets missing from npm package — trending issue (4+ GitHub issues in 24h)
+**Link:** https://twitter.com/compose/tweet
 
-**COPY AND PASTE:**
+**COPY AND PASTE (one tweet at a time):**
+
+Tweet 1:
 ```
-1/ 🚨 Control UI is broken in OpenClaw 2026.3.22
+🚨 Control UI is broken in OpenClaw 2026.3.22
 
 If you upgraded via install.sh and see:
 "Control UI assets not found. Build them with pnpm ui:build"
@@ -778,55 +781,75 @@ If you upgraded via install.sh and see:
 You're not alone. This is affecting everyone who used the official install script.
 
 🧵
+```
 
-2/ The Problem:
+Tweet 2:
+```
+The Problem:
 
-The npm package for 2026.3.22 is missing the `dist/control-ui/` directory.
+The npm package for 2026.3.22 is missing the dist/control-ui/ directory.
 
-The error tells you to run `pnpm ui:build` — but that doesn't work for install.sh users because:
+The error tells you to run pnpm ui:build — but that doesn't work for install.sh users because:
 • pnpm isn't installed
 • ~/.openclaw isn't a git repo
 • No package.json to build from
+```
 
-3/ Who's Affected:
+Tweet 3:
+```
+Who's Affected:
 
-• Everyone who used: `curl -fsSL https://openclaw.ai/install.sh | bash`
+• Everyone who used: curl -fsSL https://openclaw.ai/install.sh | bash
 • npm global install users
 • Anyone NOT building from source
 
 Basically: most production deployments.
+```
 
-4/ Workaround (Until Fix Lands):
+Tweet 4:
+```
+Workaround (Until Fix Lands):
 
 Download assets manually:
-```bash
+
 curl -L https://github.com/openclaw/openclaw/releases/download/v2026.3.22/control-ui-assets.tar.gz -o /tmp/ui-assets.tar.gz
 mkdir -p ~/.openclaw/dist/control-ui
 tar -xzf /tmp/ui-assets.tar.gz -C ~/.openclaw/dist/control-ui/
 openclaw gateway restart
 ```
 
-5/ The Real Fix:
+Tweet 5:
+```
+The Real Fix:
 
 kevinheinrichs has PR #52839 that fixes the npm packaging.
 
 Expect this in 2026.3.23. Until then, use the workaround above or downgrade to 2026.3.21.
+```
 
-6/ Why This Matters:
+Tweet 6:
+```
+Why This Matters:
 
 The Control UI is how most people manage their OpenClaw instance.
 
 When it breaks on a standard install, that's a trust issue. New users hit this on day one.
+```
 
-7/ Need Help Now?
+Tweet 7:
+```
+Need Help Now?
 
 If your OpenClaw deployment is down because of this and the workaround isn't working, I help people debug these issues.
 
 $75 for 30 min — usually resolved in 15.
 
 DM me or check my GitHub: @mohlt
+```
 
-8/ Follow for more OpenClaw debugging tips
+Tweet 8:
+```
+Follow for more OpenClaw debugging tips
 
 I track every regression, workaround, and fix so you don't have to.
 
@@ -905,10 +928,13 @@ Interested?
 **Status:** ✅ Ready to post
 **Platform:** Twitter/X
 **Topic:** Cron delivery to Slack failing — fresh issue today
+**Link:** https://twitter.com/compose/tweet
 
-**COPY AND PASTE:**
+**COPY AND PASTE (one tweet at a time):**
+
+Tweet 1:
 ```
-1/ 🚨 Slack cron delivery is broken in OpenClaw 2026.3.22
+🚨 Slack cron delivery is broken in OpenClaw 2026.3.22
 
 If your cron jobs are failing with:
 "Unsupported channel: slack"
@@ -916,8 +942,11 @@ If your cron jobs are failing with:
 You're not alone. This just started hitting people today.
 
 🧵
+```
 
-2/ The Problem:
+Tweet 2:
+```
+The Problem:
 
 Cron jobs with delivery: {mode: "announce", channel: "slack"} are failing even though:
 • Slack is properly configured
@@ -925,19 +954,25 @@ Cron jobs with delivery: {mode: "announce", channel: "slack"} are failing even t
 • Direct API calls work fine
 
 The cron scheduler isn't recognizing Slack as a valid delivery target.
+```
 
-3/ Who's Affected:
+Tweet 3:
+```
+Who's Affected:
 
 • Anyone using cron jobs with Slack delivery
 • Both isolated and main session targets
 • Gateway restart doesn't fix it
 
 This is a regression in 2026.3.22's delivery validation layer.
+```
 
-4/ Workaround #1: Switch to Webhook Mode
+Tweet 4:
+```
+Workaround #1: Switch to Webhook Mode
 
 Change your cron job delivery config:
-```json
+
 {
   "delivery": {
     "mode": "webhook",
@@ -946,10 +981,12 @@ Change your cron job delivery config:
 }
 ```
 
-5/ Workaround #2: System Event + Script
+Tweet 5:
+```
+Workaround #2: System Event + Script
 
 Use a systemEvent payload that calls Slack API directly:
-```json
+
 {
   "payload": {
     "kind": "systemEvent",
@@ -958,30 +995,40 @@ Use a systemEvent payload that calls Slack API directly:
 }
 ```
 
-6/ Workaround #3: Downgrade
+Tweet 6:
+```
+Workaround #3: Downgrade
 
 If you need it working NOW:
-```bash
+
 npm install -g openclaw@2026.3.21
-```
 
 Cron delivery was stable in 2026.3.21.
+```
 
-7/ The Real Fix:
+Tweet 7:
+```
+The Real Fix:
 
 This needs to be fixed in the cron delivery layer. The channel validation is incorrectly rejecting Slack.
 
 Expect a fix in 2026.3.23. Track issue #53769 for updates.
+```
 
-8/ Need Help Now?
+Tweet 8:
+```
+Need Help Now?
 
 If your production cron jobs are down and these workarounds aren't working for your setup, I debug OpenClaw issues regularly.
 
 $75 for 30 min — usually resolved in 15.
 
 DM me or check my GitHub: @mohlt
+```
 
-9/ Follow for more OpenClaw debugging tips
+Tweet 9:
+```
+Follow for more OpenClaw debugging tips
 
 I track every regression, workaround, and fix so you don't have to.
 
@@ -1045,16 +1092,14 @@ Immediate workarounds to stop the bleeding:
 Set `safeBins: []` in openclaw.json to bypass the approval system entirely (only if you trust your environment)
 
 **Option 2: Clear the cache manually**
-```bash
-openclaw gateway stop
-rm -rf ~/.openclaw/cache/approvals/
-openclaw gateway start
-```
+
+    openclaw gateway stop
+    rm -rf ~/.openclaw/cache/approvals/
+    openclaw gateway start
 
 **Option 3: Downgrade to 2026.3.23-1**
-```bash
-npm install -g openclaw@2026.3.23-1
-```
+
+    npm install -g openclaw@2026.3.23-1
 
 The manual cache clearing you mentioned works but shouldn't be required. This needs a hotfix from the core team.
 
@@ -1113,9 +1158,8 @@ Since downgrading to 2026.3.2 fixes it, that confirms it's not your config.
 Quick fixes:
 
 **Option 1: Stay on 2026.3.2 for now**
-```bash
-npm install -g openclaw@2026.3.2
-```
+
+    npm install -g openclaw@2026.3.2
 
 **Option 2: Use localhost tunnel**
 If Ollama is on the same network, try using localhost with SSH tunnel instead of direct IP.
@@ -1238,14 +1282,12 @@ The "billing error" message is misleading — your billing is fine, it's the aut
 **Workarounds:**
 
 **Option 1: Use exec mode instead of OAuth**
-```bash
-openclaw models add codex --provider openai-codex --api-key $YOUR_API_KEY
-```
+
+    openclaw models add codex --provider openai-codex --api-key $YOUR_API_KEY
 
 **Option 2: Downgrade to 2026.3.8**
-```bash
-npm install -g openclaw@2026.3.8
-```
+
+    npm install -g openclaw@2026.3.8
 
 **Option 3: Switch to alternative models**
 • MiniMax 2.7 — Fast, reliable, cheap
@@ -1263,15 +1305,18 @@ DM me if you want to get unblocked quickly!
 
 ## 📝 CONTENT DRAFT — March 25, 2026
 
-### Twitter Thread 12: 2026.3.23-2 Approval System Infinite Loop Bug
+### Twitter Thread 13: 2026.3.23-2 Approval System Infinite Loop Bug
 
 **Status:** ✅ Ready to post
 **Platform:** Twitter/X
 **Topic:** Critical approval system bug in 2026.3.23-2 — trending today, burns API tokens
+**Link:** https://twitter.com/compose/tweet
 
-**COPY AND PASTE:**
+**COPY AND PASTE (one tweet at a time):**
+
+Tweet 1:
 ```
-1/ 🚨 CRITICAL BUG: OpenClaw 2026.3.23-2
+🚨 CRITICAL BUG: OpenClaw 2026.3.23-2
 
 If you're on the latest version, your approval system might be stuck in an infinite loop — burning API tokens with every iteration.
 
@@ -1280,8 +1325,11 @@ One user reported 13+ approval loops for a single command.
 Here's what's happening and how to stop the bleeding:
 
 🧵
+```
 
-2/ The Problem:
+Tweet 2:
+```
+The Problem:
 
 Fresh install of 2026.3.23-2 has a broken approval queue:
 • You approve a command (allow-once or allow-always)
@@ -1290,79 +1338,101 @@ Fresh install of 2026.3.23-2 has a broken approval queue:
 • System retries same command endlessly 🔁
 
 Each retry = more API calls = more $$$
+```
 
-3/ Who's Affected:
+Tweet 3:
+```
+Who's Affected:
 
 • Anyone who installed/updated to 2026.3.23-2 (March 24, 2026)
 • Users with safeBins configured (any command requiring approval)
 • Both new installs AND updates
 
 If you're not sure: check your gateway logs for repeated "approval requested" messages.
+```
 
-4/ Immediate Workaround #1: Disable Approvals
+Tweet 4:
+```
+Immediate Workaround #1: Disable Approvals
 
 If you trust your environment, temporarily disable approvals:
 
-```json
 {
   "gateway": {
     "safeBins": []
   }
 }
-```
 
 ⚠️ Only do this if you understand the security implications.
+```
 
-5/ Immediate Workaround #2: Clear the Cache
+Tweet 5:
+```
+Immediate Workaround #2: Clear the Cache
 
 Stop the bleeding manually:
-```bash
+
 openclaw gateway stop
 rm -rf ~/.openclaw/cache/approvals/
 openclaw gateway start
-```
 
 This clears the stuck approval queue. You'll need to do this every time it happens.
-
-6/ Immediate Workaround #3: Downgrade
-
-The safest option — go back to 2026.3.23-1:
-```bash
-npm install -g openclaw@2026.3.23-1
 ```
 
-Approvals work correctly in this version.
+Tweet 6:
+```
+Immediate Workaround #3: Downgrade
 
-7/ The Root Cause:
+The safest option — go back to 2026.3.23-1:
+
+npm install -g openclaw@2026.3.23-1
+
+Approvals work correctly in this version.
+```
+
+Tweet 7:
+```
+The Root Cause:
 
 The approval queue isn't being cleared after successful execution in 2026.3.23-2.
 
 This is a regression — the same config worked fine in previous versions.
+```
 
-8/ When Will This Be Fixed?
+Tweet 8:
+```
+When Will This Be Fixed?
 
 No ETA yet from the core team. Track issue #54533 for updates.
 
 Given that this actively burns user money (API tokens), expect a hotfix soon.
-
-9/ How to Check If You're Affected:
-
-Run this and watch your logs:
-```bash
-tail -f ~/.openclaw/logs/gateway.log | grep -i "approval"
 ```
 
-If you see the same command requesting approval multiple times, you're in the loop.
+Tweet 9:
+```
+How to Check If You're Affected:
 
-10/ Need Help Now?
+Run this and watch your logs:
+
+tail -f ~/.openclaw/logs/gateway.log | grep -i "approval"
+
+If you see the same command requesting approval multiple times, you're in the loop.
+```
+
+Tweet 10:
+```
+Need Help Now?
 
 If your production setup is burning tokens and you need immediate help:
 
 I debug OpenClaw issues regularly — $75 for 30 min, usually resolved in 15.
 
 DM me or check my GitHub: @mohlt
+```
 
-11/ Follow for more OpenClaw debugging tips
+Tweet 11:
+```
+Follow for more OpenClaw debugging tips
 
 I track every critical bug, regression, and workaround so you don't have to.
 
