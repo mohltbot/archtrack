@@ -1379,11 +1379,11 @@ Immediate Workaround #1: Disable Approvals
 
 If you trust your environment, temporarily disable approvals:
 
-{
-  "gateway": {
-    "safeBins": []
-  }
-}
+    {
+      "gateway": {
+        "safeBins": []
+      }
+    }
 
 ⚠️ Only do this if you understand the security implications.
 ```
@@ -1407,7 +1407,7 @@ Immediate Workaround #3: Downgrade
 
 The safest option — go back to 2026.3.23-1:
 
-npm install -g openclaw@2026.3.23-1
+    npm install -g openclaw@2026.3.23-1
 
 Approvals work correctly in this version.
 ```
