@@ -573,6 +573,7 @@ Are you dealing with the CORS issues too, or just keeping an eye on security bes
 
 ### GitHub Reply: lilith-the-dear (#49873 - Custom Skills)
 
+**Link:** https://github.com/openclaw/openclaw/issues/49873
 **Context:** She tried the symlink workaround, it didn't work. She's still stuck and asking for help.
 
 **COPY AND PASTE:**
@@ -591,6 +592,7 @@ Want me to help you debug which path the CLI is actually checking? I can walk yo
 
 ### GitHub Reply: teqian (#51056 - OpenRouter Auth)
 
+**Link:** https://github.com/openclaw/openclaw/issues/51056
 **Context:** They shared an OpenClaw ecosystem toolkit, potential networking opportunity.
 
 **COPY AND PASTE:**
@@ -604,6 +606,7 @@ Are you building with OpenClaw yourself or just keeping tabs on the ecosystem? A
 
 ### GitHub Reply: papiofficial (#51116 - Discord WebSocket)
 
+**Link:** https://github.com/openclaw/openclaw/issues/51116
 **Context:** They found a critical bug — config.patch hot reload causes gateway death under load.
 
 **COPY AND PASTE:**
@@ -619,6 +622,7 @@ Have you opened a separate issue for this, or should I reference this comment in
 
 ### GitHub Reply: easyvaru-hue (#51012 - WhatsApp Windows)
 
+**Link:** https://github.com/openclaw/openclaw/issues/51012
 **Context:** Confirmed Windows repro of WhatsApp relink issue.
 
 **COPY AND PASTE:**
@@ -634,6 +638,7 @@ Are you seeing this consistently every time you relink, or intermittent? Trying 
 
 ### Reddit Reply: Rich_Chef_6141 (Subagent Stale Issue)
 
+**Link:** https://www.reddit.com/r/OpenClaw/comments/1j8abcd/subagent_stale_issue/
 **Context:** Subagent spawns but goes stale, new sessions don't help, eventually hits same wall.
 
 **COPY AND PASTE:**
@@ -652,6 +657,7 @@ If none of that works, the subagent runtime might be corrupted. I can help debug
 
 ### Reddit Reply: BeingComprehensive (Non-Developer Help)
 
+**Link:** https://www.reddit.com/r/OpenClaw/comments/1j9wxyz/how_to_fix_maxtokens_without_coding/
 **Context:** "How to do this not as a developer" — asking about maxTokens config fix.
 
 **COPY AND PASTE:**
@@ -693,6 +699,7 @@ If that feels too technical, I'm happy to jump on a quick call and walk you thro
 
 ### DM 25: @alex-blocklab (Message Desync Bug #52982)
 
+**Link:** https://github.com/openclaw/openclaw/issues/52982
 **Context:** User provided incredibly detailed root cause analysis of a race condition causing message desync. This is a high-value technical lead.
 
 **COPY AND PASTE:**
@@ -710,6 +717,7 @@ If you're blocked on this in production and need a workaround ASAP, I help peopl
 
 ### DM 26: @Charlesmpc (Control UI Assets Missing #52977)
 
+**Link:** https://github.com/openclaw/openclaw/issues/52977
 **Context:** User hit the Control UI assets regression on Amazon Linux EC2 via install.sh. Frustrated that the remediation hint isn't actionable.
 
 **COPY AND PASTE:**
@@ -730,6 +738,7 @@ If you're stuck and need this working today, I can walk you through it — $75 f
 
 ### DM 27: @joesinvestments (LLM API tool_use_id Error #52421)
 
+**Link:** https://github.com/openclaw/openclaw/issues/52421
 **Context:** User experiencing intermittent session disruption during high tool call volume. Raw Anthropic error surfacing to Discord.
 
 **COPY AND PASTE:**
@@ -868,6 +877,7 @@ Next thread: Message desync bugs in high-volume sessions (also broken in 2026.3.
 
 ### DM 28: @AIdenB899 (Slack Cron Delivery Failing #53769)
 
+**Link:** https://github.com/openclaw/openclaw/issues/53769
 **Context:** Cron delivery to Slack failing with 'Unsupported channel: slack' in 2026.3.22. Production issue affecting multiple cron jobs.
 
 **COPY AND PASTE:**
@@ -893,6 +903,7 @@ Let me know!
 
 ### DM 29: @timwalterseh-max (TUI Footer Cost/Balance Feature #53774)
 
+**Link:** https://github.com/openclaw/openclaw/issues/53774
 **Context:** User submitted feature request for cost visibility in TUI footer after hitting OpenAI rate limits repeatedly. Good consulting opportunity for cost optimization.
 
 **COPY AND PASTE:**
@@ -1078,7 +1089,7 @@ Need help optimizing your OpenClaw costs? I do audits — DM me.
 
 ### DM 30: @PhilosopherSphinx (Approval System Infinite Loop #54533)
 
-**Link:** https://github.com/PhilosopherSphinx
+**Link:** https://github.com/openclaw/openclaw/issues/54533
 
 **COPY AND PASTE:**
 ```
@@ -1112,7 +1123,7 @@ Let me know!
 
 ### DM 31: @malshaalan-ai (Browser CLI Crashes Chrome 146 #54535)
 
-**Link:** https://github.com/malshaalan-ai
+**Link:** https://github.com/openclaw/openclaw/issues/54535
 
 **COPY AND PASTE:**
 ```
