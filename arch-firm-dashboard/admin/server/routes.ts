@@ -422,13 +422,17 @@ export function setupRoutes(app: Express): void {
       let productiveSeconds = 0;
       let unproductiveSeconds = 0;
       let neutralSeconds = 0;
+      let idleSeconds = 0;
       let totalScore = 0;
+      let scoreCount = 0;
 
       for (const activity of activities) {
         const minutes = activity.durationSeconds / 60;
         categoryBreakdown[activity.categoryName] = (categoryBreakdown[activity.categoryName] || 0) + minutes;
 
-        if (activity.productivityLevel === 'productive') {
+        if (activity.isIdle || activity.productivityLevel === 'idle') {
+          idleSeconds += activity.durationSeconds;
+        } else if (activity.productivityLevel === 'productive') {
           productiveSeconds += activity.durationSeconds;
         } else if (activity.productivityLevel === 'unproductive') {
           unproductiveSeconds += activity.durationSeconds;
@@ -436,25 +440,34 @@ export function setupRoutes(app: Express): void {
           neutralSeconds += activity.durationSeconds;
         }
 
-        totalScore += activity.productivityScore;
+        // Only count non-idle activities for productivity score
+        if (!activity.isIdle && activity.productivityLevel !== 'idle') {
+          totalScore += activity.productivityScore;
+          scoreCount++;
+        }
       }
 
-      const avgScore = activities.length > 0 ? Math.round(totalScore / activities.length) : 0;
+      const avgScore = scoreCount > 0 ? Math.round(totalScore / scoreCount) : 0;
 
       // Group by day for trend
-      const dailyMap = new Map<string, { productive: number; unproductive: number; totalScore: number; count: number }>();
+      const dailyMap = new Map<string, { productive: number; unproductive: number; idle: number; totalScore: number; count: number }>();
       
       for (const activity of activities) {
         const date = activity.timestamp.split('T')[0];
-        const existing = dailyMap.get(date) || { productive: 0, unproductive: 0, totalScore: 0, count: 0 };
+        const existing = dailyMap.get(date) || { productive: 0, unproductive: 0, idle: 0, totalScore: 0, count: 0 };
         
-        if (activity.productivityLevel === 'productive') {
+        if (activity.isIdle || activity.productivityLevel === 'idle') {
+          existing.idle += activity.durationSeconds;
+        } else if (activity.productivityLevel === 'productive') {
           existing.productive += activity.durationSeconds;
         } else if (activity.productivityLevel === 'unproductive') {
           existing.unproductive += activity.durationSeconds;
         }
-        existing.totalScore += activity.productivityScore;
-        existing.count++;
+        // Only count non-idle activities for score
+        if (!activity.isIdle && activity.productivityLevel !== 'idle') {
+          existing.totalScore += activity.productivityScore;
+          existing.count++;
+        }
         
         dailyMap.set(date, existing);
       }
@@ -463,8 +476,15 @@ export function setupRoutes(app: Express): void {
         date,
         productivityScore: data.count > 0 ? Math.round(data.totalScore / data.count) : 0,
         productiveMinutes: Math.round(data.productive / 60),
-        unproductiveMinutes: Math.round(data.unproductive / 60)
+        unproductiveMinutes: Math.round(data.unproductive / 60),
+        idleMinutes: Math.round(data.idle / 60)
       })).sort((a, b) => a.date.localeCompare(b.date));
+
+      // Calculate true productivity (excluding idle time)
+      const activeSeconds = productiveSeconds + unproductiveSeconds + neutralSeconds;
+      const trueProductivityScore = activeSeconds > 0 
+        ? Math.round((productiveSeconds / activeSeconds) * 100)
+        : 0;
 
       res.json({
         success: true,
@@ -473,15 +493,16 @@ export function setupRoutes(app: Express): void {
           employeeName: employee?.name || 'Unknown',
           dateRange: { start: startDate, end: endDate },
           summary: {
-            totalHours: Math.round((productiveSeconds + unproductiveSeconds + neutralSeconds) / 3600 * 10) / 10,
+            totalHours: Math.round((productiveSeconds + unproductiveSeconds + neutralSeconds + idleSeconds) / 3600 * 10) / 10,
             productiveHours: Math.round(productiveSeconds / 3600 * 10) / 10,
             unproductiveHours: Math.round(unproductiveSeconds / 3600 * 10) / 10,
             neutralHours: Math.round(neutralSeconds / 3600 * 10) / 10,
-            averageProductivityScore: avgScore,
-            focusScore: avgScore // Alias for consistency
+            idleHours: Math.round(idleSeconds / 3600 * 10) / 10,
+            averageProductivityScore: trueProductivityScore,
+            focusScore: trueProductivityScore // Alias for consistency
           },
           categoryBreakdown,
-          suspiciousActivities: activities.filter(a => a.isSuspicious),
+          suspiciousActivities: activities.filter(a => a.isSuspicious).slice(0, 50), // Limit to 50
           dailyTrend
         }
       });

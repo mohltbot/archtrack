@@ -16,7 +16,8 @@ export const Tasks: React.FC = () => {
     projectId: '',
     assignedTo: '',
     priority: 'medium',
-    estimatedHours: ''
+    estimatedHours: '',
+    status: 'todo'
   });
 
   useEffect(() => {
@@ -92,7 +93,7 @@ export const Tasks: React.FC = () => {
       if (data.success) {
         setShowForm(false);
         setEditingTask(null);
-        setFormData({ name: '', description: '', projectId: '', assignedTo: '', priority: 'medium', estimatedHours: '' });
+        setFormData({ name: '', description: '', projectId: '', assignedTo: '', priority: 'medium', estimatedHours: '', status: 'todo' });
         loadData();
       } else {
         throw new Error(data.error || 'Failed to save task');
@@ -111,9 +112,32 @@ export const Tasks: React.FC = () => {
       projectId: task.projectId,
       assignedTo: task.assignedTo || '',
       priority: task.priority,
-      estimatedHours: task.estimatedHours?.toString() || ''
+      estimatedHours: task.estimatedHours?.toString() || '',
+      status: task.status
     });
     setShowForm(true);
+  };
+
+  const handleStatusChange = async (task: Task, newStatus: string) => {
+    try {
+      const res = await fetch(`/api/tasks/${task.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to update status');
+      }
+
+      const data = await res.json();
+      if (data.success) {
+        setTasks(tasks.map(t => t.id === task.id ? { ...t, status: newStatus } : t));
+      }
+    } catch (err) {
+      console.error('Error updating status:', err);
+      alert('Failed to update status');
+    }
   };
 
   const getProjectName = (projectId: string) => {
@@ -170,7 +194,7 @@ export const Tasks: React.FC = () => {
           style={styles.addButton}
           onClick={() => {
             setEditingTask(null);
-            setFormData({ name: '', description: '', projectId: '', assignedTo: '', priority: 'medium', estimatedHours: '' });
+            setFormData({ name: '', description: '', projectId: '', assignedTo: '', priority: 'medium', estimatedHours: '', status: 'todo' });
             setShowForm(true);
           }}
         >
@@ -266,6 +290,20 @@ export const Tasks: React.FC = () => {
                   step="0.5"
                 />
               </div>
+              {editingTask && (
+                <div style={styles.inputGroup}>
+                  <label style={styles.label}>Status</label>
+                  <select
+                    value={formData.status}
+                    onChange={e => setFormData({...formData, status: e.target.value})}
+                    style={styles.input}
+                  >
+                    <option value="todo">To Do</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="completed">Completed</option>
+                  </select>
+                </div>
+              )}
               <div style={styles.formButtons}>
                 <button
                   type="button"
@@ -308,6 +346,15 @@ export const Tasks: React.FC = () => {
               )}
             </div>
             <div style={styles.cardActions}>
+              <select
+                value={task.status}
+                onChange={e => handleStatusChange(task, e.target.value)}
+                style={styles.statusDropdown}
+              >
+                <option value="todo">To Do</option>
+                <option value="in_progress">In Progress</option>
+                <option value="completed">Completed</option>
+              </select>
               <button onClick={() => handleEdit(task)} style={styles.editButton}>
                 Edit
               </button>
@@ -357,7 +404,10 @@ const errorStyles: { [key: string]: React.CSSProperties } = {
 
 const styles: { [key: string]: React.CSSProperties | any } = {
   container: {
-    padding: '32px'
+    padding: '32px',
+    '@media (max-width: 768px)': {
+      padding: '16px'
+    }
   },
   loading: {
     padding: '40px',
@@ -376,12 +426,20 @@ const styles: { [key: string]: React.CSSProperties | any } = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: '24px'
+    marginBottom: '24px',
+    '@media (max-width: 768px)': {
+      flexDirection: 'column',
+      gap: '12px',
+      alignItems: 'flex-start'
+    }
   },
   title: {
     fontSize: '28px',
     fontWeight: 600,
-    color: '#2c3e50'
+    color: '#2c3e50',
+    '@media (max-width: 768px)': {
+      fontSize: '22px'
+    }
   },
   addButton: {
     padding: '12px 24px',
@@ -391,7 +449,11 @@ const styles: { [key: string]: React.CSSProperties | any } = {
     borderRadius: '8px',
     cursor: 'pointer',
     fontSize: '14px',
-    fontWeight: 500
+    fontWeight: 500,
+    '@media (max-width: 768px)': {
+      width: '100%',
+      padding: '14px 24px'
+    }
   },
   modal: {
     position: 'fixed',
@@ -410,7 +472,13 @@ const styles: { [key: string]: React.CSSProperties | any } = {
     padding: '32px',
     borderRadius: '12px',
     width: '100%',
-    maxWidth: '450px'
+    maxWidth: '450px',
+    '@media (max-width: 768px)': {
+      margin: '16px',
+      padding: '20px',
+      maxHeight: '90vh',
+      overflowY: 'auto'
+    }
   },
   modalTitle: {
     marginBottom: '20px',
@@ -435,7 +503,11 @@ const styles: { [key: string]: React.CSSProperties | any } = {
     padding: '12px',
     border: '1px solid #ddd',
     borderRadius: '6px',
-    fontSize: '14px'
+    fontSize: '14px',
+    '@media (max-width: 768px)': {
+      fontSize: '16px', // Prevent zoom on iOS
+      padding: '14px'
+    }
   },
   formButtons: {
     display: 'flex',
@@ -463,13 +535,20 @@ const styles: { [key: string]: React.CSSProperties | any } = {
   grid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
-    gap: '16px'
+    gap: '16px',
+    '@media (max-width: 768px)': {
+      gridTemplateColumns: '1fr',
+      gap: '12px'
+    }
   },
   card: {
     backgroundColor: '#fff',
     padding: '20px',
     borderRadius: '12px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    '@media (max-width: 768px)': {
+      padding: '16px'
+    }
   },
   cardHeader: {
     display: 'flex',
@@ -522,7 +601,23 @@ const styles: { [key: string]: React.CSSProperties | any } = {
   },
   cardActions: {
     display: 'flex',
-    gap: '8px'
+    gap: '8px',
+    '@media (max-width: 768px)': {
+      flexDirection: 'column'
+    }
+  },
+  statusDropdown: {
+    flex: 1,
+    padding: '8px 12px',
+    border: '1px solid #ddd',
+    borderRadius: '6px',
+    fontSize: '14px',
+    backgroundColor: '#fff',
+    cursor: 'pointer',
+    '@media (max-width: 768px)': {
+      fontSize: '16px', // Prevent zoom on iOS
+      padding: '12px'
+    }
   },
   editButton: {
     flex: 1,
@@ -532,6 +627,10 @@ const styles: { [key: string]: React.CSSProperties | any } = {
     border: 'none',
     borderRadius: '6px',
     cursor: 'pointer',
-    fontSize: '13px'
+    fontSize: '13px',
+    '@media (max-width: 768px)': {
+      padding: '12px',
+      fontSize: '14px'
+    }
   }
 };

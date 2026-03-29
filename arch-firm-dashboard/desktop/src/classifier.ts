@@ -200,6 +200,22 @@ export function classifyActivity(
   let category: ActivityCategory = 'other';
   let isIdle = false;
 
+  // EXCLUDE idle/loginwindow from suspicious detection - these are system states, not employee actions
+  const systemIdleApps = ['idle', 'loginwindow', 'lockscreen', 'screensaver', 'window server'];
+  const isSystemIdle = systemIdleApps.some(app => appLower.includes(app) || titleLower.includes(app));
+
+  if (isSystemIdle) {
+    return {
+      category: 'break_idle',
+      categoryName: CATEGORY_NAMES['break_idle'],
+      productivityScore: 0,
+      productivityLevel: 'idle',
+      isSuspicious: false, // Never mark system idle as suspicious
+      suspiciousReason: undefined,
+      isIdle: true
+    };
+  }
+
   // SPECIAL CASE: Check window title FIRST for work indicators in browsers
   // This ensures "mission-control" in a Chrome tab gets classified as Core Work
   const browserApps = ['chrome', 'safari', 'firefox', 'edge', 'brave', 'opera'];
