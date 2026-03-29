@@ -1,6 +1,6 @@
 # OpenClaw Debugger — Lead Tracking
 
-**Last Updated:** March 28, 2026 (Shift 1 - 8:37 PM)
+**Last Updated:** March 29, 2026 (Shift 1 - 9:00 AM)
 
 ## Lead Status Legend
 - 🔥 **Hot** — Frustrated, urgent, ready to buy. DM within 24 hours.
@@ -96,10 +96,10 @@
 
 ## Pipeline Stats
 
-- 🔥 Hot leads: 53 (including vmkkumar - pricing discussion active)
-- 🟡 Warm leads: 16
+- 🔥 Hot leads: 56 (3 new from Shift 1 today)
+- 🟡 Warm leads: 17 (1 new feature request)
 - 🔵 Cold leads: 7
-- **Total potential revenue:** $8,475+ (vmkkumar project TBD + 73 leads × $75 avg + 6 complex issues × $150)
+- **Total potential revenue:** $8,700+ (56 hot × $75 avg + 17 warm × $50 avg + 3 complex cron/auth issues × $150)
 
 ---
 
@@ -237,6 +237,38 @@
 8. **Reply to GitHub #41673** — Timeout issue, common problem
 9. **Comment on GitHub #44611** — Gateway config caching on restart (NEW)
 10. **Comment on GitHub #41871** — Ollama hanging issue (NEW)
+
+---
+
+## 🔥 FRESH LEADS — March 29, 2026 (Shift 1 - Consolidated)
+
+### @stemkat100 — NO_REPLY Envelope Leakage to Telegram
+**Issue:** Agent self-talk and NO_REPLY tokens delivered as visible messages in Telegram. Internal narration between tool calls shows up in chat.
+**Why Hot:** UX regression, affects all multi-step tool-based agents on Telegram, user pinned to 2026.3.24 due to blocking bug #57112
+**Link:** https://github.com/openclaw/openclaw/issues/57133
+**Status:** 🔥 **HOT — FRESH** (posted today)
+**Draft Location:** DRAFTS.md "DM Draft: @stemkat100"
+
+### @beto-sudo — Isolated Cron Jobs LiveSessionModelSwitchError
+**Issue:** All isolated cron jobs fail with LiveSessionModelSwitchError on 2026.3.28. Error references anthropic/claude-opus-4-6 even when cron configured with different model.
+**Why Hot:** Production-critical, affects multiple cron jobs (morning-briefing, weekly-summary, usage-sync-supabase), user tried multiple workarounds
+**Link:** https://github.com/openclaw/openclaw/issues/57134
+**Status:** 🔥 **HOT — FRESH** (posted today)
+**Draft Location:** DRAFTS.md "DM Draft: @beto-sudo"
+
+### @dragoneptech — sglang Docker Setup Failure
+**Issue:** Docker setup fails with "Maximum call stack size exceeded" on sglang extension load. Fresh install on Ubuntu via docker-setup.sh.
+**Why Hot:** Blocks new Docker users completely, fresh install broken, circular dependency in extension loader
+**Link:** https://github.com/openclaw/openclaw/issues/57132
+**Status:** 🔥 **HOT — FRESH** (posted today)
+**Draft Location:** DRAFTS.md "DM Draft: @dragoneptech"
+
+### @dwbutler — sessions_history Archived Session Access
+**Issue:** Feature request for reading archived/reset sessions. Agents lose access to conversation history after /new or auto-reset.
+**Why Hot:** Real production pain point, affects knowledge base maintenance and memory recovery, well-articulated with proposed solution
+**Link:** https://github.com/openclaw/openclaw/issues/57139
+**Status:** 🟡 **WARM — FRESH** (posted today)
+**Draft Location:** DRAFTS.md "DM Draft: @dwbutler"
 
 ---
 
