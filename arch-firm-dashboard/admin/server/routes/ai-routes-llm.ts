@@ -53,8 +53,8 @@ async function callLLM(messages: Array<{role: string, content: string}>, tempera
       return 'Sorry, I encountered an error. Please try again.';
     }
 
-    const data = await response.json();
-    return data.choices[0]?.message?.content || 'No response from LLM.';
+    const data = await response.json() as { choices?: Array<{ message?: { content?: string } }> };
+    return data.choices?.[0]?.message?.content || 'No response from LLM.';
   } catch (error) {
     console.error('LLM call error:', error);
     return 'Sorry, I encountered an error. Please try again.';
@@ -173,7 +173,7 @@ router.post('/chat', async (req, res) => {
     console.error('AI chat error:', error);
     res.status(500).json({ 
       answer: 'Sorry, I encountered an error processing your question. Please try again.',
-      conversationId: conversationId || generateConversationId()
+      conversationId: generateConversationId()
     });
   }
 });
