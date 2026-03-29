@@ -134,4 +134,81 @@ I debug OpenClaw production issues. If you need help implementing a workaround o
 *(Content archived - see LEADS.md for status)*
 
 ---
+
+## 💬 GITHUB REPLY DRAFTS (Follow-up Responses)
+
+### Reply 36: @easyvaru-hue (WhatsApp Active Listener - Windows)
+**Context:** They tried your workaround but still getting "No active WhatsApp Web listener" on Windows with 2026.3.22 and 2026.3.12
+**Target:** https://github.com/openclaw/openclaw/issues/51012
+**Status:** Ready to post
+
+```
+@easyvaru-hue Thanks for testing that so thoroughly — the fact that it's still reproducing across 2026.3.12 and 2026.3.22 with clean relinks rules out a simple version regression.
+
+The WS 1006 close right after startup + "No active WhatsApp Web listener" combo suggests the Baileys session state is getting corrupted during the initial handshake, not the link itself.
+
+A few things to check:
+1. **Look at the gateway logs** right after the WS 1006 — is there a specific Baileys error before the close?
+2. **Check if it's account-specific** — try creating a fresh WhatsApp Business account and linking that
+3. **Windows-specific**: Are you running the gateway as Administrator? Baileys sometimes has permission issues on Windows with local storage
+
+If you can post those fresh logs from 2026-03-26, that would help confirm whether this is the same root cause as the macOS/Linux reports or a Windows-specific variant.
+```
+
+---
+
+### Reply 37: @Artyomkun (Ecosystem + Compiler Project)
+**Context:** 18yo contributor, working on OpenClaw bugs + i18n, has a compiler project
+**Target:** https://github.com/openclaw/openclaw/issues/51056
+**Status:** Ready to post
+
+```
+@Artyomkun That's impressive — contributing to OpenClaw core at 18 while building your own compiler is no small feat. The i18n work especially is something the project really needs.
+
+I'm curious about your compiler project — are you building a source-to-source transpiler or something lower-level? And are you using OpenClaw as inspiration for the tooling/CLI design, or more for the agent orchestration patterns?
+
+I've been working with OpenClaw for a while now (mostly debugging production setups for people). Always good to connect with others deep in the codebase. Feel free to DM if you ever want to bounce ideas around.
+```
+
+---
+
+### Reply 38: @james-parshall (Discord Gateway Intents - Confirmed Repro)
+**Context:** Confirmed your diagnosis on macOS 25.3.0 — same behavior with proper intents enabled
+**Target:** https://github.com/openclaw/openclaw/issues/24637
+**Status:** Ready to post
+
+```
+@james-parshall Thanks for the detailed repro — this confirms it's not a config issue on your end.
+
+The pattern you're seeing (DMs work, guild @mentions fail with `reason: no-mention`, health monitor restarts every ~5 min) points to the gateway not receiving GUILD_CREATE events properly, even though the WebSocket opens.
+
+A couple things to try:
+1. **Check if it's guild-size related** — does it work if you create a fresh test server with just you + the bot?
+2. **Enable gateway raw events** temporarily to see what's actually coming over the wire
+
+The fact that DMs work but guild channels don't suggests the gateway connection is fine, but the guild cache isn't populating. This might be a 2026.3.13 regression specifically.
+
+If you're still stuck on this, I debug Discord/OpenClaw integration issues. Happy to take a look at your config if you want.
+```
+
+---
+
+### Reply 39: @kelvenatdesign (Windows Task Scheduler Race Condition)
+**Context:** Excellent technical analysis — identified two-layer failure (scheduler state race + readiness misclassification)
+**Target:** https://github.com/openclaw/openclaw/issues/49871
+**Status:** Ready to post
+
+```
+@kelvenatdesign This is a really solid analysis — the two-layer failure theory makes a lot of sense.
+
+The `MultipleInstances=IgnoreNew` + `/Run` while previous state is still settling explains why the manual sequence (stop → wait → start) works but the built-in restart doesn't.
+
+Your proposed fix (wait for scheduler state + less brittle readiness check) is probably the right direction. The readiness check issue might be related to how the gateway reports "ready" before the websocket is actually accepting connections.
+
+One thing to add: the `sunruns1` comment about battery/power state affecting this suggests there might be a third layer — Windows power management throttling the Node process during startup, which would exacerbate the timing race.
+
+If you end up opening a PR for this, I'd be happy to test it on a few Windows setups. This is one of the more annoying papercuts for Windows users.
+```
+
+---
 *End of DRAFTS.md*
