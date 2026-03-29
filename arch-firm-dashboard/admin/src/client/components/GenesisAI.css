@@ -316,14 +316,174 @@
   cursor: not-allowed;
 }
 
-@media (max-width: 480px) {
-  .genesis-panel {
-    width: calc(100% - 40px);
-    right: 20px;
-    left: 20px;
+@media (max-width: 767px) {
+  .genesis-fab {
+    bottom: 16px;
+    right: 16px;
+    padding: 12px 16px;
   }
   
   .genesis-fab-text {
     display: none;
+  }
+  
+  .genesis-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+    z-index: 2000;
+  }
+  
+  .genesis-header {
+    padding: 12px 16px;
+    min-height: 56px;
+  }
+  
+  .genesis-title h3 {
+    font-size: 16px;
+  }
+  
+  .genesis-subtitle {
+    font-size: 11px;
+  }
+  
+  .genesis-icon {
+    font-size: 20px;
+  }
+  
+  .genesis-messages {
+    padding: 16px;
+    padding-bottom: 80px; /* Space for input */
+  }
+  
+  .genesis-message {
+    margin-bottom: 12px;
+  }
+  
+  .genesis-message-content {
+    gap: 8px;
+  }
+  
+  .genesis-avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+  
+  .genesis-bubble {
+    max-width: 85%;
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+  
+  .genesis-text {
+    line-height: 1.5;
+  }
+  
+  .genesis-text strong {
+    font-weight: 600;
+  }
+  
+  .genesis-suggestions {
+    margin-top: 10px;
+    gap: 6px;
+  }
+  
+  .genesis-suggestion {
+    padding: 8px 12px;
+    font-size: 13px;
+    border-radius: 8px;
+  }
+  
+  .genesis-input {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 12px 16px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    background: white;
+    border-top: 1px solid #e0e0e0;
+    gap: 10px;
+    z-index: 2001;
+  }
+  
+  .genesis-input input {
+    padding: 12px 16px;
+    font-size: 16px; /* Prevents zoom on iOS */
+    border-radius: 24px;
+  }
+  
+  .genesis-input button {
+    padding: 12px 20px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  
+  .genesis-welcome {
+    padding: 16px 0;
+  }
+  
+  .genesis-welcome h4 {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  
+  .genesis-welcome p {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  
+  .genesis-quick-actions {
+    gap: 10px;
+  }
+  
+  .genesis-quick-actions button {
+    padding: 14px 16px;
+    font-size: 14px;
+  }
+  
+  .genesis-close {
+    width: 36px;
+    height: 36px;
+    font-size: 22px;
+  }
+  
+  .llm-toggle {
+    font-size: 12px;
+    gap: 4px;
+  }
+  
+  .llm-toggle input {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* Small phones */
+@media (max-width: 375px) {
+  .genesis-bubble {
+    max-width: 88%;
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+  
+  .genesis-suggestion {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+  
+  .genesis-input input {
+    font-size: 16px;
+  }
+  
+  .genesis-input button {
+    padding: 10px 16px;
+    font-size: 13px;
   }
 }
