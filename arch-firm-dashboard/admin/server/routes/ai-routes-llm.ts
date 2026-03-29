@@ -20,27 +20,27 @@ interface ChatResponse {
 // Conversation memory store (in production, use Redis)
 const conversations = new Map<string, Array<{role: 'user' | 'assistant', content: string}>>();
 
-// Moonshot API configuration
-const MOONSHOT_API_KEY = process.env.MOONSHOT_API_KEY || '';
-const MOONSHOT_BASE_URL = 'https://api.moonshot.cn/v1';
+// DeepSeek API configuration (works from US servers)
+const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY || '';
+const DEEPSEEK_BASE_URL = 'https://api.deepseek.com/v1';
 
 /**
- * Call Moonshot LLM API
+ * Call DeepSeek LLM API
  */
 async function callLLM(messages: Array<{role: string, content: string}>, temperature = 0.7): Promise<string> {
-  if (!MOONSHOT_API_KEY) {
-    return 'LLM not configured. Please set MOONSHOT_API_KEY environment variable.';
+  if (!DEEPSEEK_API_KEY) {
+    return 'LLM not configured. Please set DEEPSEEK_API_KEY environment variable.';
   }
 
   try {
-    const response = await fetch(`${MOONSHOT_BASE_URL}/chat/completions`, {
+    const response = await fetch(`${DEEPSEEK_BASE_URL}/chat/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${MOONSHOT_API_KEY}`
+        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'kimi-k2.5',
+        model: 'deepseek-chat',
         messages,
         temperature,
         max_tokens: 2000
