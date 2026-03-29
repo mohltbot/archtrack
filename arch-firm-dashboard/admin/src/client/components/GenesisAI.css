@@ -207,6 +207,22 @@
 
 .genesis-text {
   white-space: pre-wrap;
+  line-height: 1.6;
+}
+
+.genesis-text strong {
+  font-weight: 600;
+  color: #667eea;
+}
+
+.genesis-text em {
+  font-style: italic;
+}
+
+.genesis-text br {
+  display: block;
+  content: "";
+  margin-top: 8px;
 }
 
 .genesis-suggestions {

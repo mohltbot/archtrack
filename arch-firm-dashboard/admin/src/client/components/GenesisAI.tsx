@@ -1,6 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './GenesisAI.css';
 
+// Simple markdown formatter
+function formatMarkdown(text: string): string {
+  return text
+    // Bold: **text** → <strong>text</strong>
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    // Italic: *text* → <em>text</em>  
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    // Line breaks
+    .replace(/\n/g, '<br/>');
+}
+
 interface Message {
   id: string;
   role: 'user' | 'assistant';
@@ -104,7 +115,7 @@ export function GenesisAI() {
           <div>
             <h3>Genesis AI</h3>
             <span className="genesis-subtitle">
-              {useLLM ? 'Powered by Moonshot AI' : 'Rule-based Analytics'}
+              {useLLM ? 'Powered by DeepSeek AI' : 'Rule-based Analytics'}
             </span>
           </div>
         </div>
@@ -150,7 +161,7 @@ export function GenesisAI() {
             <div className="genesis-message-content">
               {message.role === 'assistant' && <span className="genesis-avatar">🤖</span>}
               <div className="genesis-bubble">
-                <div className="genesis-text">{message.content}</div>
+                <div className="genesis-text" dangerouslySetInnerHTML={{ __html: formatMarkdown(message.content) }} />
                 
                 {message.suggestions && message.suggestions.length > 0 && (
                   <div className="genesis-suggestions">
