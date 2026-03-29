@@ -1,6 +1,6 @@
 # OpenClaw Debugger — Lead Tracking
 
-**Last Updated:** March 25, 2026 (Shift 2 - 6PM)
+**Last Updated:** March 28, 2026 (Shift 1 - 8:37 PM)
 
 ## Lead Status Legend
 - 🔥 **Hot** — Frustrated, urgent, ready to buy. DM within 24 hours.
@@ -96,10 +96,10 @@
 
 ## Pipeline Stats
 
-- 🔥 Hot leads: 49 (including vmkkumar - pricing discussion active)
+- 🔥 Hot leads: 53 (including vmkkumar - pricing discussion active)
 - 🟡 Warm leads: 16
 - 🔵 Cold leads: 7
-- **Total potential revenue:** $8,175+ (vmkkumar project TBD + 69 leads × $75 avg + 6 complex issues × $150)
+- **Total potential revenue:** $8,475+ (vmkkumar project TBD + 73 leads × $75 avg + 6 complex issues × $150)
 
 ---
 
@@ -237,6 +237,34 @@
 8. **Reply to GitHub #41673** — Timeout issue, common problem
 9. **Comment on GitHub #44611** — Gateway config caching on restart (NEW)
 10. **Comment on GitHub #41871** — Ollama hanging issue (NEW)
+
+---
+
+## 🔥 FRESH LEADS — March 28, 2026 (Shift 1 - Cron Consolidated)
+
+### @bennybuoy — OpenAI HTTP Endpoints Scope Regression (2026.3.28)
+**Issue:** /v1/models and /v1/chat/completions reject gateway bearer token with 'missing scope: operator.read/write' after updating from 2026.3.24 to 2026.3.28
+**Why Hot:** Breaks Open WebUI integration (documented recommended setup), fresh regression in latest version, user provided detailed analysis with likely cause
+**Link:** https://github.com/openclaw/openclaw/issues/56763
+**Status:** 🔥 **HOT — FRESH** (posted 5 minutes ago)
+
+### @Kaiji-Z — Gateway Event Loop Freeze (Zombie State)
+**Issue:** Gateway process alive but event loop frozen — all HTTP requests silently timeout during low-activity hours (00:00-06:00), consistently reproduces across 4 nights
+**Why Hot:** Production-critical issue, detailed 4-day pattern analysis, affects both LLM and channel APIs, WSL2/systemd deployment
+**Link:** https://github.com/openclaw/openclaw/issues/56733
+**Status:** 🔥 **HOT — FRESH** (posted 1 hour ago, 1 comment)
+
+### @Mu-cream — Session Force Timeout on Bootstrap
+**Issue:** Session terminated (Force timeout) on first bootstrap with local model, timeoutSeconds config has no effect, ~60s hard limit
+**Why Hot:** Windows 11 user, local model deployment issue, blocking basic functionality
+**Link:** https://github.com/openclaw/openclaw/issues/56738
+**Status:** 🔥 **HOT — FRESH** (posted 39 minutes ago)
+
+### @clawoneloke — WhatsApp Cascading Reconnects (STILL BROKEN in 2026.3.28)
+**Issue:** WhatsApp aggressive 30-minute heartbeat causes cascading reconnects every ~60 seconds, idle counter not resetting after reconnect
+**Why Hot:** Confirmed STILL reproducible in 2026.3.28 (just tested), long-running issue since Feb, affects production WhatsApp deployments
+**Link:** https://github.com/openclaw/openclaw/issues/55030
+**Status:** 🔥 **HOT — ACTIVE** (author confirmed still broken 17 minutes ago)
 
 ---
 
