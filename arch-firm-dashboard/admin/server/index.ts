@@ -9,6 +9,7 @@ import { initDatabase } from './database.js';
 import { setupRoutes } from './routes.js';
 import { setupWebSocket } from './websocket.js';
 import aiRoutes from './routes/ai-routes.js';
+import aiLLMRoutes from './routes/ai-routes-llm.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -97,7 +98,8 @@ async function startServer() {
     console.log('🛣️  Setting up API routes...');
     setupRoutes(app);
     app.use('/api/ai', aiRoutes);
-    console.log('✅ API routes configured');
+    app.use('/api/ai-llm', aiLLMRoutes);
+    console.log('✅ API routes configured (including LLM)');
     
     // Step 4: Find and serve static files
     const staticPath = findStaticPath();
