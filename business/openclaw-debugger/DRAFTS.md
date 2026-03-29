@@ -1,12 +1,13 @@
 # OpenClaw Debugger - Post Drafts (Copy-Paste Ready)
 
-**Last Updated:** March 28, 2026 (Shift 1)
+**Last Updated:** March 28, 2026 (9:25 PM)
 
 ---
 
-## 🚀 READY TO POST (Shift 1 - March 28)
+## 🚀 READY TO POST (Fresh - March 28)
 
 ### Twitter Thread: "OpenClaw 2026.3.28 Scope Regression"
+**Status:** Ready to post
 
 **Tweet 1/5:**
 ```
@@ -53,11 +54,10 @@ DM me or check my pinned tweet for details.
 
 ---
 
-## 📨 READY TO SEND DMs (Shift 1 - March 28)
+## 📨 READY TO SEND DMs (Fresh - March 28)
 
 ### DM 32: @bennybuoy (OpenAI HTTP Scope Issue)
 **Target:** https://github.com/openclaw/openclaw/issues/56763
-**Status:** Ready to send
 
 ```
 Hey @bennybuoy — saw your detailed issue on the 2026.3.28 scope regression. Your root cause analysis is spot on.
@@ -70,9 +70,10 @@ Quick workarounds while we wait for a patch:
 I help teams debug OpenClaw production issues like this. If you need hands-on help getting your Open WebUI integration back online, happy to assist.
 ```
 
+---
+
 ### DM 33: @Kaiji-Z (Gateway Event Loop Freeze)
 **Target:** https://github.com/openclaw/openclaw/issues/56733
-**Status:** Ready to send
 
 ```
 Hey @Kaiji-Z — excellent detective work on the event loop freeze issue. The 4-day pattern analysis is impressive.
@@ -85,9 +86,10 @@ A few things to try while debugging:
 I specialize in debugging production OpenClaw issues like this. If you want to hop on a quick call to troubleshoot, let me know.
 ```
 
+---
+
 ### DM 34: @Mu-cream (Session Force Timeout)
 **Target:** https://github.com/openclaw/openclaw/issues/56738
-**Status:** Ready to send
 
 ```
 Hey @Mu-cream — saw your issue with the 60s force timeout on bootstrap. The timeoutSeconds config not working is frustrating.
@@ -100,9 +102,10 @@ This looks like a hardcoded bootstrap timeout separate from the session timeoutS
 I help debug OpenClaw issues like this. DM me if you want to troubleshoot together.
 ```
 
+---
+
 ### DM 35: @clawoneloke (WhatsApp Cascading Reconnects)
 **Target:** https://github.com/openclaw/openclaw/issues/55030
-**Status:** Ready to send
 
 ```
 Hey @clawoneloke — thanks for confirming this is still broken in 2026.3.28. The fact that lastInboundAt never resets after reconnect is the smoking gun.
@@ -116,31 +119,10 @@ I debug OpenClaw production issues. If you need help implementing a workaround o
 
 ---
 
-## ✅ ALREADY POSTED (Archive)
-
-### Twitter Threads 1-13 [ALL POSTED Mar 17-26]
-*(Content archived - see LEADS.md for status)*
-
-### Case Studies 1-4 [POSTED Mar 17-24]
-*(Content archived - see LEADS.md for status)*
-
-### Community Replies 1-30 [ALL POSTED Mar 17-26]
-*(Content archived - see LEADS.md for status)*
-
-### Reddit DMs 1-5 [POSTED Mar 17-25]
-*(Content archived - see LEADS.md for status)*
-
-### GitHub DM Reaches (DMs 1-31) [POSTED Mar 17-26]
-*(Content archived - see LEADS.md for status)*
-
----
-
-## 💬 GITHUB REPLY DRAFTS (Follow-up Responses)
+## 💬 GITHUB REPLY DRAFTS (Fresh - March 28)
 
 ### Reply 36: @easyvaru-hue (WhatsApp Active Listener - Windows)
-**Context:** They tried your workaround but still getting "No active WhatsApp Web listener" on Windows with 2026.3.22 and 2026.3.12
 **Target:** https://github.com/openclaw/openclaw/issues/51012
-**Status:** Ready to post
 
 ```
 @easyvaru-hue Thanks for testing that so thoroughly — the fact that it's still reproducing across 2026.3.12 and 2026.3.22 with clean relinks rules out a simple version regression.
@@ -158,9 +140,7 @@ If you can post those fresh logs from 2026-03-26, that would help confirm whethe
 ---
 
 ### Reply 37: @Artyomkun (Ecosystem + Compiler Project)
-**Context:** 18yo contributor, working on OpenClaw bugs + i18n, has a compiler project
 **Target:** https://github.com/openclaw/openclaw/issues/51056
-**Status:** Ready to post
 
 ```
 @Artyomkun That's impressive — contributing to OpenClaw core at 18 while building your own compiler is no small feat. The i18n work especially is something the project really needs.
@@ -173,9 +153,7 @@ I've been working with OpenClaw for a while now (mostly debugging production set
 ---
 
 ### Reply 38: @james-parshall (Discord Gateway Intents - Confirmed Repro)
-**Context:** Confirmed your diagnosis on macOS 25.3.0 — same behavior with proper intents enabled
 **Target:** https://github.com/openclaw/openclaw/issues/24637
-**Status:** Ready to post
 
 ```
 @james-parshall Thanks for the detailed repro — this confirms it's not a config issue on your end.
@@ -194,9 +172,7 @@ If you're still stuck on this, I debug Discord/OpenClaw integration issues. Happ
 ---
 
 ### Reply 39: @kelvenatdesign (Windows Task Scheduler Race Condition)
-**Context:** Excellent technical analysis — identified two-layer failure (scheduler state race + readiness misclassification)
 **Target:** https://github.com/openclaw/openclaw/issues/49871
-**Status:** Ready to post
 
 ```
 @kelvenatdesign This is a really solid analysis — the two-layer failure theory makes a lot of sense.
@@ -209,6 +185,17 @@ One thing to add: the `sunruns1` comment about battery/power state affecting thi
 
 If you end up opening a PR for this, I'd be happy to test it on a few Windows setups. This is one of the more annoying papercuts for Windows users.
 ```
+
+---
+
+## ✅ ALREADY POSTED (Archive)
+
+### Twitter Threads 1-13 [ALL POSTED Mar 17-26]
+### Case Studies 1-4 [POSTED Mar 17-24]
+### Community Replies 1-30 [ALL POSTED Mar 17-26]
+### Reddit DMs 1-5 [POSTED Mar 17-25]
+### GitHub DM Reaches (DMs 1-31) [POSTED Mar 17-26]
+### GitHub Replies 1-35 [POSTED Mar 17-28]
 
 ---
 *End of DRAFTS.md*
